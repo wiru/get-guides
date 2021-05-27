@@ -5,13 +5,19 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 
 # The two lines below have to be added to the .env file to run flask
-# create .env and add follwoing 2 lines. 
+# create .env and add follwoing 2 lines.
+#  
 # FLASK_APP=app.py
 # FLASK_ENV=development
+# 
 # alias python= python3
 # Add .env to gitignore
+#
+# then do pipenv install (this installs everything mentioned in the pipfile)
+#
 # to run (any) python file, a virtual environment has to be created
 # this has to be done by running 'pipenv shell' (step has to be done after .env file is prepared)
+# After this, type "flask run" into cmd/bash
 
 
 # make server like express()
