@@ -13,12 +13,12 @@ node_modules
 /src-cordova/www
 
 # Capacitor related directories and files
-/src-capacitor/www
-/src-capacitor/node_modules
+client/src-capacitor/www
+client/src-capacitor/node_modules
 
 # BEX related directories and files
-/src-bex/www
-/src-bex/js/core
+client/src-bex/www
+client/src-bex/js/core
 
 # Log files
 npm-debug.log*
@@ -31,3 +31,4 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+.env
