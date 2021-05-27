@@ -51,46 +51,46 @@ import EssentialLink from 'components/EssentialLink.vue'
 
 const linksData = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
+    title: 'Search',
+    caption: 'Search for Guides',
     icon: 'code',
-    link: 'https://github.com/quasarframework'
+    view: 'Search'
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
+    title: 'My Profile',
+    caption: 'Show/edit My Profile',
     icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    view: 'MyProfile'
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    title: 'Bookings',
+    caption: 'Check your bookings',
+    icon: 'book_online',
+    view: 'Bookings'
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    title: 'How to',
+    caption: 'How to use the App',
+    icon: 'question_mark',
+    view: 'HowTo'
   },
   {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
+    title: 'Messages',
+    caption: 'Your messages',
+    icon: 'message',
+    view: 'Messages'
   },
   {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
+    title: 'About Us',
+    caption: 'The team behind Get Guides',
     icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    view: 'AboutUs'
+  },
+  {
+    title: 'Logout',
+    caption: 'Bye bye',
+    icon: 'favorite',
+    view: 'Logout'
   }
 ];
 
@@ -102,6 +102,6 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: linksData
     }
-  }
+  },
 }
 </script>

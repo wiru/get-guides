@@ -1,9 +1,8 @@
 <template>
   <q-item
-    clickable
-    tag="a"
-    target="_blank"
-    :href="link"
+  clickable
+    tag="span"
+     @click="changeView(view)"
   >
     <q-item-section
       v-if="icon"
@@ -23,6 +22,12 @@
 
 <script>
 export default {
+  methods: {
+    changeView(view) {
+      console.log(view)
+      this.$store.commit("changeView", view)
+    }
+  },
   name: 'EssentialLink',
   props: {
     title: {
@@ -35,9 +40,9 @@ export default {
       default: ''
     },
 
-    link: {
+    view: {
       type: String,
-      default: '#'
+      default: ''
     },
 
     icon: {

@@ -29,6 +29,9 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated (/* registration */) {
     // console.log('New content is available; please refresh.')
+    
+    console.log('New content is available: Please refresh.')      // added for hot-reloading the dev app. Should be be taken out before building
+    window.location.reload(true)                                  // added for hot-reloading the dev app. Should be taken out before building
   },
 
   offline () {
