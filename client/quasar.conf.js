@@ -73,7 +73,8 @@ module.exports = function (/* ctx */) {
 
     // Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      https: false,
+      https: true,
+      host: '192.168.3.4',
       port: 8080,
       open: true // opens browser window automatically
     },
@@ -114,11 +115,18 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
         skipWaiting: true             // added for hot-reloading the dev app. Might have to be taken out before building
-      }, // only for GenerateSW
+      },
+       // only for GenerateSW
+
+      // TIP
+      //(@quasar/app v2.1.10+) If your PWA is behind basic auth or requires an Authorization header, set quasar.conf.js > pwa > useCredentials 
+      //to true to include crossorigin="use-credentials" on the manifest.json meta tag.
+      useCredentials: true,
+
       manifest: {
         name: `Get Guides`,
         short_name: `Get Guides`,
-        description: `A Quasar Framework app`,
+        description: `An attempt to make PWA work. GG.`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
