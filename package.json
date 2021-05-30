@@ -6,7 +6,7 @@
   "author": "mussinbenarbia <mouhssine.benarbia@gmail.com>",
   "private": true,
   "scripts": {
-    "start": "quasar dev",
+    "start": "quasar serve dist/spa",
     "build": "quasar build",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
