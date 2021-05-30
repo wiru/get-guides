@@ -6,6 +6,7 @@ backend
 # Quasar core related directories
 .quasar
 /dist
+/client
 
 # Cordova related directories and files
 /src-cordova/node_modules

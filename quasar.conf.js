@@ -114,7 +114,7 @@ module.exports = function (/* ctx */) {
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
-        skipWaiting: true             // added for hot-reloading the dev app. Might have to be taken out before building
+        //skipWaiting: true             // added for hot-reloading the dev app. Might have to be taken out before building
       },
        // only for GenerateSW
 
