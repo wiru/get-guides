@@ -46,5 +46,5 @@ export default new Vuex.Store({
       search(state, payload) {
         state.commit("setFilteredGuides")
       }
-      }
+    }
  });

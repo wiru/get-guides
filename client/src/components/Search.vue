@@ -13,22 +13,39 @@
                     </template>
                 </q-input>
             
-                <q-input filled bottom-slots v-model="date.from" label="Select date or range" :dense="dense">
+                <q-input filled bottom-slots v-model="startDate" label="Select start date" :dense="dense">
                     <template v-slot:before>
                         <q-btn icon="event" round color="primary">
-                            <q-popup-proxy @before-show="updateDate" transition-show="scale" transition-hide="scale">
-                                <q-date v-model="dateRange" range>
-                                    <div class="row items-center justify-end q-gutter-sm">
-                                        <q-btn label="Cancel" color="primary" flat v-close-popup />
-                                        <q-btn label="OK" color="primary" flat @click="saveDate" v-close-popup />
-                                    </div>
-                                </q-date>
+                            <q-popup-proxy @before-show="updateStartDate" transition-show="scale" transition-hide="scale">
+                            <q-date
+                                v-model="startDate"
+                                title="Start Date"
+                                subtitle="Select the first day"
+                            />
                             </q-popup-proxy>
                         </q-btn>
                     </template>
 
                     <template v-slot:append>
-                        <q-icon v-if="date !== ''" name="close" @click="date = ''" class="cursor-pointer" />
+                        <q-icon v-if="startDate !== ''" name="close" @click="startDate = ''" class="cursor-pointer" />
+                    </template>
+                </q-input>
+                
+                <q-input filled bottom-slots v-model="endDate" label="Select end date" :dense="dense">
+                    <template v-slot:before>
+                        <q-btn icon="event" round color="primary">
+                            <q-popup-proxy @before-show="endDate" transition-show="scale" transition-hide="scale">
+                                <q-date
+                                    v-model="endDate"
+                                    title="End Date"
+                                    subtitle="Select the last day"
+                                />
+                            </q-popup-proxy>
+                        </q-btn>
+                    </template>
+
+                    <template v-slot:append>
+                        <q-icon v-if="endDate !== ''" name="close" @click="endDate = ''" class="cursor-pointer" />
                     </template>
                 </q-input>
 
@@ -53,23 +70,13 @@ export default {
 
         location: "",
 
-        date: "",
-
-        dateRange: {
-            from: '2021/06/01',
-            to: '2021/06/07'
-            },
+        startDate: "",
+        
+        endDate: "",
+        
     }),
 
   methods: {
-
-    updateDate() {
-      this.dateRange = this.date
-    },
-
-    saveDate() {
-      this.date = this.dateRange
-    },
 
     search(searchCriteria) {
         this.$store.dispatch("search", searchCriteria)
