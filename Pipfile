@@ -10,7 +10,6 @@ python-dotenv = "*"
 dnspython = "*"
 flask-cors = "*"
 pymongo = "*"
-dnspython = "*"
 gunicorn = "*"
 flask_socketio = "*"
 
