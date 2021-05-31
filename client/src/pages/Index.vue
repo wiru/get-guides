@@ -9,6 +9,7 @@
     <AboutUs v-if="this.$store.state.currentView === 'AboutUs'"/>
     <Login v-if="this.$store.state.currentView === 'Login'"/>
     <Logout v-if="this.$store.state.currentView === 'Logout'"/>
+    <Registration v-if="this.$store.state.currentView === 'Registration'"/>
   </q-page>
 </template>
 
@@ -23,6 +24,7 @@ import HowTo from '../components/HowTo.vue'
 import AboutUs from '../components/AboutUs.vue'
 import Login from '../components/Login.vue'
 import Logout from '../components/Logout.vue'
+import Registration from '../components/Registration.vue'
 
 
 export default {
@@ -36,7 +38,8 @@ export default {
     HowTo,
     AboutUs,
     Login,
-    Logout
+    Logout,
+    Registration
   },
   methods: {
     whatever() {
