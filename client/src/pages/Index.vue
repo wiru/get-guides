@@ -3,7 +3,6 @@
     <Search v-if="this.$store.state.currentView === 'Search'"/>
     <Bookings v-if="this.$store.state.currentView === 'Bookings'"/>
     <MyProfile v-if="this.$store.state.currentView === 'MyProfile'"/>
-    <Chats v-if="this.$store.state.currentView === 'Chats'"/>
     <Messages v-if="this.$store.state.currentView === 'Messages'"/>
     <HowTo v-if="this.$store.state.currentView === 'HowTo'"/>
     <AboutUs v-if="this.$store.state.currentView === 'AboutUs'"/>
@@ -18,7 +17,6 @@ import Search from '../components/Search.vue'
 import Bookings from '../components/Bookings.vue'
 import MyProfile from '../components/MyProfile.vue'
 import Messages from '../components/Messages.vue'
-import Chats from '../components/Chats.vue'
 import HowTo from '../components/HowTo.vue'
 import AboutUs from '../components/AboutUs.vue'
 import Login from '../components/Login.vue'
@@ -31,7 +29,6 @@ export default {
     Search,
     Bookings,
     MyProfile,
-    Chats,
     Messages,
     HowTo,
     AboutUs,
