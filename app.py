@@ -1,21 +1,22 @@
+# jsonify is 
+# send_from_directory is
+# cors is checking if injected from outside or valid request. 
+from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
-from threading import Lock
 
-from flask import Flask, jsonify, send_from_directory, render_template, session, request, \
-    copy_current_request_context
-from flask_socketio import SocketIO, emit, join_room, leave_room, \
-    close_room, rooms, disconnect
-     
-# async_mode = None
+# The two lines below have to be added to the .env file to run flask
+# create .env and add follwoing 2 lines. 
+# FLASK_APP=app.py
+# FLASK_ENV=development
+# alias python= python3
+# Add .env to gitignore
+# to run (any) python file, a virtual environment has to be created
+# this has to be done by running 'pipenv shell' (step has to be done after .env file is prepared)
 
-# import socketio
 
+# make server like express()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins='*')
-# thread = None
-# thread_lock = Lock()
-
+# wrap app in CORS protection?
 CORS(app)
 
 cors = CORS(app, resource={
@@ -24,20 +25,21 @@ cors = CORS(app, resource={
     }
 })
 
-@socketio.event
-def connect():
-    print('FUCKING! CONNECTED')
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    print(request.data)
+    if request.method == 'POST':
+        return "<h1>This was a POST</h1>"
 
-@socketio.event
-def disconnect():
-    print('FUCKED OFF')
+@app.route("/api/guides")
+def guides():
+    return "<h1>It's a guide page</h1>"
 
-# Currently stuck on long polling. Issue with server most likely relating to 
-# https://stackoverflow.com/questions/17696801/express-js-app-listen-vs-server-listen/17697134#17697134
-@socketio.event
-def Message(data):
-    print(data)
-
-
-if __name__ == '__main__':
-    socketio.run(app)
+@app.route("/api/user/<username>")
+def user():
+    headers = {'content-type': 'application/json'}
+    return make_response(
+        'some shit',
+        200,
+        headers=headers
+    )

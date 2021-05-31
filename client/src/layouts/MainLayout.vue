@@ -12,16 +12,10 @@
         />
 
         <q-toolbar-title>
-          {{ this.$store.state.currentView }}
+          Quasar App
         </q-toolbar-title>
 
-        <q-btn 
-        v-if="this.$store.state.currentView === 'Messages'"
-        @click="goToChats" 
-        dense
-        flat 
-        icon="arrow_back" 
-        label="Back" />
+        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -81,12 +75,6 @@ const linksData = [
     view: 'HowTo'
   },
   {
-    title: 'Chats',
-    caption: 'Your chats',
-    icon: 'message',
-    view: 'Chats'
-  },
-  {
     title: 'Messages',
     caption: 'Your messages',
     icon: 'message',
@@ -113,11 +101,6 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
-    }
-  },
-  methods: {
-    goToChats() {
-      this.$store.commit("changeView", "Chats")
     }
   },
 }
