@@ -3,7 +3,7 @@
         <div class="q-pa-md">
             <div class="q-gutter-y-md column" style="width: 60vw">
             
-                <q-input filled bottom-slots v-model="location" label="Select location" :dense="dense">
+                <q-input filled bottom-slots v-model="location" label="Select location">
                     <template v-slot:before>
                         <q-btn icon="my_location" round color="primary" />
                     </template>
@@ -13,7 +13,7 @@
                     </template>
                 </q-input>
             
-                <q-input filled bottom-slots v-model="location" label="Select language" :dense="dense">
+                <q-input filled bottom-slots v-model="location" label="Select language">
                     <template v-slot:before>
                         <q-btn icon="language" round color="primary" />
                     </template>
@@ -23,10 +23,10 @@
                     </template>
                 </q-input>
 
-                <q-input filled bottom-slots v-model="startDate" label="Select start date" :dense="dense">
+                <q-input filled bottom-slots v-model="startDate" label="Select start date">
                     <template v-slot:before>
                         <q-btn icon="today" round color="primary">
-                            <q-popup-proxy @before-show="updateStartDate" transition-show="scale" transition-hide="scale">
+                            <q-popup-proxy @before-show="startDate" transition-show="scale" transition-hide="scale">
                             <q-date
                                 v-model="startDate"
                                 title="Start Date"
@@ -41,7 +41,7 @@
                     </template>
                 </q-input>
                 
-                <q-input filled bottom-slots v-model="endDate" label="Select end date" :dense="dense">
+                <q-input filled bottom-slots v-model="endDate" label="Select end date">
                     <template v-slot:before>
                         <q-btn icon="event" round color="primary">
                             <q-popup-proxy @before-show="endDate" transition-show="scale" transition-hide="scale">
