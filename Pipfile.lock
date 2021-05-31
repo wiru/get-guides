@@ -211,6 +211,7 @@
                 "sha256:fedf0dee7a412ca6d1d6d92c158fe9cbaa8ea0cae90d268f9ccc0744de7a97d0",
                 "sha256:fffff7bfb6799a763d3742c59c6ee7ffadda21abed557637bc44ed1080876484"
             ],
+            "index": "pypi",
             "version": "==3.11.4"
         },
         "python-dotenv": {
