@@ -3,24 +3,24 @@
         <div class="q-pa-md">
             <div class="q-gutter-y-md column" style="width: 60vw">
             
-                <q-input filled bottom-slots v-model="text" label="Select location" :dense="dense">
+                <q-input filled bottom-slots v-model="location" label="Select location" :dense="dense">
                     <template v-slot:before>
                         <q-btn icon="my_location" round color="primary" />
                     </template>
 
                     <template v-slot:append>
-                    <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
+                    <q-icon v-if="location !== ''" name="close" @click="location = ''" class="cursor-pointer" />
                     </template>
                 </q-input>
             
-                <q-input filled bottom-slots v-model="text" label="Select date or range" :dense="dense">
+                <q-input filled bottom-slots v-model="date.from" label="Select date or range" :dense="dense">
                     <template v-slot:before>
                         <q-btn icon="event" round color="primary">
-                            <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+                            <q-popup-proxy @before-show="updateDate" transition-show="scale" transition-hide="scale">
                                 <q-date v-model="dateRange" range>
                                     <div class="row items-center justify-end q-gutter-sm">
                                         <q-btn label="Cancel" color="primary" flat v-close-popup />
-                                        <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
+                                        <q-btn label="OK" color="primary" flat @click="saveDate" v-close-popup />
                                     </div>
                                 </q-date>
                             </q-popup-proxy>
@@ -28,7 +28,7 @@
                     </template>
 
                     <template v-slot:append>
-                        <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
+                        <q-icon v-if="date !== ''" name="close" @click="date = ''" class="cursor-pointer" />
                     </template>
                 </q-input>
 
@@ -51,10 +51,9 @@ export default {
 
     data: () => ({
 
-        date: {
-            from: '',
-            to: ''
-        },
+        location: "",
+
+        date: "",
 
         dateRange: {
             from: '2021/06/01',
@@ -74,7 +73,8 @@ export default {
 
     search(searchCriteria) {
         this.$store.dispatch("search", searchCriteria)
-    }
+    },
+
   }
 }
 </script>
