@@ -1,11 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from 'axios'
+import createSocketioPlugin from './socketioStorePlugin'
+import socket from '../socket'
 
 Vue.use(Vuex);
 
+const socketioPlugin = createSocketioPlugin(socket)
+
 export default new Vuex.Store({
     state: {
+
       currentView: "Login",
       userType: "",
       userData: {
@@ -27,6 +32,7 @@ export default new Vuex.Store({
         bio: "Wensleydale cheese was first made by French Cistercian monks from the Roquefort region, who had settled in Wensleydale. They built a monastery at Fors, but some years later the monks moved to Jervaulx in Lower Wensleydale. They brought with them a recipe for making cheese from sheep's milk. During the 14th century cows' milk began to be used instead, and the character of the cheese began to change. A little ewes' milk was still mixed in since it gave a more open texture, and allowed the development of the blue mould. At that time, Wensleydale was almost always blue with the white variety almost unknown."
       }
     },
+    plugins: [socketioPlugin],
     // sync stuff - Use "commit"   
     mutations: {
       changeView(state, payload) {
@@ -39,5 +45,9 @@ export default new Vuex.Store({
     },
     // async stuff - Use "dispatch"
     actions: {
+      dispatchMessage(state, payload) {
+        socket.emit("Message", payload)
+        console.log("I SENT IT YOU PRICK")
       }
+    }
  });
