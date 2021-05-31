@@ -6,6 +6,8 @@
   "author": "mussinbenarbia <mouhssine.benarbia@gmail.com>",
   "private": true,
   "scripts": {
+    "build": "quasar build -m pwa",
+    "heroku-postbuild": "quasar build -m pwa",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
@@ -13,7 +15,8 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
