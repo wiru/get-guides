@@ -1,7 +1,16 @@
 <template>
     <div id="Login">
-        <h1> I'm a Login page. We have no idea whats gonna go on here yet. </h1>
-        <button @click="doStuff">L O G I N</button>
+        <h1> Welcome to GetGuides!</h1>
+        <span>Please register a new account below or log into your existing one.</span>
+        <br/>
+        <button @click="registerAction">Register new User</button>
+        <br/>
+        <br/>
+        <q-input filled v-model="text" label="Username" />
+        <br/>
+        <q-input filled v-model="Password" label="Password" />
+        <br/>
+        <button @click="loginAction">LOGIN</button>
     </div>
 </template>
 
@@ -9,7 +18,11 @@
 export default {
     name: 'Login',
 	methods: {
-        doStuff(userType) {
+        registerAction() {
+            this.$store.commit("changeView", "Registration")
+        },
+
+        loginAction(userType) {
             this.$store.commit("setUserType", userType)
             this.$store.commit("changeView", "Search")
         },
@@ -20,6 +33,7 @@ export default {
 
 <style scoped>
 h1 {
-    color: hotpink;
+    color: rgb(226, 74, 47);
+    font-size: 40pt
 }
 </style>
