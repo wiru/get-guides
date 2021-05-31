@@ -1,6 +1,37 @@
 <template>
     <div id="search">
-        <h1> I'm a search page </h1>
+        <div class="q-pa-md">
+            <div class="q-gutter-y-md column" style="max-width: 300px">
+
+            <q-input filled bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
+                <template v-slot:before>
+                <q-icon name="flight_takeoff" />
+                </template>
+
+                <template v-slot:append>
+                <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
+                <q-icon name="search" />
+                </template>
+
+                <template v-slot:hint>
+                Field hint
+                </template>
+            </q-input>
+            <q-input filled bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
+                <template v-slot:before>
+                <q-icon name="event" />
+                </template>
+
+                <template v-slot:hint>
+                Field hint
+                </template>
+
+                <template v-slot:append>
+                <q-btn round dense flat icon="add" />
+                </template>
+            </q-input>
+            </div>
+         </div>
     </div>
 </template>
 
