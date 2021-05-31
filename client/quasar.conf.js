@@ -121,9 +121,9 @@ module.exports = function (/* ctx */) {
 
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
-        //skipWaiting: true,
-        //clientsClaim: true             // added for hot-reloading the dev app. Might have to be taken out before building
-      },
+        // skipWaiting: true,
+        // clientsClaim: true             // added for hot-reloading the dev app. Might have to be taken out before building
+        },
        // only for GenerateSW
 
       // TIP

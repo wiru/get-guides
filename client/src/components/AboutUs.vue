@@ -1,6 +1,7 @@
 <template>
     <div id="about-us">
-        <h1> I'm an About Us page </h1>
+        <h1> Welcome to GetGuides! </h1>
+        <span>We are Team EnviroKraken, and we've been told to create an about us page.</span>
         
     </div>
 </template>
@@ -14,5 +15,6 @@ export default {
 <style scoped>
 h1 {
     color: rgb(246, 0, 0);
+    font-size: 34pt
 }
 </style>
