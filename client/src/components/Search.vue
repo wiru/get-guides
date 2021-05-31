@@ -1,35 +1,45 @@
 <template>
     <div id="search">
         <div class="q-pa-md">
-            <div class="q-gutter-y-md column" style="max-width: 300px">
+            <div class="q-gutter-y-md column" style="width: 60vw">
+            
+                <q-input filled bottom-slots v-model="text" label="Select location" :dense="dense">
+                    <template v-slot:before>
+                        <q-btn icon="my_location" round color="primary" />
+                    </template>
 
-            <q-input filled bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
-                <template v-slot:before>
-                <q-icon name="flight_takeoff" />
-                </template>
+                    <template v-slot:append>
+                    <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
+                    </template>
+                </q-input>
+            
+                <q-input filled bottom-slots v-model="text" label="Select date or range" :dense="dense">
+                    <template v-slot:before>
+                        <q-btn icon="event" round color="primary">
+                            <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+                                <q-date v-model="dateRange" range>
+                                    <div class="row items-center justify-end q-gutter-sm">
+                                        <q-btn label="Cancel" color="primary" flat v-close-popup />
+                                        <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
+                                    </div>
+                                </q-date>
+                            </q-popup-proxy>
+                        </q-btn>
+                    </template>
 
-                <template v-slot:append>
-                <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
-                <q-icon name="search" />
-                </template>
+                    <template v-slot:append>
+                        <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
+                    </template>
+                </q-input>
 
-                <template v-slot:hint>
-                Field hint
-                </template>
-            </q-input>
-            <q-input filled bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
-                <template v-slot:before>
-                <q-icon name="event" />
-                </template>
+                    <q-btn
+                        size="2vh"
+                        class="q-px-xl q-py-xs"
+                        color="primary"
+                        label="Search Guides"
+                        @click="search"
+                    />
 
-                <template v-slot:hint>
-                Field hint
-                </template>
-
-                <template v-slot:append>
-                <q-btn round dense flat icon="add" />
-                </template>
-            </q-input>
             </div>
          </div>
     </div>
@@ -38,27 +48,34 @@
 <script>
 export default {
     name: 'Search',
-    // This is regular vue. Kinda replaced as we're using Vuex and the store. 
-	// data() => ({
 
-	// }),
-	methods: {
+    data: () => ({
 
+        date: {
+            from: '',
+            to: ''
+        },
+
+        dateRange: {
+            from: '2021/06/01',
+            to: '2021/06/07'
+            },
+    }),
+
+  methods: {
+
+    updateDate() {
+      this.dateRange = this.date
     },
-	// Before mounted. As function. 
-    created() {
-        this.$store.commit("someOtherFunction");
+
+    saveDate() {
+      this.date = this.dateRange
     },
-	// On load. DO the following. Commit is for sync methods in store. 
-    mounted() {
-        this.$store.commit("someFunction");
-    },
-	// As a key. Happens when running through the code on this page. After mounted. We think. Have to return something. 
-    computed: {
-        someFunction() {
-           return console.log("Something");
-        }
+
+    search(searchCriteria) {
+        this.$store.dispatch("search", searchCriteria)
     }
+  }
 }
 </script>
 
