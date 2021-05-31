@@ -1,16 +1,14 @@
 from flask_cors import CORS
 from threading import Lock
-import os
+from authlib.integrations.flask_client import OAuth
+from flask import Flask, url_for, redirect, jsonify, send_from_directory, render_template, session, request
 import datetime
-
-from flask import Flask, jsonify, send_from_directory, render_template, session, request, \
-    copy_current_request_context
 
 from flask_pymongo import PyMongo
 
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
-     
+import os
 # async_mode = None
 
 # The two lines below have to be added to the .env file to run flask
@@ -23,16 +21,32 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
 # Add .env to gitignore
 #
 # then do pipenv install (this installs everything mentioned in the pipfile)
-#
+# 
 # to run (any) python file, a virtual environment has to be created
 # this has to be done by running 'pipenv shell' (step has to be done after .env file is prepared)
 # After this, type "flask run" into cmd/bash
+app = Flask(__name__, static_folder="client/dist/pwa", static_url_path="")
 
 
+# AUTHLIB #
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.environ.get('OAUTH_ID'),
+    client_secret=os.environ.get('OAUTH_SECRET'),
+    access_token_url='https://accounts.google.com/o/oauth2/token',    
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    client_kwargs={'scope': 'openid profile email'}
+)
+
+
+# SOCKET.IO #
+app.config['SECRET_KEY'] = 'secret!' # MAKE THIS HARDER FOR PRODUCTION
 # import socketio
 
-app = Flask(__name__, static_folder="client/dist/pwa", static_url_path="")
-app.config['SECRET_KEY'] = 'secret!'
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 socketio = SocketIO(app, cors_allowed_origins='*')
 # thread = None
@@ -45,8 +59,36 @@ cors = CORS(app, resource={
         "origins":"*"
     }
 })
-
 mongo = PyMongo(app)
+
+@app.route('/hello')
+def hello_world():
+    email = dict(session).get('email', None)
+    return 'hello'
+
+# AUTHLIB
+@app.route('/login')
+def login():
+    google = oauth.create_client('google')
+    redirect_uri = url_for('authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+    # If authorized we this route takes us to app redirect
+@app.route('/authorize')
+def authorize():
+    google = oauth.create_client('google')
+    token = google.authorize_access_token()
+    resp = google.get('userinfo')
+    resp.raise_for_status()
+    user_info = resp.json()
+    print(user_info)
+
+    # do something with the token and profile
+    session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
+    return redirect('https://localhost:8080/')
+
+
+# SOCKET.IO
 
 @app.get("/")
 def index():
@@ -71,7 +113,7 @@ def get_bookings():
     bookings = mongo.db.bookings
     out = []
     if userType == 'traveller':
-        for booking in bookings.find("name": request.form.name):
+        for booking in bookings.find({"name": request.form.name}):
             out.append({
                 guide: booking['guide'],
                 location: booking['location'],
@@ -84,7 +126,7 @@ def get_bookings():
                 convID: booking['conversation']['_id']
             })
     else: 
-        for booking in bookings.find("name": request.form.name):
+        for booking in bookings.find({"name": request.form.name}):
             out.append({
                 traveller: booking['traveller'],
                 location: booking['location'],
@@ -145,7 +187,7 @@ def add_booking():
         "end_time":request.form.end_time,
         "meeting_location": request.form.meeting_location,
         "details": request.form.details,
-        "status": request.form.confirmed",
+        "status": request.form.confirmed,
         "conversation": ""
     })
 
@@ -161,7 +203,7 @@ def modify_booking():
         "end_time":request.form.end_time,
         "meeting_location": request.form.meeting_location,
         "details": request.form.details,
-        "status": request.form.confirmed",
+        "status": request.form.confirmed,
         "conversation": ""
     })
 
@@ -170,7 +212,7 @@ def modify_booking():
 def post_message():
     conversation = mongo.db.conversations.find_one({"_id": request.form.id})
     mongo.db.conversations[request.form.id]['messages'] ({
-        "from": request.form.from,
+        "from": request.form.sender,
         "text": request.form.text,
         "timestamp": datetime.datetime.now().replace(microsecond=0)
     })
@@ -184,12 +226,21 @@ def connect():
 def disconnect():
     print('FUCKED OFF')
 
-# Currently stuck on long polling. Issue with server most likely relating to 
-# https://stackoverflow.com/questions/17696801/express-js-app-listen-vs-server-listen/17697134#17697134
 @socketio.event
 def Message(data):
     print(data)
 
-
 if __name__ == '__main__':
     socketio.run(app)
+
+
+# NOTES
+    # Authlib Setup
+        # pip install Authlib Flask
+        # from authlib.integrations.flask_client import OAuth
+        # oauth = OAuth(app)
+        # Make Login route
+        # Make Authorize route
+        # add oauth register
+        # register on google for oauth
+        # added 1 test email "test@test.com" on google. 
