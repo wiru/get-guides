@@ -26,7 +26,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
 
 # import socketio
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="client/dist/pwa", static_url_path="")
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, cors_allowed_origins='*')
 # thread = None
@@ -39,6 +39,11 @@ cors = CORS(app, resource={
         "origins":"*"
     }
 })
+
+@app.route("/")
+def index():
+    return send_from_directory(app.static_folder, "index.html")
+
 
 @socketio.event
 def connect():
