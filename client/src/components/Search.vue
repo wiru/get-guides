@@ -13,9 +13,19 @@
                     </template>
                 </q-input>
             
+                <q-input filled bottom-slots v-model="location" label="Select language" :dense="dense">
+                    <template v-slot:before>
+                        <q-btn icon="language" round color="primary" />
+                    </template>
+
+                    <template v-slot:append>
+                    <q-icon v-if="location !== ''" name="close" @click="location = ''" class="cursor-pointer" />
+                    </template>
+                </q-input>
+
                 <q-input filled bottom-slots v-model="startDate" label="Select start date" :dense="dense">
                     <template v-slot:before>
-                        <q-btn icon="event" round color="primary">
+                        <q-btn icon="today" round color="primary">
                             <q-popup-proxy @before-show="updateStartDate" transition-show="scale" transition-hide="scale">
                             <q-date
                                 v-model="startDate"
@@ -45,9 +55,10 @@
                     </template>
 
                     <template v-slot:append>
-                        <q-icon v-if="endDate !== ''" name="close" @click="endDate = ''" class="cursor-pointer" />
+                        <q-icon v-if="language !== ''" name="close" @click="language = ''" class="cursor-pointer" />
                     </template>
                 </q-input>
+
 
                     <q-btn
                         size="2vh"
@@ -69,6 +80,8 @@ export default {
     data: () => ({
 
         location: "",
+
+        language: "",
 
         startDate: "",
         
