@@ -22,11 +22,11 @@
                     <q-icon v-if="location !== ''" name="close" @click="location = ''" class="cursor-pointer" />
                     </template>
                 </q-input>
-
+                
                 <q-input filled bottom-slots v-model="startDate" label="Select start date" :dense="dense">
                     <template v-slot:before>
-                        <q-btn icon="today" round color="primary">
-                            <q-popup-proxy @before-show="updateStartDate" transition-show="scale" transition-hide="scale">
+                        <q-btn icon="event" round color="primary">
+                            <q-popup-proxy @before-show="startDate" transition-show="scale" transition-hide="scale">
                             <q-date
                                 v-model="startDate"
                                 title="Start Date"
