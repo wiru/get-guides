@@ -1,11 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from 'axios'
+import createSocketioPlugin from './socketioStorePlugin'
+import socket from '../socket'
 
 Vue.use(Vuex);
 
+const socketioPlugin = createSocketioPlugin(socket)
+
 export default new Vuex.Store({
     state: {
+
       currentView: "Login",
       userType: "",
       userData: {
@@ -28,6 +33,7 @@ export default new Vuex.Store({
       },
       filteredGuides: [],
     },
+    plugins: [socketioPlugin],
     // sync stuff - Use "commit"   
     mutations: {
       changeView(state, payload) {
@@ -45,6 +51,12 @@ export default new Vuex.Store({
     actions: {
       search(state, payload) {
         state.commit("setFilteredGuides")
+      },
+      
+      dispatchMessage(state, payload) {
+        socket.emit("Message", payload)
+        console.log("I SENT IT YOU PRICK")
       }
+      
     }
  });

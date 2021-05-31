@@ -7,7 +7,13 @@ name = "pypi"
 flask = "*"
 flask-pymongo = "*"
 python-dotenv = "*"
+dnspython = "*"
 flask-cors = "*"
+gunicorn = "*"
+flask_socketio = "*"
+
+[scripts]
+start = "flask run"
 
 [dev-packages]
 
