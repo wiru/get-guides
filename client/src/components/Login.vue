@@ -34,6 +34,6 @@ export default {
 <style scoped>
 h1 {
     color: rgb(226, 74, 47);
-    font-size: 40pt
+    font-size: 34pt
 }
 </style>

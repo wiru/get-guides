@@ -4,32 +4,24 @@
         <br/>
         <span>Please fill in the following fields to finish the registration process.</span>
         <br/>
-        <q-select
-        disable
-        filled
-        v-model="username"
-        :username="username" 
-        />
-        <q-select
-        disable
-        filled
-        v-model="emailaddress"
-        :emailaddress="emailaddress" 
-        />
+        <q-select disable filled v-model="username" :username="username" />
+        <q-select disable filled v-model="emailaddress" :emailaddress="emailaddress" />
         <br/>
         <span>Please confirm the type of account you would like to create:</span>
-        <q-select outlined v-model="usermodel" :options="usertype" :dense="dense" />
+        <q-select outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" />
             <div id="travelreg" v-if="(usermodel === 'Traveler')">
                 <br/>
                 <span>You're all set! Please confirm to finish the registration.</span>
                 <br/>
-                <q-btn id="travelconfirm" color="primary" label="Finish" />
+                <q-btn id="travelconfirm" @click="registerTraveler" color="primary" label="Finish" />
             </div>
             <div id="guidereg" v-if="(usermodel === 'Guide')">
                 <br/>          
                 <q-input filled v-model="biomodel" type="string" maxlength=160 placeholder="Please write a short bio about yourself!" hint="max 160 characters" :dense="dense" />
                 <br/>
-                <q-select filled v-model="languagemodel" multiple :options="languages" label="Languages"  hint="Multiple Options" />
+                <q-select filled v-model="locationmodel" multiple :options="location" label="Location" hint="Multiple Options" :dense="dense" />
+                <br/>
+                <q-select filled v-model="languagemodel" multiple :options="languages" label="Languages"  hint="Multiple Options" :dense="dense" />
                 <br/>
                 <q-select filled v-model="availabledaysmodel" multiple :options="availabledays" label="Available Days"  hint="Multiple Options" />
                 <br/>
@@ -37,7 +29,7 @@
                 <br/>
                 <span>You're all set! Please confirm to finish the registration.</span>
                 <br/>
-                <q-btn id="guideconfirm" color="primary" label="Finish" />
+                <q-btn id="guideconfirm" @click="registerGuide" color="primary" label="Finish" />
             </div>
     </div>
 </template>
@@ -46,17 +38,25 @@
 export default {
     name: 'Registration',
 	methods: {
+        registerTraveler () {
+            //this.$store.commit("changeView", "Registration")
+        },
+        registerGuide () {
+            // something here
+        }
     },
     mounted() {
     },
     data () {
         return {
             usermodel: null,
+            locationmodel: null,
             languagemodel: null,
             availabledaysmodel: null,
             ratemodel: null,
             biomodel: null,
             usertype: ['Traveler', 'Guide'],
+            location: ['Tokyo 23 wards', 'Extended Tokyo', 'Osaka'],
             languages: ['English', 'Japanese', 'Italian'],
             availabledays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
             username: ["username"],
@@ -70,6 +70,6 @@ export default {
 <style scoped>
 h1 {
     color: black;
-    font-size: 40pt
+    font-size: 34pt
 }
 </style>

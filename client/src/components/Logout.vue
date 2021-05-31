@@ -25,6 +25,6 @@ export default {
 <style scoped>
 h1 {
     color: hotpink;
-    font-size: 40pt
+    font-size: 34pt
 }
 </style>
