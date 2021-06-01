@@ -49,6 +49,14 @@ export default new Vuex.Store({
   },
   // async stuff - Use "dispatch"
   actions: {
+    login(state) {
+      this.$router.push("/login");
+    },
+
+    async receiveMessage(state, payload) {
+      console.log("this was received:", payload);
+    },
+
     async search(state, payload) {
       state.commit("setFilteredGuides");
     },

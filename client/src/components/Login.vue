@@ -13,10 +13,16 @@
 
 <script>
 export default {
-  name: "Login",
-  methods: {
-    registerAction() {
-      this.$store.commit("changeView", "Registration");
+    name: 'Login',
+	methods: {
+        registerAction() {
+            this.$store.commit("changeView", "Registration")
+        },
+
+        loginAction() {
+            this.$store.dispatch("login")
+        },
+
     },
 
     loginAction(userType) {

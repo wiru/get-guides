@@ -9,14 +9,15 @@
     "build": "quasar build -m pwa",
     "heroku-postbuild": "quasar build -m pwa",
     "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "icons": "icongenie generate -m pwa -i GG-white-red-1240.png --skip-trim"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
-    "socket.io-client": "^4.1.2"
+    "socket.io-client": "^4.1.2",
+    "vue-socket.io": "^3.0.10"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
