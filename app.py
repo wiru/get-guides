@@ -99,8 +99,9 @@ def index():
 @app.get("/api/guides/<location>/<language>/<startdate>/<enddate>")
 def get_guides(location, language, startdate, enddate):
     out = []
-    for guide in mongo.db.guides.find( {"locations" : "nikko"}):
-        out.append({'name': guide['name'], 'avatar': guide['avatar']})
+    for guide in mongo.db.guides.find( {"locations" : location}, {"name":1, "avatar":1}):
+        guide["_id"] = str(guide["_id"])
+        out.append(guide)
     return jsonify(out)
 
 @app.get("/api/guides/<name>")
