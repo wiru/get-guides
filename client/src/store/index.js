@@ -45,7 +45,7 @@ export default new Vuex.Store({
       setFilteredGuides(state, payload) {
         this.state.filteredGuides = payload;
       },
-      setUserName(state, payload) {
+      setUserInfo(state, payload) {
         this.state.userData.name = payload.name
       }
       

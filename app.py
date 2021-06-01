@@ -72,12 +72,14 @@ def login():
     # If authorized we this route takes us to app redirect
 @app.route('/authorize')
 def authorize():
-    newPath = '/#/'
+    newPath = 'http://localhost:8080'
     google = oauth.create_client('google')
     token = google.authorize_access_token()
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
+
+    #check user_info against data in database
 
     # print(user_info)
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
