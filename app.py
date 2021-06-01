@@ -94,19 +94,19 @@ def authorize():
 def index():
     return send_from_directory(app.static_folder, "index.html")
 
-@app.get("/api/guides")
-def get_guides():
-    guides = mongo.db.guides
+# db.inventory.find( { qty: { $in: [ 5, 15 ] } } )
+
+@app.get("/api/guides/<location>/<language>/<startdate>/<enddate>")
+def get_guides(location, language, startdate, enddate):
     out = []
-    for guide in guides.find():
-        print(guide)
+    for guide in mongo.db.guides.find( {"locations" : "nikko"}):
         out.append({'name': guide['name'], 'avatar': guide['avatar']})
     return jsonify(out)
 
 @app.get("/api/guides/<name>")
 def get_single_guide(name):
-    guide = mongo.db.guides.find_one({"name": request.form.name})
-    return jsonify(guide)
+    guides = mongo.db.guides.find({"name": request.form.name})
+    return jsonify({"location": location, "language":language,"startdate":startdate,"enddate":enddate})
 
 @app.get("/api/bookings/<name>")
 def get_bookings():
