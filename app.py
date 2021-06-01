@@ -61,11 +61,6 @@ cors = CORS(app, resource={
 })
 mongo = PyMongo(app)
 
-@app.route('/hello')
-def hello_world():
-    email = dict(session).get('email', None)
-    return 'hello'
-
 # AUTHLIB
 @app.route('/login')
 def login():
@@ -82,11 +77,14 @@ def authorize():
     resp.raise_for_status()
     user_info = resp.json()
     print(user_info)
-
     # do something with the token and profile
     session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    return redirect('https://localhost:8080/')
+    return redirect('/authorized')
 
+@app.route('/authorized')
+def authorized():
+    socketio.emit('authorized', "Hello")
+    return 'hello'
 
 # SOCKET.IO
 
