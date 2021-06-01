@@ -9,7 +9,7 @@
     "build": "quasar build -m pwa",
     "heroku-postbuild": "quasar build -m pwa",
     "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "icons": "icongenie generate -m pwa -i GG-white-red-1240.png --skip-trim"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
