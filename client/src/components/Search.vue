@@ -119,7 +119,6 @@ export default {
   }),
 
   methods: {
-<<<<<<< HEAD
     search() {
       let newDate = this.startDate.split("/").join("");
       console.log(`New Date is: ${newDate}`);
@@ -131,12 +130,6 @@ export default {
         meme: "69420"
       });
     }
-=======
-
-    search(searchCriteria) {
-        this.$store.dispatch("search", searchCriteria)
-    },
->>>>>>> bd3978ff83283fc878b30a7cc4a503a145348c58
   }
 };
 </script>

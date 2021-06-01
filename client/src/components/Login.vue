@@ -13,22 +13,20 @@
 
 <script>
 export default {
-    name: 'Login',
-	methods: {
-        registerAction() {
-            this.$store.commit("changeView", "Registration")
-        },
-
-        loginAction() {
-            this.$store.dispatch("login")
-        },
-
+  name: "Login",
+  methods: {
+    registerAction() {
+      this.$store.commit("changeView", "Registration");
     },
 
-    loginAction(userType) {
-      this.$store.commit("setUserType", userType);
-      this.$store.commit("changeView", "Search");
+    loginAction() {
+      this.$store.dispatch("login");
     }
+  },
+
+  loginAction(userType) {
+    this.$store.commit("setUserType", userType);
+    this.$store.commit("changeView", "Search");
   }
 };
 </script>
