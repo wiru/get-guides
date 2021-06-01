@@ -111,13 +111,13 @@ def index():
 # db.inventory.find( { qty: { $in: [ 5, 15 ] } } )
 
 
-@app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
-def get_guides(location, language, startdate, enddate):
+@app.get("/api/guides/search/<location>/<language>/<date>")
+def get_guides(location, language, date):
     out = []
     for guide in mongo.db.guides.find({ "$and": [
         {"locations" : location},
         {"languages": language},
-        { "unavailable_dates": { "$nin": [startdate] } }
+        { "unavailable_dates": { "$nin": [date] } }
     ]
     }, {"name":1, "avatar":1}):
         guide["_id"] = str(guide["_id"])
@@ -133,12 +133,20 @@ def get_single_guide(id):
     guide = mongo.db.guides.find_one({"_id": ObjectId(id)})
     return JSONEncoder().encode(guide)
 
+@app.get("/api/messages/<partner_id>")
+def get_conversation(partner_id):
+    out = []
+    for message in mongo.db.conversations.find({"traveller": partner_id}):
+        out.append(message)
+    print(out)
+    return jsonify(out)
+    
 @app.get("/api/bookings/<name>")
-def get_bookings():
+def get_bookings(name):
     bookings = mongo.db.bookings
     out = []
     if userType == 'traveller':
-        for booking in bookings.find({"name": request.form.name}):
+        for booking in bookings.find({"name": name}):
             out.append({
                 guide: booking['guide'],
                 location: booking['location'],
@@ -151,7 +159,7 @@ def get_bookings():
                 convID: booking['conversation']['_id']
             })
     else: 
-        for booking in bookings.find({"name": request.form.name}):
+        for booking in bookings.find({"name": name}):
             out.append({
                 traveller: booking['traveller'],
                 location: booking['location'],
@@ -164,25 +172,15 @@ def get_bookings():
                 convID: booking['conversation']['_id']
             })
 
-@app.get("/api/messages/<conversation_ID>")
-def get_conversation():
-    converations = mongo.db.conversations
-    return jsonify(conversations.find_one({"_id": request.form.id}))
-
-
 # post new guide
 @app.post("/api/guides/<name>")
-def add_guide():
+def add_guide(name):
     mongo.db.guides.insert_one({
         'name': request.form.name,
         "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
         "gallery": [],
-        "email": request.form.email,
-        "languages": [
-            {"italian": 5},
-            {"arabic": 5},
-            {"english": 4},
-        ],
+        "email": email,
+        "languages": [language],
         "bio": request.form.bio,
         "weekdays": request.form.weekdays,
         "locations": request.form.locations,

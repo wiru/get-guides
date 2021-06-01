@@ -30,6 +30,7 @@
       <div class="q-pa-md">
         <div class="q-gutter-md">
           <q-date v-model="date" :options="optionsFn2" minimal />
+          <q-btn color="deep-orange" icon="chat" @click="startChat(singleGuide.id)" />
         </div>
       </div>
     </div>
@@ -48,6 +49,10 @@ export default {
     optionsFn2(date) {
       const parts = date.split("/");
       return parts[2] % 2 === 0;
+    },
+    startChat(id) {
+      this.$store.state.currentView = "Messages";
+      this.$store.dispatch("getChatLogs", id);
     }
   },
   created() {
