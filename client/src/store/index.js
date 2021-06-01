@@ -56,6 +56,9 @@ export default new Vuex.Store({
       dispatchMessage(state, payload) {
         socket.emit("Message", payload)
         console.log("I SENT IT YOU PRICK")
+      },
+      receiveMessage(state, payload) {
+        console.log("this was received:", payload)
       }
       
     }

@@ -61,6 +61,7 @@ cors = CORS(app, resource={
 })
 mongo = PyMongo(app)
 
+
 # AUTHLIB
 @app.route('/login')
 def login():
@@ -71,20 +72,20 @@ def login():
     # If authorized we this route takes us to app redirect
 @app.route('/authorize')
 def authorize():
+    newPath = '/#/authorized'
     google = oauth.create_client('google')
     token = google.authorize_access_token()
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
-    print(user_info)
-    # do something with the token and profile
-    session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    return redirect('/authorized')
 
-@app.route('/authorized')
-def authorized():
-    socketio.emit('authorized', "Hello")
-    return 'hello'
+    # print(user_info)
+    # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
+    socketio.emit('message', user_info)
+    ## user_info == mongo.userID ? newPath = '/authorized' : newPath = '/registerSomethingnoclue'
+    
+    # do something with the token and profile
+    return redirect(newPath)
 
 # SOCKET.IO
 

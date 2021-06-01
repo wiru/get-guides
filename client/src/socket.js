@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+
 const socket = io("http://localhost:5000", { //this needs to be updated
 	transportOptions: {
 		polling: {
@@ -13,8 +14,9 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
 	console.log('disconnected now')
 })
-socket.on('authorized', () => {
-	this.$store.commit("changeView", "HowTo")
+socket.on('changeView', () => {
+	console.log("store access here")
+	this.$store.state.currentView = 'HowTo';
 })
 
 export default socket
