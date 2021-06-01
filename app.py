@@ -72,7 +72,7 @@ def login():
     # If authorized we this route takes us to app redirect
 @app.route('/authorize')
 def authorize():
-    newPath = '/#/authorized'
+    newPath = '/#/'
     google = oauth.create_client('google')
     token = google.authorize_access_token()
     resp = google.get('userinfo')
@@ -81,7 +81,7 @@ def authorize():
 
     # print(user_info)
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    socketio.emit('message', user_info)
+    socketio.emit('authSuccess', user_info)
     ## user_info == mongo.userID ? newPath = '/authorized' : newPath = '/registerSomethingnoclue'
     
     # do something with the token and profile

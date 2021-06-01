@@ -44,6 +44,9 @@ export default new Vuex.Store({
       },
       setFilteredGuides(state, payload) {
         this.state.filteredGuides = payload;
+      },
+      setUserName(state, payload) {
+        this.state.userData.name = payload.name
       }
       
     },
@@ -52,7 +55,9 @@ export default new Vuex.Store({
       search(state, payload) {
         state.commit("setFilteredGuides")
       },
-      
+      login(state) {
+        this.$router.push("/login");
+      },
       dispatchMessage(state, payload) {
         socket.emit("Message", payload)
         console.log("I SENT IT YOU PRICK")

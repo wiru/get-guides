@@ -22,10 +22,8 @@ export default {
             this.$store.commit("changeView", "Registration")
         },
 
-        loginAction(userType) {
-            //this.$store.commit("setUserType", userType)
-            //this.$store.commit("changeView", "Search")
-            this.$store.dispatch("dispatchMessage", "FUck");
+        loginAction() {
+            this.$store.dispatch("login")            
         },
 
     },
