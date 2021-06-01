@@ -12,6 +12,8 @@ flask-cors = "*"
 pymongo = "*"
 gunicorn = "*"
 flask_socketio = "*"
+authlib = "*"
+requests = "*"
 
 [scripts]
 start = "flask run"
