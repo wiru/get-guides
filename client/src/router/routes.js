@@ -6,7 +6,18 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Index.vue') }
     ]
-  },    
+  },
+  {
+    path: '/authorized',
+    component: () => import('pages/test.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    beforeEnter() {location.href = 'http://localhost:5000/login'},
+		//component: 'login'
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

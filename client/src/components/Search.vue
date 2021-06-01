@@ -2,7 +2,6 @@
     <div id="search">
         <div class="q-pa-md">
             <div class="q-gutter-y-md column" style="width: 60vw">
-            
                 <q-input filled bottom-slots v-model="location" label="Select location">
                     <template v-slot:before>
                         <q-btn icon="my_location" round color="primary" />
@@ -94,7 +93,6 @@ export default {
     search(searchCriteria) {
         this.$store.dispatch("search", searchCriteria)
     },
-
   }
 }
 </script>
