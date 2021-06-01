@@ -126,15 +126,10 @@ def get_guides(location, language, startdate, enddate):
 
 # datetime.datetime(2012, 3, 23, 23, 24, 55, 173504)
 # >>> datetime.datetime.today().weekday()
-# 4
-    
-# 60b47b595c7aa6b557654a30
-
-# JSONEncoder().encode(analytics)
 
 @app.get("/api/guides/<id>")
 def get_single_guide(id):
-    guide = mongo.db.guides.find_one({"_id": ObjectId(id)}, {"name": 1, "avatar":1})
+    guide = mongo.db.guides.find_one({"_id": ObjectId(id)})
     return JSONEncoder().encode(guide)
 
 @app.get("/api/bookings/<name>")

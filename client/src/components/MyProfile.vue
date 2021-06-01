@@ -1,17 +1,14 @@
 <template>
-  <div id="my-profile">
+  <div id="my-profile" :key="this.$store.state.somethingStupid">
     <div id="top">
       <div id="guide-data" class="fixed-top-left">
-        <p>Name: {{ this.$store.state.userData.name }}</p>
-        <p>Email: {{ this.$store.state.userData.email }}</p>
-        <p>Location: {{ this.$store.state.userData.location }}</p>
-        <p>Completed tours: {{ this.$store.state.userData.completedTours }}</p>
+        <p>Name: {{ this.$store.state.singleGuide.name }}</p>
+        <!-- <p>Location: {{ this.$store.state.singleGuide.location }}</p> -->
         <p>I can guide you in:</p>
         <q-chip
-          v-for="language in this.$store.state.userData.languages"
+          v-for="language in this.$store.state.singleGuide.languages"
           :key="language.fakeValueThatIMadeUp"
           clickable
-          @click="onClick"
           color="primary"
           text-color="white"
         >
@@ -19,14 +16,14 @@
         </q-chip>
       </div>
       <div id="avatar" class="q-pa-md q-gutter-sm fixed-top-right">
-        <q-avatar rounded size="30vw">
-          <img src="https://cdn.quasar.dev/img/avatar.png" />
+        <q-avatar rounded size="25vw">
+          <img v-bind:src="this.$store.state.singleGuide.avatar" />
         </q-avatar>
       </div>
     </div>
     <div id="mid">
       <div id="bio">
-        <p>{{ this.$store.state.userData.bio }}</p>
+        <p>{{ this.$store.state.singleGuide.bio }}</p>
       </div>
     </div>
     <div id="bot">
@@ -42,20 +39,22 @@
 <script>
 export default {
   name: "MyProfile",
-  data() {
-    return {
-      left: true
-    };
-  },
+  data: () => ({
+    left: true,
+    date: ""
+  }),
+
   methods: {
     optionsFn2(date) {
       const parts = date.split("/");
       return parts[2] % 2 === 0;
     }
+  },
+  created() {
+    console.log("call start", Date.now());
+    this.$store.dispatch("getSingleGuide");
+    this.avatar = this.$store.state.singleGuide.avatar;
   }
-  // mounted() {
-  //     this.$store.commit("someFunction");
-  // },
 };
 </script>
 

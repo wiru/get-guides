@@ -17,16 +17,16 @@
           </template>
         </q-input>
 
-        <q-input filled bottom-slots v-model="location" label="Select language">
+        <q-input filled bottom-slots v-model="language" label="Select language">
           <template v-slot:before>
             <q-btn icon="language" round color="primary" />
           </template>
 
           <template v-slot:append>
             <q-icon
-              v-if="location !== ''"
+              v-if="language !== ''"
               name="close"
-              @click="location = ''"
+              @click="language = ''"
               class="cursor-pointer"
             />
           </template>
@@ -119,10 +119,16 @@ export default {
   }),
 
   methods: {
-    search(searchCriteria) {
+    search() {
       let newDate = this.startDate.split("/").join("");
       console.log(`New Date is: ${newDate}`);
-      this.$store.ispatch("search", searchCriteria);
+
+      this.$store.dispatch("getFilteredGuides", {
+        location: this.location,
+        language: this.language,
+        date: newDate,
+        meme: "69420"
+      });
     }
   }
 };
