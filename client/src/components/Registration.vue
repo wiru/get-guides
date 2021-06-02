@@ -57,8 +57,15 @@ export default {
         registerTraveler () {
             
             if (this.usermodel !== null && this.username !== "" && this.emailaddress !== "" && this.$store.state.gid !== "") {
-            // pass Name, Email, UserType, gid to Database
             
+            let travellerPackage = {}
+            travellerPackage["usertype"] = this.usermodel
+            travellerPackage["username"] = this.username
+            travellerPackage["email"] = this.emailaddress
+            travellerPackage["gid"] = this.$store.state.gid
+            //console.log(travellerPackage)
+            this.$store.commit("setTravellerPackage", travellerPackage)
+            this.$store.dispatch('travellerPackage', travellerPackage)
             this.$store.commit("changeView", "Search")
             }
             
@@ -66,8 +73,19 @@ export default {
         },
         registerGuide () {
             if (this.usermodel !== null && this.username !== "" && this.emailaddress !== "" && this.locationmodel !== null && this.languagemodel !== null && this.ratemodel !== null && this.biomodel !== null && this.$store.state.gid !== "") {
-            // pass Name, Email, UserType, gid and filled fields to Database
             
+             let guidePackage = {}
+            guidePackage["usertype"] = this.usermodel
+            guidePackage["username"] = this.username
+            guidePackage["email"] = this.emailaddress
+            guidePackage["location"] = this.locationmodel
+            guidePackage["language"] = this.languagemodel
+            guidePackage["rate"] = this.ratemodel
+            guidePackage["bio"] = this.biomodel
+            guidePackage["gid"] = this.$store.state.gid
+            //console.log(guidePackage)
+            this.$store.commit("setGuidePackage", guidePackage)
+            this.$store.dispatch('guidePackage', guidePackage)
             this.$store.commit("changeView", "MyProfile")
             }
             else {this.alert = true}

@@ -17,6 +17,8 @@ export default new Vuex.Store({
     name: "",
     email: "",
     gid: "",
+    travellerPackage: {},
+    guidePackage: {},
     ////
     currentChatId: '',
     currentChat: [],
@@ -60,6 +62,12 @@ export default new Vuex.Store({
     },
     setUsergid(state, payload) {
       this.state.gid = payload;
+    },
+    setTravellerPackage(state, payload) {
+      this.state.travellerPackage = payload
+    },
+    setGuidePackage(state, payload) {
+      this.state.guidePackage = payload
     },
     ////////////
 
@@ -135,6 +143,15 @@ export default new Vuex.Store({
     async dispatchMessage(state, payload) {
       socket.emit("Message", payload);
       console.log("I SENT IT YOU PRICK");
-    }
+    },
+    // For Registration
+    async travellerPackage(state, payload) {
+      socket.emit('newTravellerRegistration', payload)
+      console.log('newTravellerRegistration on front')
+      },
+    async guidePackage(state, payload) {
+      socket.emit('newGuideRegistration', payload)
+      console.log('newGuideRegistration on front')
+      }
   }
 });

@@ -5,7 +5,7 @@
       >Please log in to continue.</span
     >
     <br />
-    <button @click="registerAction">Register new User</button>
+    <!-- <button @click="registerAction">Register new User</button> -->
     <br />
     <button @click="loginAction">LOGIN</button>
   </div>
@@ -16,9 +16,10 @@ export default {
   name: "Login",
   methods: {
     // Not needed in current itaration
+    /*
     registerAction() {
       this.$store.commit("changeView", "Registration");
-    },
+    },*/
     
     loginAction() {
       this.$store.dispatch("login");
