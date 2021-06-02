@@ -91,7 +91,8 @@ def searchUser(gid, email, name):
             'path': 'Registration',
             'loggedIn': False,
             'email': email,
-            'name': name
+            'name': name,
+            'gid': gid,
             }
 
 # AUTHLIB

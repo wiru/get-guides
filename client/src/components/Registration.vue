@@ -7,6 +7,22 @@
         <q-select disable filled v-model="username" :username="username" />
         <q-select disable filled v-model="emailaddress" :emailaddress="emailaddress" />
         <br/>
+            <q-dialog v-model="alert">
+            <q-card>
+                <q-card-section>
+                    <div class="text-h6">Alert</div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-none">
+                     Please fill in all necessary information.
+                    </q-card-section>
+
+                    <q-card-actions align="right">
+                    <q-btn flat label="OK" color="primary" v-close-popup />
+                </q-card-actions>
+            </q-card>
+            </q-dialog>
+
         <span>Please confirm the type of account you would like to create:</span>
         <q-select outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" />
             <div id="travelreg" v-if="(usermodel === 'Traveler')">
@@ -39,10 +55,22 @@ export default {
     name: 'Registration',
 	methods: {
         registerTraveler () {
-            //this.$store.commit("changeView", "Registration")
+            
+            if (this.usermodel !== null && this.username !== "" && this.emailaddress !== "" && this.$store.state.gid !== "") {
+            // pass Name, Email, UserType, gid to Database
+            
+            this.$store.commit("changeView", "Search")
+            }
+            
+            else {this.alert = true}
         },
         registerGuide () {
-            // something here
+            if (this.usermodel !== null && this.username !== "" && this.emailaddress !== "" && this.locationmodel !== null && this.languagemodel !== null && this.ratemodel !== null && this.biomodel !== null && this.$store.state.gid !== "") {
+            // pass Name, Email, UserType, gid and filled fields to Database
+            
+            this.$store.commit("changeView", "MyProfile")
+            }
+            else {this.alert = true}
         }
     },
     mounted() {
@@ -59,9 +87,10 @@ export default {
             location: ['Tokyo 23 wards', 'Extended Tokyo', 'Osaka'],
             languages: ['English', 'Japanese', 'Italian'],
             availabledays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
-            username: ["username"],
-            emailaddress: ["email address"],
+            username: this.$store.state.name,
+            emailaddress: this.$store.state.email,
             dense: true,
+            alert: false,
             }
     }
 }

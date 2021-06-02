@@ -2,7 +2,7 @@
   <div id="Login">
     <h1>Welcome to GetGuides!</h1>
     <span
-      >Please register a new account below or log into your existing one.</span
+      >Please log in to continue.</span
     >
     <br />
     <button @click="registerAction">Register new User</button>
@@ -15,10 +15,11 @@
 export default {
   name: "Login",
   methods: {
+    // Not needed in current itaration
     registerAction() {
       this.$store.commit("changeView", "Registration");
     },
-
+    
     loginAction() {
       this.$store.dispatch("login");
     }
