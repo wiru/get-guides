@@ -1,142 +1,19 @@
 <template>
   <div id="search-results">
-    <div class="q-pa-md" style="max-width: 350px">
-      <q-list bordered padding>
-        <q-item>
-          <q-item-section>
-            <q-item-label overline>OVERLINE</q-item-label>
-            <q-item-label>Single line item</q-item-label>
-            <q-item-label caption
-              >Secondary line text. Lorem ipsum dolor sit amet, consectetur
-              adipiscit elit.</q-item-label
-            >
-          </q-item-section>
-
-          <q-item-section side top>
-            <q-item-label caption>5 min ago</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced />
-        <q-item-label header>List Header</q-item-label>
-
-        <q-item>
+    <div class="q-pa-md" style="width: 100vw">
+      <q-list bordered>
+        <q-item
+          :key="guide.id"
+          v-for="guide in this.$store.state.filteredGuides"
+          clickable
+          v-ripple
+          @click="getSingleGuide(guide._id)"
+        >
+          <q-item-section>{{ guide.name }}</q-item-section>
           <q-item-section avatar>
-            <q-icon color="primary" name="bluetooth" />
-          </q-item-section>
-          <q-item-section>List item</q-item-section>
-          <q-item-section side>
-            <q-item-label caption>meta</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced inset="item" />
-
-        <q-item>
-          <q-item-section top avatar>
-            <q-avatar color="primary" text-color="white" icon="bluetooth" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Single line item</q-item-label>
-            <q-item-label caption lines="2"
-              >Secondary line text. Lorem ipsum dolor sit amet, consectetur
-              adipiscit elit.</q-item-label
-            >
-          </q-item-section>
-
-          <q-item-section side top>
-            <q-item-label caption>5 min ago</q-item-label>
-            <q-icon name="star" color="yellow" />
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced inset="item" />
-
-        <q-item>
-          <q-item-section top avatar>
-            <q-avatar
-              color="primary"
-              text-color="white"
-              square
-              icon="bluetooth"
-            />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Single line item</q-item-label>
-            <q-item-label caption
-              >Secondary line text. Lorem ipsum dolor sit amet, consectetur
-              adipiscit elit.</q-item-label
-            >
-          </q-item-section>
-
-          <q-item-section side top>
-            <q-item-label caption>meta</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced inset="item" />
-
-        <q-item>
-          <q-item-section top avatar>
             <q-avatar>
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+              <img v-bind:src="guide.avatar" />
             </q-avatar>
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Single line item</q-item-label>
-            <q-item-label caption
-              >Secondary line text. Lorem ipsum dolor sit amet, consectetur
-              adipiscit elit.</q-item-label
-            >
-          </q-item-section>
-
-          <q-item-section side top>
-            <q-badge label="10k" />
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced inset="item" />
-
-        <q-item>
-          <q-item-section top avatar>
-            <q-avatar rounded>
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-            </q-avatar>
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Single line item</q-item-label>
-            <q-item-label caption
-              >Secondary line text. Lorem ipsum dolor sit amet, consectetur
-              adipiscit elit.</q-item-label
-            >
-          </q-item-section>
-
-          <q-item-section side top>
-            <q-item-label caption>meta</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced />
-
-        <q-item>
-          <q-item-section top thumbnail class="q-ml-none">
-            <img src="https://cdn.quasar.dev/img/mountains.jpg" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Single line item</q-item-label>
-            <q-item-label caption
-              >Secondary line text. Lorem ipsum dolor sit amet, consectetur
-              adipiscit elit.</q-item-label
-            >
-          </q-item-section>
-
-          <q-item-section side top>
-            <q-item-label caption>meta</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -148,34 +25,16 @@
 export default {
   name: "SearchResults",
 
-  data: () => ({
-    location: "",
-
-    language: "",
-
-    startDate: "",
-
-    endDate: ""
-  }),
+  data: () => ({}),
 
   methods: {
-    search() {
-      let newDate = this.startDate.split("/").join("");
-      console.log(`New Date is: ${newDate}`);
-
-      this.$store.dispatch("getFilteredGuides", {
-        location: this.location,
-        language: this.language,
-        date: newDate,
-        meme: "69420"
-      });
+    getSingleGuide(id) {
+      console.log("Passing this ID: ", id);
+      this.$store.dispatch("getSingleGuide", id);
+      this.$store.state.currentView = "MyProfile";
     }
   }
 };
 </script>
 
-<style scoped>
-h1 {
-  color: hotpink;
-}
-</style>
+<style scoped></style>
