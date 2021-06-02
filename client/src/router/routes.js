@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    beforeEnter() {location.href = 'http://localhost:5000/login'},
+    beforeEnter() {location.href = '/login'},
 		//component: 'login'
   },
 

@@ -114,7 +114,7 @@ export default new Vuex.Store({
       const meme = payload.meme;
       const data = (
         await axios.get(
-          `http://localhost:5000/api/guides/search/${location}/${language}/${date}/${meme}`
+          `/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
       console.log(data);
@@ -125,7 +125,7 @@ export default new Vuex.Store({
       console.log(payload);
       try {
         const data = (
-          await axios.get(`http://localhost:5000/api/guides/${payload}`)
+          await axios.get(`/api/guides/${payload}`)
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -136,7 +136,7 @@ export default new Vuex.Store({
 
     async getChatLogs(state, payload) {
       const data = (
-        await axios.get(`http://localhost:5000/api/messages/${payload}`)
+        await axios.get(`/api/messages/${payload}`)
       ).data;
     },
 
