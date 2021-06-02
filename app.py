@@ -55,7 +55,6 @@ google = oauth.register(
     client_kwargs={'scope': 'openid profile email'}
 )
 
-
 # SOCKET.IO #
 app.config['SECRET_KEY'] = 'secret!' # MAKE THIS HARDER FOR PRODUCTION
 # import socketio
@@ -74,6 +73,26 @@ cors = CORS(app, resource={
 })
 mongo = PyMongo(app)
 
+def searchUser(gid, email, name):
+    guide = mongo.db.guides.find_one({"gid": gid}, {'_id':1})
+    if guide: 
+        return {
+            'path': 'MyProfile',
+            'id': str(guide['_id']),
+            'loggedIn': True
+            }
+    traveler = mongo.db.travellers.find_one({"gid": gid}, {'_id':1})
+    if traveler:
+        return {
+            'path': 'Search',
+            'id': str(traveler['_id']),
+            'loggedIn': True}
+    return {
+            'path': 'Registration',
+            'loggedIn': False,
+            'email': email,
+            'name': name
+            }
 
 # AUTHLIB
 @app.route('/login')
@@ -85,22 +104,22 @@ def login():
     # If authorized we this route takes us to app redirect
 @app.route('/authorize')
 def authorize():
-    newPath = 'http://localhost:8080'
     google = oauth.create_client('google')
     token = google.authorize_access_token()
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
+    print(user_info['id'])
 
     #check user_info against data in database
-
-    # print(user_info)
+    authObj = searchUser(
+        user_info['id'], 
+        user_info['email'],
+        user_info['name'])
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    socketio.emit('authSuccess', user_info)
-    ## user_info == mongo.userID ? newPath = '/authorized' : newPath = '/registerSomethingnoclue'
-    
+    socketio.emit('authResult', authObj)
     # do something with the token and profile
-    return redirect(newPath)
+    return redirect('http://localhost:8080/')
 
 # SOCKET.IO
 
@@ -131,6 +150,7 @@ def get_guides(location, language, startdate, enddate):
 @app.get("/api/guides/<id>")
 def get_single_guide(id):
     guide = mongo.db.guides.find_one({"_id": ObjectId(id)})
+    print(JSONEncoder().encode(guide))
     return JSONEncoder().encode(guide)
 
 @app.get("/api/bookings/<name>")
@@ -243,17 +263,13 @@ def post_message():
     })
 
 
-# @socketio.event
-# def connect():
-#     print('FUCKING! CONNECTED')
+@socketio.event
+def connect():
+    print('FUCKING! CONNECTED')
 
-# @socketio.event
-# def disconnect():
-#     print('FUCKED OFF')
-
-# @socketio.event
-# def Message(data):
-#     # print(data)
+@socketio.event
+def disconnect():
+    print('FUCKED OFF')
 
 if __name__ == '__main__':
     socketio.run(app)

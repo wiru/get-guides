@@ -12,10 +12,11 @@ export default new Vuex.Store({
   state: {
     currentView: "SearchResults",
     userType: "",
-    guideID: "60b47b595c7aa6b557654a30",
+    id: "",
     singleGuide: {},
     filteredGuides: [],
-    somethingStupid: 0
+    somethingStupid: 0,
+    loggedIn: "false"
   },
   plugins: [socketioPlugin],
   // sync stuff - Use "commit"
@@ -23,8 +24,14 @@ export default new Vuex.Store({
     changeView(state, payload) {
       this.state.currentView = payload;
     },
+    loggedIn(state, bool) {
+      this.state.loggedIn = bool
+    },
     setUserType(state, payload) {
       this.state.userType = "traveller";
+    },
+    setUserId(state, payload) {
+      this.state.id = payload;
     },
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
