@@ -8,7 +8,20 @@ from flask_pymongo import PyMongo
 
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
+
 import os
+
+import json
+from bson import ObjectId
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+
+
 # async_mode = None
 
 # The two lines below have to be added to the .env file to run flask
@@ -97,18 +110,28 @@ def index():
 
 # db.inventory.find( { qty: { $in: [ 5, 15 ] } } )
 
-@app.get("/api/guides/<location>/<language>/<startdate>/<enddate>")
+
+@app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
 def get_guides(location, language, startdate, enddate):
     out = []
-    for guide in mongo.db.guides.find( {"locations" : location}, {"name":1, "avatar":1}):
+    for guide in mongo.db.guides.find({ "$and": [
+        {"locations" : location},
+        {"languages": language},
+        { "unavailable_dates": { "$nin": [startdate] } }
+    ]
+    }, {"name":1, "avatar":1}):
         guide["_id"] = str(guide["_id"])
         out.append(guide)
+    print(out)
     return jsonify(out)
 
-@app.get("/api/guides/<name>")
-def get_single_guide(name):
-    guides = mongo.db.guides.find({"name": request.form.name})
-    return jsonify({"location": location, "language":language,"startdate":startdate,"enddate":enddate})
+# datetime.datetime(2012, 3, 23, 23, 24, 55, 173504)
+# >>> datetime.datetime.today().weekday()
+
+@app.get("/api/guides/<id>")
+def get_single_guide(id):
+    guide = mongo.db.guides.find_one({"_id": ObjectId(id)})
+    return JSONEncoder().encode(guide)
 
 @app.get("/api/bookings/<name>")
 def get_bookings():
@@ -220,17 +243,17 @@ def post_message():
     })
 
 
-@socketio.event
-def connect():
-    print('FUCKING! CONNECTED')
+# @socketio.event
+# def connect():
+#     print('FUCKING! CONNECTED')
 
-@socketio.event
-def disconnect():
-    print('FUCKED OFF')
+# @socketio.event
+# def disconnect():
+#     print('FUCKED OFF')
 
-@socketio.event
-def Message(data):
-    print(data)
+# @socketio.event
+# def Message(data):
+#     # print(data)
 
 if __name__ == '__main__':
     socketio.run(app)
