@@ -10,9 +10,19 @@ const socketioPlugin = createSocketioPlugin(socket);
 
 export default new Vuex.Store({
   state: {
-    currentView: "Bookings",
-    userType: "traveller",
-    id: "60b6326339b7417d0f2649ad",
+    currentView: "Login",
+    userType: "",
+    // Changed for Auth
+    id: "",
+    name: "",
+    email: "",
+    gid: "",
+    travellerPackage: {},
+    guidePackage: {},
+    ////
+    currentChatId: "",
+    currentChat: [],
+
     singleGuide: {},
     bookings: [],
     filteredGuides: [],
@@ -31,9 +41,34 @@ export default new Vuex.Store({
     setUserType(state, payload) {
       this.state.userType = "traveller";
     },
+    // Changed for Auth
     setUserId(state, payload) {
+      // console.log("id ", payload)
       this.state.id = payload;
+      // console.log(this.state.id)\
     },
+    chatUpdate(state, payload) {
+      for (message of payload) {
+        this.state.currentChat.push(message);
+      }
+    },
+    setUserName(state, payload) {
+      this.state.name = payload;
+    },
+    setUserEmail(state, payload) {
+      this.state.email = payload;
+    },
+    setUsergid(state, payload) {
+      this.state.gid = payload;
+    },
+    setTravellerPackage(state, payload) {
+      this.state.travellerPackage = payload;
+    },
+    setGuidePackage(state, payload) {
+      this.state.guidePackage = payload;
+    },
+    ////////////
+
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
       console.log("Setter's");
@@ -118,6 +153,15 @@ export default new Vuex.Store({
       this.state.bookings = data;
 
       console.log(this.state);
+    },
+    // For Registration
+    async travellerPackage(state, payload) {
+      socket.emit("newTravellerRegistration", payload);
+      console.log("newTravellerRegistration on front");
+    },
+    async guidePackage(state, payload) {
+      socket.emit("newGuideRegistration", payload);
+      console.log("newGuideRegistration on front");
     }
   }
 });
