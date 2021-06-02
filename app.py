@@ -272,7 +272,6 @@ def post_message():
         "timestamp": datetime.datetime.now().replace(microsecond=0)
     })
 
-
 @socket.event
 def connect():
     print('CONNECTED')
