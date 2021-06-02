@@ -12,13 +12,20 @@ export default new Vuex.Store({
   state: {
     currentView: "Search",
     userType: "",
+    // Changed for Auth
     id: "",
+    name: "",
+    email: "",
+    gid: "",
+    ////
     currentChatId: '',
     currentChat: [],
+
     singleGuide: {},
     filteredGuides: [],
     somethingStupid: 0,
     loggedIn: "false"
+    
   },
   plugins: [socketioPlugin],
   // sync stuff - Use "commit"
@@ -34,6 +41,7 @@ export default new Vuex.Store({
     setUserType(state, payload) {
       this.state.userType = "traveller";
     },
+    // Changed for Auth
     setUserId(state, payload) {
       // console.log("id ", payload)
       this.state.id = payload;
@@ -44,6 +52,17 @@ export default new Vuex.Store({
         this.state.currentChat.push(message)
       }
     },
+    setUserName(state, payload) {
+      this.state.name = payload;
+    },
+    setUserEmail(state, payload) {
+      this.state.email = payload;
+    },
+    setUsergid(state, payload) {
+      this.state.gid = payload;
+    },
+    ////////////
+
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
       console.log("Setter's");
