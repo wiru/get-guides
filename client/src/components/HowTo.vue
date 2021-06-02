@@ -1,25 +1,18 @@
 <template>
-    <div id="my profile">
-        <h1> I'm a 'how to page' </h1>
-        
-    </div>
+  <div id="how-to">
+    <h5>Just press the search button homie</h5>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'My Profile',
-    // This is regular vue. Kinda replaced as we're using Vuex and the store. 
-	// data() => ({
+  name: "My Profile",
+  // This is regular vue. Kinda replaced as we're using Vuex and the store.
+  // data() => ({
 
-	// }),
-	methods: {
-
-    },
-}
+  // }),
+  methods: {}
+};
 </script>
 
-<style scoped>
-h1 {
-    color: rgb(105, 255, 125);
-}
-</style>
+<style scoped></style>
