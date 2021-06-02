@@ -10,7 +10,7 @@ const socketioPlugin = createSocketioPlugin(socket);
 
 export default new Vuex.Store({
   state: {
-    currentView: "Search",
+    currentView: "Login",
     userType: "",
     // Changed for Auth
     id: "",
@@ -20,14 +20,14 @@ export default new Vuex.Store({
     travellerPackage: {},
     guidePackage: {},
     ////
-    currentChatId: '',
+    currentChatId: "",
     currentChat: [],
 
     singleGuide: {},
+    bookings: [],
     filteredGuides: [],
     somethingStupid: 0,
     loggedIn: "false"
-    
   },
   plugins: [socketioPlugin],
   // sync stuff - Use "commit"
@@ -36,9 +36,7 @@ export default new Vuex.Store({
       this.state.currentView = payload;
     },
     loggedIn(state, bool) {
-      // console.log("loggedIn ", bool), 
-      this.state.loggedIn = bool
-      // console.log(this.state.loggedIn)
+      this.state.loggedIn = bool;
     },
     setUserType(state, payload) {
       this.state.userType = "traveller";
@@ -51,7 +49,7 @@ export default new Vuex.Store({
     },
     chatUpdate(state, payload) {
       for (message of payload) {
-        this.state.currentChat.push(message)
+        this.state.currentChat.push(message);
       }
     },
     setUserName(state, payload) {
@@ -64,10 +62,10 @@ export default new Vuex.Store({
       this.state.gid = payload;
     },
     setTravellerPackage(state, payload) {
-      this.state.travellerPackage = payload
+      this.state.travellerPackage = payload;
     },
     setGuidePackage(state, payload) {
-      this.state.guidePackage = payload
+      this.state.guidePackage = payload;
     },
     ////////////
 
@@ -144,14 +142,26 @@ export default new Vuex.Store({
       socket.emit("Message", payload);
       console.log("I SENT IT YOU PRICK");
     },
+
+    async getBookings(state) {
+      const data = (
+        await axios.get(
+          `http://localhost:5000/api/bookings/${this.state.userType}/${this.state.id}`
+        )
+      ).data;
+
+      this.state.bookings = data;
+
+      console.log(this.state);
+    },
     // For Registration
     async travellerPackage(state, payload) {
-      socket.emit('newTravellerRegistration', payload)
-      console.log('newTravellerRegistration on front')
-      },
+      socket.emit("newTravellerRegistration", payload);
+      console.log("newTravellerRegistration on front");
+    },
     async guidePackage(state, payload) {
-      socket.emit('newGuideRegistration', payload)
-      console.log('newGuideRegistration on front')
-      }
+      socket.emit("newGuideRegistration", payload);
+      console.log("newGuideRegistration on front");
+    }
   }
 });
