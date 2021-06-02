@@ -1,8 +1,5 @@
 <template>
   <q-page class="flex full-width column">
-      <q-banner inline-actions class="text-white bg-red">
-      User is offline.
-    </q-banner>
     <div class="q-pa-md column col justify-end">
       <q-chat-message
         v-for="message in messages"
@@ -40,39 +37,26 @@
 </template>
 
 <script>
+import socket from "../socket";
 
 export default {
     name: 'Messages',
     data() {
       return { 
         newMessage: '',
-        messages: [ 
-          {
-            text: 'hey dickhead! :)',
-            from: 'me'
-          },
-          {
-            text: 'Fuck you, you dick',
-            from: 'you'
-          },
-          {
-            text: "Oh don't be such a goon",
-            from: 'me'
-          },
-          {
-            text: "You're the fucking goon",
-            from: 'you'
-          }
-        ]
+        messages: this.$store.state.currentChat
       }
     },
 	  methods: {
       sendMessage() {
-        this.messages.push({
+        // console.log(this.$store.state.id),
+        socket.emit(
+          'chatMessage', 
+        {
+          conversationId: this.$store.state.currentChat, 
           text: this.newMessage,
-          from: 'me'
+          from: this.$store.state.id
         })
-        this.newMessage = ''
       }
     },
 }

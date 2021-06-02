@@ -13,6 +13,8 @@ export default new Vuex.Store({
     currentView: "SearchResults",
     userType: "",
     id: "",
+    currentChatId: '',
+    currentChat: [],
     singleGuide: {},
     filteredGuides: [],
     somethingStupid: 0,
@@ -25,13 +27,22 @@ export default new Vuex.Store({
       this.state.currentView = payload;
     },
     loggedIn(state, bool) {
+      // console.log("loggedIn ", bool), 
       this.state.loggedIn = bool
+      // console.log(this.state.loggedIn)
     },
     setUserType(state, payload) {
       this.state.userType = "traveller";
     },
     setUserId(state, payload) {
+      // console.log("id ", payload)
       this.state.id = payload;
+      // console.log(this.state.id)\
+    },
+    chatUpdate(state, payload) {
+      for (message of payload) {
+        this.state.currentChat.push(message)
+      }
     },
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;

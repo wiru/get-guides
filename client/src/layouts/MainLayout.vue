@@ -87,12 +87,6 @@ const linksData = [
     view: 'Chats'
   },
   {
-    title: 'Messages',
-    caption: 'Your messages',
-    icon: 'message',
-    view: 'Messages'
-  },
-  {
     title: 'About Us',
     caption: 'The team behind Get Guides',
     icon: 'favorite',

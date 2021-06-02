@@ -60,7 +60,7 @@ app.config['SECRET_KEY'] = 'secret!' # MAKE THIS HARDER FOR PRODUCTION
 # import socketio
 
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
-socketio = SocketIO(app, cors_allowed_origins='*')
+socket = SocketIO(app, cors_allowed_origins='*')
 # thread = None
 # thread_lock = Lock()
 
@@ -117,7 +117,7 @@ def authorize():
         user_info['email'],
         user_info['name'])
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    socketio.emit('authResult', authObj)
+    socket.emit('authResult', authObj)
     # do something with the token and profile
     return redirect('http://localhost:8080/')
 
@@ -263,16 +263,21 @@ def post_message():
     })
 
 
-@socketio.event
+@socket.event
 def connect():
-    print('FUCKING! CONNECTED')
+    print('CONNECTED')
 
-@socketio.event
+@socket.event
 def disconnect():
-    print('FUCKED OFF')
+    print('DISCONNECTED')
+
+# chat message receiver
+@socket.event
+def chatMessage(payload):
+    print('MESSAGE RECEIVED', payload)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socket.run(app)
 
 
 # NOTES
