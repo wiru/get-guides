@@ -10,10 +10,11 @@ const socketioPlugin = createSocketioPlugin(socket);
 
 export default new Vuex.Store({
   state: {
-    currentView: "Search",
-    userType: "",
-    id: "",
+    currentView: "Bookings",
+    userType: "traveller",
+    id: "60b6326339b7417d0f2649ad",
     singleGuide: {},
+    bookings: [],
     filteredGuides: [],
     somethingStupid: 0,
     loggedIn: "false"
@@ -25,7 +26,7 @@ export default new Vuex.Store({
       this.state.currentView = payload;
     },
     loggedIn(state, bool) {
-      this.state.loggedIn = bool
+      this.state.loggedIn = bool;
     },
     setUserType(state, payload) {
       this.state.userType = "traveller";
@@ -105,6 +106,18 @@ export default new Vuex.Store({
     async dispatchMessage(state, payload) {
       socket.emit("Message", payload);
       console.log("I SENT IT YOU PRICK");
+    },
+
+    async getBookings(state) {
+      const data = (
+        await axios.get(
+          `http://localhost:5000/api/bookings/${this.state.userType}/${this.state.id}`
+        )
+      ).data;
+
+      this.state.bookings = data;
+
+      console.log(this.state);
     }
   }
 });

@@ -151,36 +151,77 @@ def get_single_guide(id):
     print(JSONEncoder().encode(guide))
     return JSONEncoder().encode(guide)
 
-@app.get("/api/bookings/<name>")
-def get_bookings():
+@app.get("/api/bookings/guide/<id>")
+def get_bookings_as_guide(id):
     bookings = mongo.db.bookings
     out = []
-    if userType == 'traveller':
-        for booking in bookings.find({"name": request.form.name}):
-            out.append({
-                guide: booking['guide'],
-                location: booking['location'],
-                date: booking['date'],
-                start_time: booking['start_time'],
-                end_time: booking['end_time'],
-                meeting_location: booking['meeting_location'],
-                details: booking['details'],
-                status: booking['status'],
-                convID: booking['conversation']['_id']
+    for booking in bookings.find({"guide": id}):
+        out.append({
+            "traveller": mongo.db.travellers.find_one({"_id": ObjectId(booking["traveller"])}, {"name":1, "avatar":1, "_id":0}),
+            "location": booking['location'],
+            "date": booking['date'],
+            "start_time": booking['start_time'],
+            "end_time": booking['end_time'],
+            "meeting_location": booking['meeting_location'],
+            "details": booking['details'],
+            "status": booking['status'],
+            "conv_id": str(booking['conversation']['_id'])
             })
-    else: 
-        for booking in bookings.find({"name": request.form.name}):
-            out.append({
-                traveller: booking['traveller'],
-                location: booking['location'],
-                date: booking['date'],
-                start_time: booking['start_time'],
-                end_time: booking['end_time'],
-                meeting_location: booking['meeting_location'],
-                details: booking['details'],
-                status: booking['status'],
-                convID: booking['conversation']['_id']
+    return jsonify(out)
+
+@app.get("/api/bookings/traveller/<id>")
+def get_bookings_as_traveller(id):
+    bookings = mongo.db.bookings
+    out = []
+    for booking in bookings.find({"traveller": id}):
+        out.append({
+            "guide": mongo.db.guides.find_one({"_id": ObjectId(booking["guide"])}, {"name":1, "avatar":1, "_id":0}),
+            "location": booking['location'],
+            "date": booking['date'],
+            "start_time": booking['start_time'],
+            "end_time": booking['end_time'],
+            "meeting_location": booking['meeting_location'],
+            "details": booking['details'],
+            "status": booking['status'],
+            "conv_id": str(booking['conversation']['_id'])
             })
+        return jsonify(out)
+
+
+# post new booking
+@app.post("/api/bookings/<booking_ID>")
+def add_booking():
+    mongo.db.bookings.insert_one({
+        "traveller": request.form.traveller,
+        "guide": request.form.guide,
+        "location": request.form.location,
+        "date": request.form.date,
+        "start_time": request.form.start_time,
+        "end_time":request.form.end_time,
+        "meeting_location": request.form.meeting_location,
+        "details": request.form.details,
+        "status": request.form.confirmed,
+        "conversation": ""
+    })
+
+# put booking
+@app.put("/api/bookings/<booking_ID>")
+def modify_booking():
+    mongo.db.bookings.insert_one({
+        "traveller": request.form.traveller,
+        "guide": request.form.guide,
+        "location": request.form.location,
+        "date": request.form.date,
+        "start_time": request.form.start_time,
+        "end_time":request.form.end_time,
+        "meeting_location": request.form.meeting_location,
+        "details": request.form.details,
+        "status": request.form.confirmed,
+        "conversation": ""
+    })
+
+
+
 
 # @app.get("/api/messages/<conversation_ID>")
 # def get_conversation():
@@ -273,37 +314,7 @@ def add_traveller():
         "bookings": [],
         })
 
-# post new booking
-@app.post("/api/bookings/<booking_ID>")
-def add_booking():
-    mongo.db.bookings.insert_one({
-        "traveller": request.form.traveller,
-        "guide": request.form.guide,
-        "location": request.form.location,
-        "date": request.form.date,
-        "start_time": request.form.start_time,
-        "end_time":request.form.end_time,
-        "meeting_location": request.form.meeting_location,
-        "details": request.form.details,
-        "status": request.form.confirmed,
-        "conversation": ""
-    })
 
-# put booking
-@app.put("/api/bookings/<booking_ID>")
-def modify_booking():
-    mongo.db.bookings.insert_one({
-        "traveller": request.form.traveller,
-        "guide": request.form.guide,
-        "location": request.form.location,
-        "date": request.form.date,
-        "start_time": request.form.start_time,
-        "end_time":request.form.end_time,
-        "meeting_location": request.form.meeting_location,
-        "details": request.form.details,
-        "status": request.form.confirmed,
-        "conversation": ""
-    })
 
 # post new message
 @app.post("/api/messages/<message_ID>")
