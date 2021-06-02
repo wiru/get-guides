@@ -1,10 +1,20 @@
 <template>
   <div id="my-profile" :key="this.$store.state.somethingStupid">
     <div id="top">
-      <div id="guide-data" class="fixed-top-left">
+      <div id="guide-data" class="absolute-top-left">
         <p>Name: {{ this.$store.state.singleGuide.name }}</p>
         <!-- <p>Location: {{ this.$store.state.singleGuide.location }}</p> -->
-        <p>I can guide you in:</p>
+        <p class="pre-chip">I can guide you in:</p>
+        <q-chip
+          v-for="location in this.$store.state.singleGuide.locations"
+          :key="location.fakeValueThatIMadeUp"
+          clickable
+          color="primary"
+          text-color="white"
+        >
+          {{ location }}
+        </q-chip>
+        <p class="pre-chip">I can speak:</p>
         <q-chip
           v-for="language in this.$store.state.singleGuide.languages"
           :key="language.fakeValueThatIMadeUp"
@@ -15,26 +25,33 @@
           {{ language }}
         </q-chip>
       </div>
-      <div id="avatar" class="q-pa-md q-gutter-sm fixed-top-right">
-        <q-avatar rounded size="25vw">
+      <div id="avatar-container" class="q-pa-md q-gutter-sm">
+        <q-avatar id="avatar" rounded size="25vw" class="absolute-top-right">
           <img v-bind:src="this.$store.state.singleGuide.avatar" />
         </q-avatar>
+        <q-btn
+          id="chat-btn"
+          class="absolute-top-right"
+          color="deep-orange"
+          icon="chat"
+          @click="startChat(singleGuide.id)"
+        />
       </div>
     </div>
     <div id="mid">
       <div id="bio">
+        <h9>More about me:</h9>
+        <p></p>
         <p>{{ this.$store.state.singleGuide.bio }}</p>
+        <h9>I'm unavailable:</h9>
+        <p></p>
+        <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
       </div>
     </div>
     <div id="bot">
       <div class="q-pa-md">
         <div class="q-gutter-md">
           <q-date v-model="date" :options="optionsFn" minimal />
-          <q-btn
-            color="deep-orange"
-            icon="chat"
-            @click="startChat(singleGuide.id)"
-          />
         </div>
       </div>
     </div>
@@ -53,7 +70,10 @@ export default {
 
   methods: {
     optionsFn(validDate) {
-      return validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
+      validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
+      // returns true or false for every date in the month
+      console.log(validDate);
+      return validDate;
     },
     // optionsFn(date) {
     //   const parts = date.split("/");
@@ -69,11 +89,18 @@ export default {
 
 <style scoped>
 #avatar {
-  margin-top: 5vh;
+  margin-top: 1vh;
+  margin-right: 1.25vw;
+}
+
+#chat-btn {
+  margin-top: 19vh;
+  margin-right: 1.1vh;
+  width: 25vw;
 }
 
 #guide-data {
-  margin-top: 8vh;
+  margin-top: 1vh;
   margin-left: 3vw;
 }
 
@@ -83,6 +110,10 @@ textarea {
 
 #bio {
   padding: 10px;
-  margin-top: 25vh;
+  margin-top: 24vh;
+}
+
+.pre-chip {
+  margin-bottom: -3px;
 }
 </style>
