@@ -129,6 +129,7 @@ export default {
         date: newDate,
         meme: "69420"
       });
+      this.$store.state.currentView = "SearchResults";
     }
   }
 };

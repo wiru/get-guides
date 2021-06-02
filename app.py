@@ -130,6 +130,16 @@ def index():
 # db.inventory.find( { qty: { $in: [ 5, 15 ] } } )
 
 
+# vvv mock
+# @app.get("/api/messages/<partner_id>")
+# def get_conversation(partner_id):
+#     out = []
+#     for message in mongo.db.conversations.find({"traveller": partner_id}):
+#         out.append(message)
+#     print(out)
+#     return jsonify(out)
+
+
 @app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
 def get_guides(location, language, startdate, enddate):
     out = []

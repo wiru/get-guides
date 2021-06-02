@@ -10,7 +10,7 @@ const socketioPlugin = createSocketioPlugin(socket);
 
 export default new Vuex.Store({
   state: {
-    currentView: "SearchResults",
+    currentView: "Search",
     userType: "",
     id: "",
     currentChatId: '',
@@ -94,16 +94,23 @@ export default new Vuex.Store({
       state.commit("setFilteredGuides", data);
     },
 
-    async getSingleGuide(state) {
-      let id = this.state.guideID;
+    async getSingleGuide(state, payload) {
+      console.log(payload);
       try {
-        const data = (await axios.get(`http://localhost:5000/api/guides/${id}`))
-          .data;
+        const data = (
+          await axios.get(`http://localhost:5000/api/guides/${payload}`)
+        ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
       } catch (e) {
         console.log(e);
       }
+    },
+
+    async getChatLogs(state, payload) {
+      const data = (
+        await axios.get(`http://localhost:5000/api/messages/${payload}`)
+      ).data;
     },
 
     async dispatchMessage(state, payload) {
