@@ -124,8 +124,8 @@ export default {
       console.log(`New Date is: ${newDate}`);
 
       this.$store.dispatch("getFilteredGuides", {
-        location: this.location,
-        language: this.language,
+        location: this.location.toLowerCase(),
+        language: this.language.toLowerCase(),
         date: newDate,
         meme: "69420"
       });
@@ -135,8 +135,4 @@ export default {
 };
 </script>
 
-<style scoped>
-h1 {
-  color: hotpink;
-}
-</style>
+<style scoped></style>

@@ -60,7 +60,7 @@ app.config['SECRET_KEY'] = 'secret!' # MAKE THIS HARDER FOR PRODUCTION
 # import socketio
 
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
-socketio = SocketIO(app, cors_allowed_origins='*')
+socket = SocketIO(app, cors_allowed_origins='*')
 # thread = None
 # thread_lock = Lock()
 
@@ -118,7 +118,7 @@ def authorize():
         user_info['email'],
         user_info['name'])
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    socketio.emit('authResult', authObj)
+    socket.emit('authResult', authObj)
     # do something with the token and profile
     return redirect('http://localhost:8080/')
 
@@ -127,18 +127,6 @@ def authorize():
 @app.get("/")
 def index():
     return send_from_directory(app.static_folder, "index.html")
-
-# db.inventory.find( { qty: { $in: [ 5, 15 ] } } )
-
-
-# vvv mock
-# @app.get("/api/messages/<partner_id>")
-# def get_conversation(partner_id):
-#     out = []
-#     for message in mongo.db.conversations.find({"traveller": partner_id}):
-#         out.append(message)
-#     print(out)
-#     return jsonify(out)
 
 
 @app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
@@ -195,10 +183,65 @@ def get_bookings():
                 convID: booking['conversation']['_id']
             })
 
-@app.get("/api/messages/<conversation_ID>")
-def get_conversation():
-    converations = mongo.db.conversations
-    return jsonify(conversations.find_one({"_id": request.form.id}))
+# @app.get("/api/messages/<conversation_ID>")
+# def get_conversation():
+
+
+    
+#     conversations = mongo.db.conversations
+#     return jsonify(conversations.find_one({"_id": request.form.id}))
+
+@app.get("/api/conversations/guide/<id>")
+def get_conversation_by_guide(id):
+    conversations = []
+    for conversation in mongo.db.conversations.find({"guide": id}, {"traveller":1}):
+        conversation["traveller"] = mongo.db.travellers.find_one({"_id": ObjectId(conversation["traveller"])}, {"name":1, "avatar":1})
+        conversation["_id"] = str(conversation["_id"])
+        conversation["traveller"]["_id"] = str(conversation["traveller"]["_id"])
+        conversations.append(conversation)
+
+    return jsonify(conversations)
+
+@app.get("/api/conversations/traveller/<id>")
+def get_conversation_by_traveller(id):
+    conversations = []
+    for conversation in mongo.db.conversations.find({"traveller": id}, {"guide":1}):
+        conversation["guide"] = mongo.db.guides.find_one({"_id": ObjectId(conversation["guide"])}, {"name":1, "avatar":1})
+        conversation["_id"] = str(conversation["_id"])
+        conversation["guide"]["_id"] = str(conversation["guide"]["_id"])
+        conversations.append(conversation)
+
+    return jsonify(conversations)
+
+@app.get("/api/conversations/<id>/messages")
+def get_messages_from_conversation(id):
+    conversation = mongo.db.conversations.find_one({"_id": ObjectId(id)})
+    conversation["_id"] = str(conversation["_id"])
+    conversation["traveller"] = mongo.db.travellers.find_one({"_id": ObjectId(conversation["traveller"])}, {"name":1, "avatar":1})
+    conversation["guide"] = mongo.db.guides.find_one({"_id": ObjectId(conversation["guide"])}, {"name":1, "avatar":1})
+    
+    return JSONEncoder().encode(conversation)
+
+# msg = {
+#     from: Blah,
+#     text: Bloh
+#     timestamp: 43234
+# }
+@app.post("/api/conversations/<id>/messages")
+def add_message_to_conversation(id):
+    message = request.json
+    mongo.db.conversations.update_one({"_id": ObjectId(id)}, { "$push": {"messages": message}})
+    return "Sent"
+    
+
+# vvv mock
+# @app.get("/api/messages/<partner_id>")
+# def get_conversation(partner_id):
+#     out = []
+#     for message in mongo.db.conversations.find({"traveller": partner_id}):
+#         out.append(message)
+#     print(out)
+#     return jsonify(out)
 
 
 # post new guide
@@ -273,17 +316,21 @@ def post_message():
         "timestamp": datetime.datetime.now().replace(microsecond=0)
     })
 
-
-@socketio.event
+@socket.event
 def connect():
-    print('FUCKING! CONNECTED')
+    print('CONNECTED')
 
-@socketio.event
+@socket.event
 def disconnect():
-    print('FUCKED OFF')
+    print('DISCONNECTED')
+
+# chat message receiver
+@socket.event
+def chatMessage(payload):
+    print('MESSAGE RECEIVED', payload)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socket.run(app)
 
 
 # NOTES

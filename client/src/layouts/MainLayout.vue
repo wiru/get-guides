@@ -15,13 +15,18 @@
           {{ this.$store.state.currentView }}
         </q-toolbar-title>
 
-        <q-btn 
-        v-if="this.$store.state.currentView === 'Messages'"
-        @click="goToChats" 
-        dense
-        flat 
-        icon="arrow_back" 
-        label="Back" />
+        <q-btn
+          v-if="
+            this.$store.state.currentView === 'Messages' ||
+              this.$store.state.currentView === 'MyProfile' ||
+              this.$store.state.currentView === 'SearchResults'
+          "
+          @click="goBack"
+          dense
+          flat
+          icon="arrow_back"
+          label="Back"
+        />
       </q-toolbar>
     </q-header>
 
@@ -32,10 +37,7 @@
       content-class="bg-grey-1"
     >
       <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
+        <q-item-label header class="text-grey-8">
           Essential Links
         </q-item-label>
         <EssentialLink
@@ -53,44 +55,38 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from "components/EssentialLink.vue";
 
 const linksData = [
   {
-    title: 'Search',
-    caption: 'Search for Guides',
-    icon: 'code',
-    view: 'Search'
+    title: "Search",
+    caption: "Search for Guides",
+    icon: "code",
+    view: "Search"
   },
   {
-    title: 'My Profile',
-    caption: 'Show/edit My Profile',
-    icon: 'chat',
-    view: 'MyProfile'
+    title: "My Profile",
+    caption: "Show/edit My Profile",
+    icon: "chat",
+    view: "MyProfile"
   },
   {
-    title: 'Bookings',
-    caption: 'Check your bookings',
-    icon: 'book_online',
-    view: 'Bookings'
+    title: "Bookings",
+    caption: "Check your bookings",
+    icon: "book_online",
+    view: "Bookings"
   },
   {
-    title: 'How to',
-    caption: 'How to use the App',
-    icon: 'question_mark',
-    view: 'HowTo'
+    title: "How to",
+    caption: "How to use the App",
+    icon: "question_mark",
+    view: "HowTo"
   },
   {
-    title: 'Chats',
-    caption: 'Your chats',
-    icon: 'message',
-    view: 'Chats'
-  },
-  {
-    title: 'Messages',
-    caption: 'Your messages',
-    icon: 'message',
-    view: 'Messages'
+    title: "Chats",
+    caption: "Your chats",
+    icon: "message",
+    view: "Chats"
   },
   {
     title: 'About Us',
@@ -99,26 +95,31 @@ const linksData = [
     view: 'AboutUs'
   },
   {
-    title: 'Logout',
-    caption: 'Bye bye',
-    icon: 'favorite',
-    view: 'Logout'
+    title: "Logout",
+    caption: "Bye bye",
+    icon: "favorite",
+    view: "Logout"
   }
 ];
 
 export default {
-  name: 'MainLayout',
+  name: "MainLayout",
   components: { EssentialLink },
-  data () {
+  data() {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
-    }
+    };
   },
   methods: {
-    goToChats() {
-      this.$store.commit("changeView", "Chats")
+    goBack() {
+      if (this.$store.state.currentView === "Messages")
+        this.$store.commit("changeView", "Chats");
+      else if (this.$store.state.currentView === "SearchResults")
+        this.$store.commit("changeView", "Search");
+      else if (this.$store.state.currentView === "MyProfile")
+        this.$store.commit("changeView", "SearchResults");
     }
-  },
-}
+  }
+};
 </script>

@@ -1,7 +1,6 @@
 export default function createSocketioPlugin (socket) {
 	return store => {
 	  store.$socket = socket
-	  socket.on('message', payload => store.dispatch('receiveMessage', payload)),
 	  socket.on('authResult', payload => {
 		console.log(payload),
 		store.commit('setUserId', payload.id)
@@ -13,5 +12,6 @@ export default function createSocketioPlugin (socket) {
 			store.commit('setUsergid', payload.gid)
 		}
 		})
+		socket.on('chatUpdate', payload => store.commit('chatUpdate', payload))
 	}
   }
