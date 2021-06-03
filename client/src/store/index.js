@@ -39,7 +39,7 @@ export default new Vuex.Store({
       this.state.loggedIn = bool;
     },
     setUserType(state, payload) {
-      this.state.userType = "traveller";
+      this.state.userType = payload;
     },
     // Changed for Auth
     setUserId(state, payload) {
