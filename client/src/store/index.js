@@ -112,7 +112,8 @@ export default new Vuex.Store({
       const meme = payload.meme;
       const data = (
         await axios.get(
-          `/api/guides/search/${location}/${language}/${date}/${meme}`
+          // WEBLINK HERE
+          `https://getguides.herokuapp.com/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
       console.log(data);
@@ -123,7 +124,8 @@ export default new Vuex.Store({
       console.log(payload);
       try {
         const data = (
-          await axios.get(`/api/guides/${payload}`)
+          // WEBLINK HERE
+          await axios.get(`https://getguides.herokuapp.com/api/guides/${payload}`)
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -146,7 +148,8 @@ export default new Vuex.Store({
     async getBookings(state) {
       const data = (
         await axios.get(
-          `http://localhost:5000/api/bookings/${this.state.userType}/${this.state.id}`
+          // WEBLINK HERE
+          `https://getguides.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
 

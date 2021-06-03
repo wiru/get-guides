@@ -1,18 +1,21 @@
 
 const routes = [
   {
-    path: '/',
+    // WEBLINK HERE
+    path: 'https://getguides.herokuapp.com/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') }
     ]
   },
   {
-    path: '/authorized',
+    // WEBLINK HERE
+    path: 'https://getguides.herokuapp.com/authorized',
     component: () => import('pages/test.vue'),
   },
   {
-    path: '/login',
+    // WEBLINK HERE
+    path: 'https://getguides.herokuapp.com/login',
     name: 'login',
     beforeEnter() {location.href = '/login'},
 		//component: 'login'
