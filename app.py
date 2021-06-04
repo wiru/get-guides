@@ -38,7 +38,7 @@ class JSONEncoder(json.JSONEncoder):
 # to run (any) python file, a virtual environment has to be created
 # this has to be done by running 'pipenv shell' (step has to be done after .env file is prepared)
 # After this, type "flask run" into cmd/bash
-app = Flask(__name__, static_folder="client/dist/pwa", static_url_path="")
+app = Flask(__name__, static_folder="client/dist/spa", static_url_path="")
 
 
 # AUTHLIB #
@@ -121,7 +121,7 @@ def authorize():
     socket.emit('updateId', user_info['id'])
     socket.emit('authResult', authObj)
     # do something with the token and profile
-    return redirect('http://localhost:8080/')
+    return redirect('https://getguides.herokuapp.com/')
 
 # SOCKET.IO
 
