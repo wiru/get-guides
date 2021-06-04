@@ -149,7 +149,7 @@
                 "sha256:b36ec2ecc003de87fc87b93197d77fea528aa0f9204a34fdf3b2f8d0f01e017b"
             ],
             "index": "pypi",
-            "version": "==0.31.0"
+            "version": "==0.30.2"
         },
         "flask": {
             "hashes": [

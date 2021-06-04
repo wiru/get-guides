@@ -1,6 +1,3 @@
-import threading
-import eventlet 
-eventlet.monkey_patch()
 from flask_cors import CORS
 from threading import Lock
 from authlib.integrations.flask_client import OAuth
