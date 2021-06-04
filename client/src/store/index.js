@@ -20,9 +20,10 @@ export default new Vuex.Store({
     travellerPackage: {},
     guidePackage: {},
     ////
-    currentChatId: "",
-    currentChat: [],
-
+    currentChat: "",
+    currentChatLog: [],
+    typingStatus: false,
+    chatList: [],
     singleGuide: {},
     bookings: [],
     filteredGuides: [],
@@ -39,17 +40,21 @@ export default new Vuex.Store({
       this.state.loggedIn = bool;
     },
     setUserType(state, payload) {
+      console.log("setting user type to: ", payload);
       this.state.userType = payload;
     },
     // Changed for Auth
     setUserId(state, payload) {
       // console.log("id ", payload)
       this.state.id = payload;
-      // console.log(this.state.id)\
+    },
+    setCurrentChat(state, id) {
+      this.state.currentChat = id;
+      console.log(this.state.currentChat);
     },
     chatUpdate(state, payload) {
       for (message of payload) {
-        this.state.currentChat.push(message);
+        this.state.currentChatLog.push(message);
       }
     },
     setUserName(state, payload) {
@@ -67,7 +72,6 @@ export default new Vuex.Store({
     setGuidePackage(state, payload) {
       this.state.guidePackage = payload;
     },
-    ////////////
 
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
@@ -88,6 +92,19 @@ export default new Vuex.Store({
       console.log("setter function");
       this.state.somethingStupid += 1;
       console.log("forced render", Date.now());
+    },
+
+    setChatList(state, payload) {
+      console.log("setChatList payload: ", payload);
+      this.state.chatList = payload;
+      console.log("chat list is : ", this.state.chatList);
+      // console.log(this.state.chatList[0].traveller.name)
+    },
+    appendMessage(state, message) {
+      this.state.currentChatLog.push(message);
+    },
+    setTypingStatus(state, bool) {
+      this.state.typingStatus = bool;
     }
   },
   // async stuff - Use "dispatch"
@@ -115,32 +132,53 @@ export default new Vuex.Store({
           `http://localhost:5000/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
-      console.log(data);
       state.commit("setFilteredGuides", data);
     },
 
     async getSingleGuide(state, payload) {
-      console.log(payload);
+      console.log("getSingleGuide called", payload);
       try {
         const data = (
           await axios.get(`http://localhost:5000/api/guides/${payload}`)
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
+        console.log("state commit setSingleGuide happened");
       } catch (e) {
         console.log(e);
       }
     },
 
-    async getChatLogs(state, payload) {
+    async getChatLog(state, payload) {
       const data = (
-        await axios.get(`http://localhost:5000/api/messages/${payload}`)
+        await axios.get(
+          `http://localhost:5000/api/conversations/${payload}/messages`
+        )
       ).data;
+      console.log("data: ", data);
+      console.log("messages: ", data.messages);
+      this.state.currentChatLog = data.messages;
+      this.state.sendTo = data.traveller._id;
+      console.log(this.state.sendTo);
     },
 
-    async dispatchMessage(state, payload) {
-      socket.emit("Message", payload);
-      console.log("I SENT IT YOU PRICK");
+    async getTravellerChats(state, payload) {
+      console.log("getTrav payload should be id: ", payload);
+      const data = (
+        await axios.get(
+          `http://localhost:5000/api/conversations/traveller/${payload}`
+        )
+      ).data;
+      state.commit("setChatList", data);
+    },
+
+    async getGuideChats(state, payload) {
+      const data = (
+        await axios.get(
+          `http://localhost:5000/api/conversations/guide/${payload}`
+        )
+      ).data;
+      state.commit("setChatList", data);
     },
 
     async getBookings(state) {
@@ -153,6 +191,21 @@ export default new Vuex.Store({
       this.state.bookings = data;
 
       console.log(this.state);
+    },
+    async someShit(state, payload) {
+      let data = {
+        traveller: "60b6326339b7417d0f2649ad",
+        guide: "60b47b595c7aa6b557654a30",
+        location: "your mom",
+        date: "Tomorrow, I guess",
+        start_time: "lol",
+        end_time: "ecks Dee",
+        meeting_location: "deez nuts",
+        details: "I have ligma",
+        status: "pending",
+        conversation: "098123098312980"
+      };
+      axios.post(`http://localhost:5000/api/bookings`, data);
     },
     // For Registration
     async travellerPackage(state, payload) {
