@@ -110,7 +110,7 @@ export default new Vuex.Store({
   // async stuff - Use "dispatch"
   actions: {
     login(state) {
-      this.$router.push("https://getguides.herokuapp.com/login");
+      this.$router.push("/login");
     },
 
     async receiveMessage(state, payload) {
