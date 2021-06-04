@@ -118,6 +118,7 @@ def authorize():
         user_info['email'],
         user_info['name'])
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
+    socket.emit('updateId', user_info['id'])
     socket.emit('authResult', authObj)
     # do something with the token and profile
     return redirect('http://localhost:8080/')
@@ -315,10 +316,15 @@ def post_message():
         "text": request.form.text,
         "timestamp": datetime.datetime.now().replace(microsecond=0)
     })
-
+connectedSockets = {}
 @socket.event
-def connect():
+def connect(sid):
     print('CONNECTED')
+    print(sid)
+    print(request.sid)
+    if sid["token"] != "blank": 
+        connectedSockets[request.sid] = sid["token"]
+    print(connectedSockets)
 
 @socket.event
 def disconnect():
@@ -327,11 +333,25 @@ def disconnect():
 # chat message receiver
 @socket.event
 def chatMessage(payload):
-    print('MESSAGE RECEIVED', payload)
+    message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
+    mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
+    for socket, id in connectedSockets:
+        if id == payload["to"]:
+            print('relayMessage: ', message, socket)
+            emit('relayMessage', message, socket),
+            return
+
+@socket.event
+def typingStatus(payload):
+    print('TYPING STATUS CHANGE', payload)
+    for socket, id in connectedSockets:
+        if id == payload["to"]:
+            print('typing status: ', payload, socket)
+            emit('typingStatus', payload["status"], socket),
+            return # return here incase socket duplicated
 
 if __name__ == '__main__':
     socket.run(app)
-
 
 # NOTES
     # Authlib Setup
