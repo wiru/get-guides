@@ -128,7 +128,7 @@ def authorize():
     socket.emit('authResult', authObj)
     print('after emitting auth Object')
     # do something with the token and profile
-    return redirect('https://getguides.herokuapp.com/')
+    return redirect('https://g1000.herokuapp.com/')
 
 # SOCKET.IO
 
