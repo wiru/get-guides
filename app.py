@@ -119,13 +119,16 @@ def authorize():
         user_info['name'])
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
     print('before emitting updateId')
-    socket.emit('updateId', user_info['id'])
+    
     print('after emitting updateId')
     print('before emitting authObject')
-    socket.emit('authResult', authObj)
+    
     print('after emitting auth Object')
     # do something with the token and profile
-    return redirect('https://g1000.herokuapp.com/')
+    redirect('https://g1000.herokuapp.com/')
+    socket.emit('authResult', authObj)
+    socket.emit('updateId', user_info['id'])
+    return "OK"
 
 # SOCKET.IO
 
