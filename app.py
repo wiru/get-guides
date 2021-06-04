@@ -38,7 +38,7 @@ class JSONEncoder(json.JSONEncoder):
 # to run (any) python file, a virtual environment has to be created
 # this has to be done by running 'pipenv shell' (step has to be done after .env file is prepared)
 # After this, type "flask run" into cmd/bash
-app = Flask(__name__, static_folder="client/dist/pwa", static_url_path="")
+app = Flask(__name__, static_folder="client/dist/spa", static_url_path="")
 
 
 # AUTHLIB #
