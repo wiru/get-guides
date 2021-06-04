@@ -323,14 +323,15 @@ connectedSockets = {}
 @socket.event
 def connect(sid):
     print('CONNECTED')
-    print(sid)
-    print(request.sid)
+    print('This is the header object upon connection ', sid)
+    print('this is the socket id ', request.sid)
     if sid["token"] != "blank": 
         connectedSockets[request.sid] = sid["token"]
-    print(connectedSockets)
+    print('This is the connected socket ', connectedSockets)
 
 @socket.event
 def disconnect():
+    print(request.sid)
     print('DISCONNECTED')
 
 # chat message receiver
