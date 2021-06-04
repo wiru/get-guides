@@ -2,13 +2,13 @@
   <q-page class="flex full-width column">
     <div class="q-pa-md column col justify-end">
       <q-chat-message
-        v-for="message in messages"
+        v-for="message in this.$store.state.currentChatLog"
         :key="message.text"
-        :name="message.from"
         :text="[message.text]"
-        :sent="message.from == 'me' ? true : false"
-        :bg-color="message.from == 'me' ? 'green-5' : 'grey-4'"
+        :sent="message.from == me"
+        :bg-color="message.from == me ? 'green-5' : 'grey-4'"
       />
+      <q-spinner-dots v-if="this.$store.state.typingStatus" size="2rem" />
     </div>
     <q-footer elevated>
       <q-toolbar>
@@ -19,7 +19,8 @@
             outlined
             rounded
             label="Message" 
-            dense>
+            dense
+            @change="typingStatus">
             <template v-slot:after>
               <q-btn
               @click="sendMessage"
@@ -43,20 +44,43 @@ export default {
     name: 'Messages',
     data() {
       return { 
-        newMessage: '',
-        messages: this.$store.state.currentChat
+        me: this.$store.state.id,
+        you: this.$store.state.sendTo,
+        newMessage: ''
       }
     },
 	  methods: {
       sendMessage() {
-        // console.log(this.$store.state.id),
+        let date = Date.now()
+        this.$store.state.currentChatLog.push({
+          text: this.newMessage,
+          from: this.$store.state.id,
+          timestamp: date
+        })
         socket.emit(
           'chatMessage', 
         {
           conversationId: this.$store.state.currentChat, 
           text: this.newMessage,
-          from: this.$store.state.id
+          from: this.$store.state.id,
+          to: this.$store.state.sendTo,
+          timestamp: date
         })
+        this.newMessage = ""
+      },
+      typingStatus() {
+        console.log("TYPING")
+        if (this.newMessage === "") {
+          socket.emit("typingStatus", {
+            to: this.$store.state.sendTo,
+            status: false
+            })
+        } else {
+          socket.emit("typingStatus", {
+            to: this.$store.state.sendTo,
+            status: true
+            })
+        }
       }
     },
 }

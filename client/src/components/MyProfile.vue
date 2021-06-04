@@ -40,10 +40,10 @@
     </div>
     <div id="mid">
       <div id="bio">
-        <h3>More about me:</h3>
+        <p>More about me:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.bio }}</p>
-        <h3>I'm unavailable:</h3>
+        <p>I'm unavailable:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
       </div>
