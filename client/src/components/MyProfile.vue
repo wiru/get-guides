@@ -62,7 +62,7 @@
 import { date } from "quasar";
 
 export default {
-  name: "MyProfile",
+  name: "SelectedProfile",
   data: () => ({
     left: true,
     date: ""

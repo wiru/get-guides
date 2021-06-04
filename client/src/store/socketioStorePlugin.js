@@ -6,7 +6,7 @@ export default function createSocketioPlugin(socket) {
       store.commit("setUserId", payload.id);
       if (payload.path === "Search") {
         store.commit("setUserType", "traveller")}
-      else if (payload.path === "MyProfile") {
+      else if (payload.path === "SelectedProfile") {
         store.commit("setUserType", "guide")}
       store.commit("changeView", payload.path);
       store.commit("loggedIn", payload.loggedIn);

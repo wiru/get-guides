@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 // WEBLINK HERE
-const socket = io("https://getguides.herokuapp.com/", { //this needs to be updated
+const socket = io("http://localhost:5000/", { //this needs to be updated
 	transportOptions: {
 		polling: {
 			auth: 123

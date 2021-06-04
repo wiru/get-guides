@@ -10,12 +10,12 @@ const routes = [
   },
   {
     // WEBLINK HERE
-    path: 'https://getguides.herokuapp.com/authorized',
+    path: 'http://localhost:5000/authorized',
     component: () => import('pages/test.vue'),
   },
   {
     // WEBLINK HERE
-    path: 'https://getguides.herokuapp.com/login',
+    path: 'http://localhost:5000/login',
     name: 'login',
     beforeEnter() {location.href = '/login'},
 		//component: 'login'
