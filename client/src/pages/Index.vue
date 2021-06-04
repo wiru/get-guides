@@ -3,6 +3,7 @@
     <Search v-if="this.$store.state.currentView === 'Search'" />
     <SearchResults v-if="this.$store.state.currentView === 'SearchResults'" />
     <Bookings v-if="this.$store.state.currentView === 'Bookings'" />
+    <SelectedProfile v-if="this.$store.state.currentView === 'SelectedProfile'" />
     <MyProfile v-if="this.$store.state.currentView === 'MyProfile'" />
     <Chats v-if="this.$store.state.currentView === 'Chats'" />
     <Messages v-if="this.$store.state.currentView === 'Messages'" />
@@ -18,6 +19,7 @@
 import Search from "../components/Search.vue";
 import SearchResults from "../components/SearchResults.vue";
 import Bookings from "../components/Bookings.vue";
+import SelectedProfile from "../components/SelectedProfile.vue";
 import MyProfile from "../components/MyProfile.vue";
 import Messages from "../components/Messages.vue";
 import Chats from "../components/Chats.vue";
@@ -33,6 +35,7 @@ export default {
     Search,
     SearchResults,
     Bookings,
+    SelectedProfile,
     MyProfile,
     Chats,
     Messages,

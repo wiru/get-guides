@@ -1,6 +1,7 @@
 
 const routes = [
   {
+    // WEBLINK HERE
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -8,13 +9,15 @@ const routes = [
     ]
   },
   {
-    path: '/authorized',
+    // WEBLINK HERE
+    path: 'http://localhost:5000/authorized',
     component: () => import('pages/test.vue'),
   },
   {
-    path: '/login',
+    // WEBLINK HERE
+    path: 'http://localhost:5000/login',
     name: 'login',
-    beforeEnter() {location.href = 'http://localhost:5000/login'},
+    beforeEnter() {location.href = '/login'},
 		//component: 'login'
   },
 

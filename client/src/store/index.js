@@ -11,7 +11,7 @@ const socketioPlugin = createSocketioPlugin(socket);
 export default new Vuex.Store({
   state: {
     currentView: "Login",
-    userType: "",
+    userType: "guide",
     // Changed for Auth
     id: "",
     name: "",
@@ -129,6 +129,7 @@ export default new Vuex.Store({
       const meme = payload.meme;
       const data = (
         await axios.get(
+          // WEBLINK HERE
           `http://localhost:5000/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
@@ -139,6 +140,7 @@ export default new Vuex.Store({
       console.log("getSingleGuide called", payload);
       try {
         const data = (
+          // WEBLINK HERE
           await axios.get(`http://localhost:5000/api/guides/${payload}`)
         ).data;
         console.log(data);
@@ -184,6 +186,7 @@ export default new Vuex.Store({
     async getBookings(state) {
       const data = (
         await axios.get(
+          // WEBLINK HERE
           `http://localhost:5000/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;

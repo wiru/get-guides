@@ -86,7 +86,7 @@ export default {
             //console.log(guidePackage)
             this.$store.commit("setGuidePackage", guidePackage)
             this.$store.dispatch('guidePackage', guidePackage)
-            this.$store.commit("changeView", "MyProfile")
+            this.$store.commit("changeView", "SelectedProfile")
             }
             else {this.alert = true}
         }

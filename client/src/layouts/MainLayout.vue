@@ -3,6 +3,11 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="
+              this.$store.state.userType === 'traveller' ||
+              this.$store.state.userType === 'guide' ||
+              this.$store.state.userType === 'admin'
+            "
           flat
           dense
           round
@@ -18,7 +23,7 @@
         <q-btn
           v-if="
             this.$store.state.currentView === 'Messages' ||
-              this.$store.state.currentView === 'MyProfile' ||
+              this.$store.state.currentView === 'SelectedProfile' ||
               this.$store.state.currentView === 'SearchResults'
           "
           @click="goBack"
@@ -32,7 +37,7 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
+      
       bordered
       content-class="bg-grey-1"
     >
@@ -40,11 +45,22 @@
         <q-item-label header class="text-grey-8">
           Essential Links
         </q-item-label>
+        
+        <div v-if="this.$store.state.userType==='guide'">
+        <ProfileLink
+          v-for="link in profileLinks"
+          :key="link.title"
+          v-bind="link"
+        />
+        </div>
+        
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
         />
+        
+
       </q-list>
     </q-drawer>
 
@@ -56,6 +72,16 @@
 
 <script>
 import EssentialLink from "components/EssentialLink.vue";
+import ProfileLink from "components/ProfileLink.vue";
+
+const profileData = [
+{
+    title: "My Profile",
+    caption: "Show and edit your own Profile",
+    icon: "person",
+    view: "SelectedProfile"
+  }
+];
 
 const linksData = [
   {
@@ -64,12 +90,7 @@ const linksData = [
     icon: "code",
     view: "Search"
   },
-  {
-    title: "My Profile",
-    caption: "Show/edit My Profile",
-    icon: "chat",
-    view: "MyProfile"
-  },
+
   {
     title: "Bookings",
     caption: "Check your bookings",
@@ -79,7 +100,7 @@ const linksData = [
   {
     title: "How to",
     caption: "How to use the App",
-    icon: "question_mark",
+    icon: "help_outline",
     view: "HowTo"
   },
   {
@@ -104,11 +125,12 @@ const linksData = [
 
 export default {
   name: "MainLayout",
-  components: { EssentialLink },
+  components: { EssentialLink, ProfileLink },
   data() {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      essentialLinks: linksData,
+      profileLinks: profileData
     };
   },
   methods: {
@@ -117,9 +139,20 @@ export default {
         this.$store.commit("changeView", "Chats");
       else if (this.$store.state.currentView === "SearchResults")
         this.$store.commit("changeView", "Search");
-      else if (this.$store.state.currentView === "MyProfile")
+      else if (this.$store.state.currentView === "SelectedProfile")
         this.$store.commit("changeView", "SearchResults");
     }
   }
 };
+
+/* Original drawer code
+<q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      bordered
+      content-class="bg-grey-1"
+    >
+*/
+
 </script>
+

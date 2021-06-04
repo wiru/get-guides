@@ -30,7 +30,7 @@ export default {
   methods: {
     getSingleGuide(id) {
       this.$store.dispatch("getSingleGuide", id);
-      this.$store.state.currentView = "MyProfile";
+      this.$store.state.currentView = "SelectedProfile";
     }
   }
 };
