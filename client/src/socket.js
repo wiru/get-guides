@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 
 let id = "blank"
 // WEBLINK HERE
-const socket = io("https://getguides.herokuapp.com", {
+const socket = io("ws://getguides.herokuapp.com", {
 	auth: {
 	  token: id
 	}
