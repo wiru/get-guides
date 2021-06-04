@@ -10,7 +10,7 @@ const socketioPlugin = createSocketioPlugin(socket);
 
 export default new Vuex.Store({
   state: {
-    currentView: "Search",
+    currentView: "Login",
     userType: "",
     // Changed for Auth
     id: "",
@@ -25,10 +25,10 @@ export default new Vuex.Store({
     typingStatus: false,
     chatList: [],
     singleGuide: {},
+    bookings: [],
     filteredGuides: [],
     somethingStupid: 0,
     loggedIn: "false"
-    
   },
   plugins: [socketioPlugin],
   // sync stuff - Use "commit"
@@ -37,9 +37,7 @@ export default new Vuex.Store({
       this.state.currentView = payload;
     },
     loggedIn(state, bool) {
-      // console.log("loggedIn ", bool), 
-      this.state.loggedIn = bool
-      // console.log(this.state.loggedIn)
+      this.state.loggedIn = bool;
     },
     setUserType(state, payload) {
       console.log("setting user type to: ", payload)
@@ -71,10 +69,10 @@ export default new Vuex.Store({
       this.state.gid = payload;
     },
     setTravellerPackage(state, payload) {
-      this.state.travellerPackage = payload
+      this.state.travellerPackage = payload;
     },
     setGuidePackage(state, payload) {
-      this.state.guidePackage = payload
+      this.state.guidePackage = payload;
     },
     
     setFilteredGuides(state, payload) {
@@ -178,14 +176,25 @@ export default new Vuex.Store({
       state.commit("setChatList", data)
     },
 
+    async getBookings(state) {
+      const data = (
+        await axios.get(
+          `http://localhost:5000/api/bookings/${this.state.userType}/${this.state.id}`
+        )
+      ).data;
+
+      this.state.bookings = data;
+
+      console.log(this.state);
+    },
     // For Registration
     async travellerPackage(state, payload) {
-      socket.emit('newTravellerRegistration', payload)
-      console.log('newTravellerRegistration on front')
-      },
+      socket.emit("newTravellerRegistration", payload);
+      console.log("newTravellerRegistration on front");
+    },
     async guidePackage(state, payload) {
-      socket.emit('newGuideRegistration', payload)
-      console.log('newGuideRegistration on front')
-      }
+      socket.emit("newGuideRegistration", payload);
+      console.log("newGuideRegistration on front");
+    }
   }
 });

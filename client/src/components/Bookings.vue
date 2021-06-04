@@ -9,7 +9,7 @@
         <q-expansion-item
           :key="booking.id"
           v-for="booking in this.$store.state.bookings"
-          label="I can't name this dynamically"
+          v-bind:label="booking.date"
         >
           <q-card>
             <q-card-section>
@@ -30,8 +30,22 @@
       <br />
       <br />
       <br />
+    </div>
+  </div>
+</template>
 
-      <q-list bordered>
+<script>
+export default {
+  name: "Bookings",
+  methods: {},
+  created() {
+    this.$store.dispatch("getBookings");
+  }
+};
+
+/*
+
+<q-list bordered>
         <q-item v-ripple>
           <q-item-section>Pending bookings</q-item-section>
         </q-item>
@@ -53,16 +67,8 @@
           </q-card>
         </q-expansion-item>
       </q-list>
-    </div>
-  </div>
-</template>
 
-<script>
-export default {
-  name: "Bookings",
-  methods: {},
-  mounted() {}
-};
+*/
 </script>
 
 <style scoped></style>
