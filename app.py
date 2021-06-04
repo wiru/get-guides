@@ -121,7 +121,7 @@ def authorize():
     socket.emit('updateId', user_info['id'])
     socket.emit('authResult', authObj)
     # do something with the token and profile
-    return redirect('http://localhost:8080/')
+    return redirect('https://getguides.herokuapp.com/')
 
 # SOCKET.IO
 
