@@ -118,6 +118,7 @@ def authorize():
         user_info['email'],
         user_info['name'])
     # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
+    socket.emit('updateId', user_info['id'])
     socket.emit('authResult', authObj)
     # do something with the token and profile
     return redirect('http://localhost:8080/')
@@ -151,6 +152,8 @@ def get_single_guide(id):
     guide = mongo.db.guides.find_one({"_id": ObjectId(id)})
     print(JSONEncoder().encode(guide))
     return JSONEncoder().encode(guide)
+
+# http://localhost:5000/api/bookings/guide/60b47b595c7aa6b557654a30
 
 @app.get("/api/bookings/guide/<id>")
 def get_bookings_as_guide(id):
@@ -190,42 +193,37 @@ def get_bookings_as_traveller(id):
 
 
 # post new booking
-@app.post("/api/bookings/<booking_ID>")
+
+# {
+#     "traveller": "60b6326339b7417d0f2649ad",
+#     "guide": "60b47b595c7aa6b557654a30",
+#     "location": "your mom",
+#     "date": "Tomorrow, I guess",
+#     "start_time": "lol",
+#     "end_time": "ecks Dee",
+#     "meeting_location": "deez nuts",
+#     "details": "I have ligma",
+#     "status": "pending",
+#     "conversation": "098123098312980"
+# }
+
+
+
+@app.post("/api/bookings")
 def add_booking():
-    mongo.db.bookings.insert_one({
-        "traveller": request.form.traveller,
-        "guide": request.form.guide,
-        "location": request.form.location,
-        "date": request.form.date,
-        "start_time": request.form.start_time,
-        "end_time":request.form.end_time,
-        "meeting_location": request.form.meeting_location,
-        "details": request.form.details,
-        "status": request.form.confirmed,
-        "conversation": ""
-    })
-
-# put booking
-@app.put("/api/bookings/<booking_ID>")
-def modify_booking():
-    mongo.db.bookings.insert_one({
-        "traveller": request.form.traveller,
-        "guide": request.form.guide,
-        "location": request.form.location,
-        "date": request.form.date,
-        "start_time": request.form.start_time,
-        "end_time":request.form.end_time,
-        "meeting_location": request.form.meeting_location,
-        "details": request.form.details,
-        "status": request.form.confirmed,
-        "conversation": ""
-    })
-
-
-
-
-# @app.get("/api/messages/<conversation_ID>")
-# def get_conversation():
+    booking_body = request.json
+    conversation_body = {
+        "traveller": booking_body["traveller"],
+        "guide": booking_body["guide"],
+        "messages": []
+    }
+    # make a conversation
+    # if a conversation doesn't exist already
+    new_conv_id = mongo.db.conversations.insert_one(conversation_body).inserted_id
+    booking_body["conversation"] = mongo.db.conversations.find_one({"_id": ObjectId(new_conv_id)})
+    mongo.db.bookings.insert_one(booking_body)
+    print("asll done yo")
+    return "ok"
 
 
     
@@ -263,11 +261,6 @@ def get_messages_from_conversation(id):
     
     return JSONEncoder().encode(conversation)
 
-# msg = {
-#     from: Blah,
-#     text: Bloh
-#     timestamp: 43234
-# }
 @app.post("/api/conversations/<id>/messages")
 def add_message_to_conversation(id):
     message = request.json
@@ -326,10 +319,15 @@ def post_message():
         "text": request.form.text,
         "timestamp": datetime.datetime.now().replace(microsecond=0)
     })
-
+connectedSockets = {}
 @socket.event
-def connect():
+def connect(sid):
     print('CONNECTED')
+    print(sid)
+    print(request.sid)
+    if sid["token"] != "blank": 
+        connectedSockets[request.sid] = sid["token"]
+    print(connectedSockets)
 
 @socket.event
 def disconnect():
@@ -338,11 +336,25 @@ def disconnect():
 # chat message receiver
 @socket.event
 def chatMessage(payload):
-    print('MESSAGE RECEIVED', payload)
+    message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
+    mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
+    for socket, id in connectedSockets:
+        if id == payload["to"]:
+            print('relayMessage: ', message, socket)
+            emit('relayMessage', message, socket),
+            return
+
+@socket.event
+def typingStatus(payload):
+    print('TYPING STATUS CHANGE', payload)
+    for socket, id in connectedSockets:
+        if id == payload["to"]:
+            print('typing status: ', payload, socket)
+            emit('typingStatus', payload["status"], socket),
+            return # return here incase socket duplicated
 
 if __name__ == '__main__':
     socket.run(app)
-
 
 # NOTES
     # Authlib Setup

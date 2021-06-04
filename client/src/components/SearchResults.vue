@@ -29,7 +29,6 @@ export default {
 
   methods: {
     getSingleGuide(id) {
-      console.log("Passing this ID: ", id);
       this.$store.dispatch("getSingleGuide", id);
       this.$store.state.currentView = "SelectedProfile";
     }

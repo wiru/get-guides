@@ -34,16 +34,16 @@
           class="absolute-top-right"
           color="deep-orange"
           icon="chat"
-          @click="startChat(singleGuide.id)"
+          @click="startChat"
         />
       </div>
     </div>
     <div id="mid">
       <div id="bio">
-        <h9>More about me:</h9>
+        <p>More about me:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.bio }}</p>
-        <h9>I'm unavailable:</h9>
+        <p>I'm unavailable:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
       </div>
@@ -72,16 +72,16 @@ export default {
     optionsFn(validDate) {
       validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
       // returns true or false for every date in the month
-      console.log(validDate);
       return validDate;
     },
     // optionsFn(date) {
     //   const parts = date.split("/");
     //   return parts[2] % 2 === 0;
     // },
-    startChat(id) {
-      this.$store.state.currentView = "Messages";
-      this.$store.dispatch("getChatLogs", id);
+    startChat() {
+      this.$store.dispatch("someShit");
+      // this.$store.state.currentView = "Messages";
+      // this.$store.dispatch("getChatLogs", id);
     }
   }
 };
