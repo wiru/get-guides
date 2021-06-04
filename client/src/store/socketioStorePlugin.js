@@ -6,6 +6,7 @@ export default function createSocketioPlugin(socket) {
       store.commit("setUserId", payload.id);
       store.commit("changeView", payload.path);
       store.commit("loggedIn", payload.loggedIn);
+      store.dispatch("getSingleGuide", payload.id);
       if (payload.path === "Registration") {
         store.commit("setUserName", payload.name);
         store.commit("setUserEmail", payload.email);
