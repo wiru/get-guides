@@ -344,6 +344,7 @@ def disconnect():
 def chatMessage(payload):
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
+    socket.emit('relayMessage', message, room=request.sid)
     for sock, id in connectedSockets:
         if id == payload["to"]:
             print('relayMessage: ', message, sock)
@@ -354,7 +355,7 @@ def chatMessage(payload):
 def typingStatus(payload):
     print('TYPING STATUS CHANGE', payload)
     print(connectedSockets)
-    emit('typingStatus', payload["status"], room="23412341234")
+    emit('typingStatus', payload["status"], room=request.sid)
     for sock, id in connectedSockets:
         if id == payload["to"]:
             print('typing status: ', payload, sock)
