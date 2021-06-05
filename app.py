@@ -99,7 +99,7 @@ def isLogged():
     if 'authObj' in session:
         if 'loggedIn' in session['authObj']:
             if session['authObj']["loggedIn"] == True:
-                print("BEFORE EMIT!!! 1", session['authObj'])
+                print("BEFORE EMIT!!! 1", session['sid'])
                 emit('updateId', session['authObj']['id'], room=session['sid'])
             emit('authResult', session['authObj'], room=session['sid'])
 
