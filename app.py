@@ -353,11 +353,11 @@ def chatMessage(payload):
 @socket.event
 def typingStatus(payload):
     print('TYPING STATUS CHANGE', payload)
+    print(connectedSockets)
     emit('typingStatus', payload["status"], room="23412341234")
     for sock, id in connectedSockets:
         if id == payload["to"]:
             print('typing status: ', payload, sock)
-            print(connectedSockets)
             emit('typingStatus', payload["status"], sock),
             return # return here incase socket duplicated
 
