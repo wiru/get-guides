@@ -1,9 +1,8 @@
 <template>
   <div id="Login">
-    <h1>Welcome to GetGuides!</h1>
+    <h1>Welcome to Get Guides!</h1>
     <span>Please log in to continue.</span>
     <br />
-    <!-- <button @click="registerAction">Register new User</button> -->
     <br />
     <button @click="loginAction">LOGIN</button>
   </div>
@@ -14,25 +13,30 @@ import axios from "axios";
 export default {
   name: "Login",
   methods: {
-    // Not needed in current itaration
-    /*
-    registerAction() {
-      this.$store.commit("changeView", "Registration");
-    },*/
-
     loginAction() {
-      this.$store.dispatch("login");
+      window.location.replace(`${window.location.origin}/login`);
     }
   },
   async created() {
-    const isLogged = (await axios.get("/auth")).data;
-    console.log("Ran created, here's the result", isLogged);
-  }
+    const payload = (await axios.get(`${window.location.origin}/auth`)).data;
 
-  // loginAction(userType) {
-  //   this.$store.commit("setUserType", userType);
-  //   this.$store.commit("changeView", "Search");
-  // }
+    if (payload.path === "Search") {
+      this.$store.commit("setUserId", payload.id);
+      this.$store.commit("setUserType", "traveller");
+      this.$store.commit("changeView", payload.path);
+      this.$store.commit("loggedIn", payload.loggedIn);
+    } else if (payload.path === "SelectedProfile") {
+      this.$store.commit("setUserId", payload.id);
+      this.$store.commit("setUserType", "guide");
+      this.$store.commit("changeView", payload.path);
+      this.$store.commit("loggedIn", payload.loggedIn);
+    } else if (payload.path === "Registration") {
+      this.$store.commit("setUserName", payload.name);
+      this.$store.commit("setUserEmail", payload.email);
+      this.$store.commit("setUsergid", payload.gid);
+      this.$store.commit("changeView", payload.path);
+    }
+  }
 };
 </script>
 

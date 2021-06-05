@@ -93,12 +93,9 @@ def searchUser(gid, email, name):
 # AUTHLIB
 @app.route("/auth")
 def isLogged():
+    print(session)
     if 'authObj' in session:
-        if 'loggedIn' in session['authObj']:
-            if session['authObj']["loggedIn"] == True:
-                socket.emit('updateId', session['authObj']['id'])
-            socket.emit('authResult', session['authObj'])
-
+        return jsonify(session['authObj'])
     return ("", 204)
 
 @app.route('/login')
@@ -122,6 +119,12 @@ def authorize():
         user_info['email'],
         user_info['name'])
     
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    for key in list(session.keys()):
+        session.pop(key)
     return redirect('/')
 
 # SOCKET.IO

@@ -3,7 +3,7 @@ export default function createSocketioPlugin(socket) {
     store.$socket = socket;
     socket.on("authResult", payload => {
       socket.auth.token = payload.id;
-      // console.log(socket.auth.token)
+
       store.commit("setUserId", payload.id);
 
       if (payload.path === "Search") {
@@ -13,7 +13,6 @@ export default function createSocketioPlugin(socket) {
       }
       store.commit("changeView", payload.path);
       store.commit("loggedIn", payload.loggedIn);
-      console.log("payload path is: ", payload.path);
 
       if (payload.path === "Registration") {
         store.commit("setUserName", payload.name);
