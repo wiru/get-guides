@@ -22,5 +22,17 @@ export default function createSocketioPlugin(socket) {
       }
     });
     socket.on("chatUpdate", payload => store.commit("chatUpdate", payload));
+    socket.on("changeView", () => {
+      console.log("store access here");
+      this.$store.state.currentView = "HowTo";
+    });
+    socket.on("relayMessage", message => {
+      console.log("Message Arrived");
+      this.$store.commit("appendMessage", message);
+    });
+    socket.on("typingStatus", bool => {
+      console.log("Typing Status Arrived");
+      this.$store.commit("settypingStatus", bool);
+    });
   };
 }
