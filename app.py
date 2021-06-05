@@ -100,8 +100,8 @@ def isLogged():
         if 'loggedIn' in session['authObj']:
             if session['authObj']["loggedIn"] == True:
                 print("BEFORE EMIT!!! 1", session['authObj'])
-                emit('updateId', session['authObj']['id'], session['authObj']['sid'])
-            emit('authResult', session['authObj'], session['authObj']['sid'])
+                emit('updateId', session['authObj']['id'], room=session['authObj']['sid'])
+            emit('authResult', session['authObj'], room=session['authObj']['sid'])
 
     return ("", 204)
 
@@ -301,8 +301,8 @@ def chatMessage(payload):
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for socket, id in connectedSockets:
         if id == payload["to"]:
-            print('relayMessage: ', message, socket)
-            emit('relayMessage', message, socket),
+            print('relayMessage: ', message, room=socket)
+            emit('relayMessage', message, room=socket),
             return
 
 @socket.event
@@ -310,8 +310,8 @@ def typingStatus(payload):
     print('TYPING STATUS CHANGE', payload)
     for socket, id in connectedSockets:
         if id == payload["to"]:
-            print('typing status: ', payload, socket)
-            emit('typingStatus', payload["status"], socket),
+            print('typing status: ', payload, room=socket)
+            emit('typingStatus', payload["status"], room=socket),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':
