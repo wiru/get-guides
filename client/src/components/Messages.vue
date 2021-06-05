@@ -57,6 +57,10 @@ export default {
           from: this.$store.state.id,
           timestamp: date
         })
+        socket.emit("typingStatus", {
+            to: this.$store.state.sendTo,
+            status: false
+            })
         socket.emit(
           'chatMessage', 
         {

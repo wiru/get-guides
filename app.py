@@ -357,6 +357,7 @@ def typingStatus(payload):
     for sock, id in connectedSockets:
         if id == payload["to"]:
             print('typing status: ', payload, sock)
+            print(connectedSockets)
             emit('typingStatus', payload["status"], sock),
             return # return here incase socket duplicated
 
