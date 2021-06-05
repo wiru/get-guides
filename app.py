@@ -90,17 +90,14 @@ def searchUser(gid, email, name):
             'gid': gid,
             }
 
-
-
-
 # AUTHLIB
 @app.route("/auth")
 def isLogged():
     if 'authObj' in session:
         if 'loggedIn' in session['authObj']:
             if session['authObj']["loggedIn"] == True:
-                emit('updateId', session['authObj']['id'], session['sid'])
-            emit('authResult', session['authObj'], session['sid'])
+                socket.emit('updateId', session['authObj']['id'])
+            socket.emit('authResult', session['authObj'])
 
     return ("", 204)
 
@@ -213,6 +210,11 @@ def add_booking():
     print("asll done yo")
     return "ok"
 
+
+
+#     conversations = mongo.db.conversations
+#     return jsonify(conversations.find_one({"_id": request.form.id}))
+
 @app.get("/api/conversations/guide/<id>")
 def get_conversation_by_guide(id):
     conversations = []
@@ -250,6 +252,7 @@ def add_message_to_conversation(id):
     mongo.db.conversations.update_one({"_id": ObjectId(id)}, { "$push": {"messages": message}})
     return "Sent"
 
+
 # post new guide
 @app.post("/api/guides/<name>")
 def add_guide():
@@ -281,9 +284,15 @@ def add_traveller():
         })
 
 
+connectedSockets = {}
 @socket.event
 def connect(sid):
-    session['sid'] = request.sid
+    print('CONNECTED')
+    print('This is the header object upon connection ', sid)
+    print('this is the socket id ', request.sid)
+    if sid["token"] != "blank":
+        connectedSockets[request.sid] = sid["token"]
+    print('This is the connected socket ', connectedSockets)
 
 @socket.event
 def disconnect():
