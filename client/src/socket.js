@@ -8,6 +8,8 @@ const socket = io("wss://g1000.herokuapp.com", {
   }
 });
 
+// http://localhost:5000
+
 socket.on("connect", () => {
   console.log("connected now");
 });

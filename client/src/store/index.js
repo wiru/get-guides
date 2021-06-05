@@ -1,4 +1,3 @@
-
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
@@ -131,7 +130,7 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `https://g1000.herokuapp.com/api/guides/search/${location}/${language}/${date}/${meme}`
+          `/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
       state.commit("setFilteredGuides", data);
@@ -140,10 +139,9 @@ export default new Vuex.Store({
     async getSingleGuide(state, payload) {
       console.log("getSingleGuide called", payload);
       try {
-        const data = (
-          // WEBLINK HERE
-          await axios.get(`https://g1000.herokuapp.com/api/guides/${payload}`)
-        ).data;
+        const data = // WEBLINK HERE
+        (await axios.get(`https://g1000.herokuapp.com/api/guides/${payload}`))
+          .data;
         console.log(data);
         state.commit("setSingleGuide", data);
         console.log("state commit setSingleGuide happened");

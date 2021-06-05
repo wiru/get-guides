@@ -1,9 +1,7 @@
 <template>
   <div id="Login">
     <h1>Welcome to GetGuides!</h1>
-    <span
-      >Please log in to continue.</span
-    >
+    <span>Please log in to continue.</span>
     <br />
     <!-- <button @click="registerAction">Register new User</button> -->
     <br />
@@ -12,6 +10,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Login",
   methods: {
@@ -20,11 +19,15 @@ export default {
     registerAction() {
       this.$store.commit("changeView", "Registration");
     },*/
-    
+
     loginAction() {
       this.$store.dispatch("login");
     }
   },
+  async created() {
+    const isLogged = (await axios.get("/auth")).data;
+    console.log("Ran created, here's the result", isLogged);
+  }
 
   // loginAction(userType) {
   //   this.$store.commit("setUserType", userType);
