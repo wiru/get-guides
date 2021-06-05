@@ -96,6 +96,16 @@ def searchUser(gid, email, name):
             }
 
 # AUTHLIB
+@app.route("/auth")
+def isLogged():
+    if 'authObj' in session:
+        if 'loggedIn' in session['authObj']:
+            if session['authObj']["loggedIn"] == True:
+                socket.emit('updateId', session['authObj']['id'])
+            socket.emit('authResult', session['authObj'])
+
+    return ("", 204)
+
 @app.route('/login')
 def login():
     google = oauth.create_client('google')
@@ -230,7 +240,6 @@ def add_booking():
     return "ok"
 
 
-    
 #     conversations = mongo.db.conversations
 #     return jsonify(conversations.find_one({"_id": request.form.id}))
 
@@ -282,6 +291,7 @@ def add_message_to_conversation(id):
 #     return jsonify(out)
 
 
+
 # post new guide
 @app.post("/api/guides/<name>")
 def add_guide():
@@ -313,23 +323,14 @@ def add_traveller():
         })
 
 
-
-# post new message
-@app.post("/api/messages/<message_ID>")
-def post_message():
-    conversation = mongo.db.conversations.find_one({"_id": request.form.id})
-    mongo.db.conversations[request.form.id]['messages'] ({
-        "from": request.form.sender,
-        "text": request.form.text,
-        "timestamp": datetime.datetime.now().replace(microsecond=0)
-    })
 connectedSockets = {}
+
 @socket.event
 def connect(sid):
-    # print('CONNECTED')
-    # print('This is the header object upon connection ', sid)
-    # print('this is the socket id ', request.sid)
-    if sid["token"] != "blank": 
+    print('CONNECTED')
+    print('This is the header object upon connection ', sid)
+    print('this is the socket id ', request.sid)
+    if sid["token"] != "blank":
         connectedSockets[request.sid] = sid["token"]
     print('This is the connected socket ', connectedSockets)
 
@@ -352,6 +353,7 @@ def chatMessage(payload):
 @socket.event
 def typingStatus(payload):
     print('TYPING STATUS CHANGE', payload)
+    emit('typingStatus', payload["status"], room=23412341234)
     for sock, id in connectedSockets:
         if id == payload["to"]:
             print('typing status: ', payload, sock)

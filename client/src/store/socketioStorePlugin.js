@@ -2,6 +2,8 @@ export default function createSocketioPlugin(socket) {
   return store => {
     store.$socket = socket;
     socket.on("authResult", payload => {
+      socket.auth.token = payload.id;
+      // console.log(socket.auth.token)
       store.commit("setUserId", payload.id);
 
       if (payload.path === "Search") {
