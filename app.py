@@ -283,7 +283,10 @@ def add_traveller():
 
 @socket.event
 def connect(sid):
+    print("CONNECT!!!!!!!!!!!!!!!!!!!!!!!")
     session['sid'] = request.sid
+    print("SESSION!!!!!!!!!!!!!!!!!!!!!!!", request.sid)
+    print("SESSION!!!!!!!!!!!!!!!!!!!!!!!", session)
 
 @socket.event
 def disconnect():
