@@ -9,6 +9,7 @@ const socket = io("http://localhost:5000", {
 });
 
 // http://localhost:5000
+// wss://g1000.herokuapp.com
 
 socket.on("connect", () => {
   console.log("connected now");

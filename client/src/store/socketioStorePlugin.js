@@ -4,14 +4,12 @@ export default function createSocketioPlugin(socket) {
     socket.on("authResult", payload => {
       socket.auth.token = payload.id;
       // console.log(socket.auth.token)
-      socket.disconnect().connect();
       store.commit("setUserId", payload.id);
 
       if (payload.path === "Search") {
-        store.commit("setUserType", "traveller")
-      }
-      else if (payload.path === "SelectedProfile") {
-        store.commit("setUserType", "guide")
+        store.commit("setUserType", "traveller");
+      } else if (payload.path === "SelectedProfile") {
+        store.commit("setUserType", "guide");
       }
       store.commit("changeView", payload.path);
       store.commit("loggedIn", payload.loggedIn);

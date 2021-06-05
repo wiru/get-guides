@@ -96,6 +96,7 @@ def isLogged():
     if 'authObj' in session:
         if 'loggedIn' in session['authObj']:
             if session['authObj']["loggedIn"] == True:
+                print(request.sid)
                 socket.emit('updateId', session['authObj']['id'])
             socket.emit('authResult', session['authObj'])
 
