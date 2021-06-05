@@ -99,10 +99,9 @@ def isLogged():
     if 'authObj' in session:
         if 'loggedIn' in session['authObj']:
             if session['authObj']["loggedIn"] == True:
-                print("BEFORE EMIT!!! 1", session)
-                emit('updateId', session['authObj']['id'], session['sid'])
-            print("BEFORE EMIT!!! 1", session['sid'])
-            emit('authResult', session['authObj'], session['sid'])
+                print("BEFORE EMIT!!! 1", session['authObj'])
+                emit('updateId', session['authObj']['id'], session['authObj']['sid'])
+            emit('authResult', session['authObj'], session['authObj']['sid'])
 
     return ("", 204)
 
@@ -286,7 +285,7 @@ def add_traveller():
 @socket.event
 def connect(sid):
     print("CONNECT!!!!!!!!!!!!!!!!!!!!!!!")
-    session['sid'] = request.sid
+    session['authObj']['sid'] = request.sid
     print("SESSION!!!!!!!!!!!!!!!!!!!!!!!", request.sid)
     print("SESSION!!!!!!!!!!!!!!!!!!!!!!!", session)
 
