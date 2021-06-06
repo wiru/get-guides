@@ -47,7 +47,7 @@ export default new Vuex.Store({
     setUserId(state, payload) {
       console.log("setuserid function in store ", payload)
       this.state.id = payload;
-      socket.emit("updateId", payload);
+      socket.emit("matchSocketWithMongoId", payload);
     },
     setCurrentChat(state, id) {
       this.state.currentChat = id;

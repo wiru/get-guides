@@ -303,6 +303,14 @@ def disconnect():
     print(request.sid)
     print('DISCONNECTED')
 
+@socket.event
+def matchSocketWithMongoId(payload):
+    print("THIS IS THE MATCH FUNCTION")
+    print("MONGOID", payload)
+    print("REQUEST.SID", request.sid)
+    connectedSockets[payload] = request.sid
+    print("CONNECTED SOCKETS", connectedSockets)
+
 # chat message receiver
 @socket.event
 def chatMessage(payload):
