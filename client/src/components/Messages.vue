@@ -43,7 +43,7 @@ import socket from "../socket";
 export default {
     name: 'Messages',
     data() {
-      return { 
+      return {
         me: this.$store.state.id,
         you: this.$store.state.sendTo,
         newMessage: ''

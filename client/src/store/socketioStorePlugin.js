@@ -25,8 +25,11 @@ export default function createSocketioPlugin(socket) {
       store.state.currentView = "HowTo";
     });
     socket.on("relayMessage", message => {
-      console.log("Message Arrived");
-      store.commit("appendMessage", message);
+      console.log("CHECKING CURRENT CHAT");
+      if (store.state.sendTo === message['from']) {
+        console.log("CHECK OK. MESSAGE RECEIVED")
+        store.commit("appendMessage", message);
+      }
     });
     socket.on("typingStatus", bool => {
       console.log("Typing Status Arrived");
