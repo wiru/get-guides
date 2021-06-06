@@ -22,6 +22,7 @@ socket.on("updateId", userId => {
   console.log("id arriving as: ", userId);
   id = userId;
   console.log("newId is: ", id);
+  disconnect().connect()
 });
 
 export default socket;

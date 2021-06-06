@@ -19,7 +19,6 @@ export default {
   },
   async created() {
     const payload = (await axios.get(`${window.location.origin}/auth`)).data;
-
     if (payload.path === "Search") {
       this.$store.commit("setUserId", payload.id);
       this.$store.commit("setUserType", "traveller");

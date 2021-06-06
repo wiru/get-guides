@@ -45,8 +45,9 @@ export default new Vuex.Store({
     },
     // Changed for Auth
     setUserId(state, payload) {
-      // console.log("id ", payload)
+      console.log("setuserid function in store ", payload)
       this.state.id = payload;
+      socket.emit("updateId", payload);
     },
     setCurrentChat(state, id) {
       this.state.currentChat = id;
