@@ -290,13 +290,9 @@ def add_traveller():
 connectedSockets = {}
 
 @socket.event
-def connect(sid):
+def connect():
     print('CONNECTED')
-    print('This is the header object upon connection ', sid)
     print('this is the socket id ', request.sid)
-    if sid["token"] != "blank":
-        connectedSockets[request.sid] = sid["token"]
-    print('This is the connected socket ', connectedSockets)
 
 @socket.event
 def disconnect():
