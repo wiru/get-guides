@@ -15,7 +15,7 @@ const routes = [
     path: "https://g1000.herokuapp.com/login",
     name: "login",
     beforeEnter() {
-      window.location.replace("http://localhost:5000/login");
+      window.location.replace("https://g1000.herokuapp.com/login");
     }
     //component: 'login'
   },
