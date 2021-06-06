@@ -17,6 +17,7 @@ export default new Vuex.Store({
     name: "",
     email: "",
     gid: "",
+    sendTo: "",
     travellerPackage: {},
     guidePackage: {},
     ////
@@ -157,6 +158,7 @@ export default new Vuex.Store({
       console.log("messages: ", data.messages);
       let to = this.state.userType === "guide" ? "traveller" : "guide";
       this.state.currentChatLog = data.messages;
+      console.log(data[to]._id)
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
     },
