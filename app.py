@@ -312,19 +312,20 @@ def matchSocketWithMongoId(payload):
 def chatMessage(payload):
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
-    for socket, id in connectedSockets:
-        if id == payload["to"]:
-            print('relayMessage: ', message, socket)
-            emit('relayMessage', message, socket),
+    for mongoId, socketId in connectedSockets:
+        if mongoId == payload["to"]:
+            print('relayMessage: ', message, room=socketId)
+            emit('relayMessage', message, room=socketId),
             return
 
 @socket.event
 def typingStatus(payload):
     print('TYPING STATUS CHANGE')
-    for socket, id in connectedSockets:
-        if id == payload["to"]:
-            print('typing status: ', payload, socket)
-            emit('typingStatus', payload["status"], socket),
+    for mongoId, socketId in connectedSockets:
+        if mongoId == payload["to"]:
+            print("THE IF STATEMENT IS FIRING")
+            print('typing status: ', payload, socketId)
+            emit('typingStatus', payload["status"], socketId),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':
