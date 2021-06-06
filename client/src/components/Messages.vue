@@ -8,7 +8,7 @@
         :sent="message.from == me"
         :bg-color="message.from == me ? 'green-5' : 'grey-4'"
       />
-      <q-spinner-dots v-if="this.$store.state.typingStatus" size="2rem" />
+      <q-spinner-dots v-if="typingCheck" size="2rem" />
     </div>
     <q-footer elevated>
       <q-toolbar>
@@ -47,6 +47,12 @@ export default {
         me: this.$store.state.id,
         you: this.$store.state.sendTo,
         newMessage: ''
+      }
+    },
+    // This should allow for hot-reloading of typing status 
+    computed: {
+      typingCheck() {
+        return this.$store.state.typingStatus      
       }
     },
 	  methods: {
