@@ -316,7 +316,7 @@ def chatMessage(payload):
 
 @socket.event
 def typingStatus(payload):
-    print('TYPING STATUS CHANGE', payload)
+    print('TYPING STATUS CHANGE')
     for socket, id in connectedSockets:
         if id == payload["to"]:
             print('typing status: ', payload, socket)

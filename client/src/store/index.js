@@ -154,8 +154,9 @@ export default new Vuex.Store({
       ).data;
       console.log("data: ", data);
       console.log("messages: ", data.messages);
+      let to = this.state.userType === "guide" ? "traveller" : "guide";
       this.state.currentChatLog = data.messages;
-      this.state.sendTo = data.traveller._id;
+      this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
     },
 
