@@ -132,7 +132,7 @@ def authorize():
     socket.emit('authResult', authObj)
     print('after emitting auth Object')
     # do something with the token and profile
-    return redirect('https://g1000.herokuapp.com/')
+    return redirect('/')
 
 @app.route('/logout')
 def logout():
