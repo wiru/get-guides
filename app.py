@@ -314,8 +314,8 @@ def chatMessage(payload):
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for mongoId, socketId in connectedSockets:
         if mongoId == payload["to"]:
-            print('relayMessage: ', message, room=socketId)
-            emit('relayMessage', message, room=socketId),
+            print('relayMessage: ', message, socketId)
+            emit('relayMessage', message, socketId),
             return
 
 @socket.event
