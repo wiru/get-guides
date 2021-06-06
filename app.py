@@ -57,12 +57,8 @@ google = oauth.register(
 
 # SOCKET.IO #
 app.config['SECRET_KEY'] = 'secret!' # MAKE THIS HARDER FOR PRODUCTION
-# import socketio
-
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 socket = SocketIO(app, cors_allowed_origins='*')
-# thread = None
-# thread_lock = Lock()
 
 CORS(app)
 
@@ -117,21 +113,13 @@ def authorize():
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
-    print(user_info['id'])
 
     #check user_info against data in database
-    authObj = searchUser(
-        user_info['id'], 
+    session["authObj"] = searchUser(
+        user_info['id'],
         user_info['email'],
         user_info['name'])
-    # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    print('before emitting updateId')
-    socket.emit('updateId', user_info['id'])
-    print('after emitting updateId')
-    print('before emitting authObject')
-    socket.emit('authResult', authObj)
-    print('after emitting auth Object')
-    # do something with the token and profile
+    
     return redirect('/')
 
 @app.route('/logout')
@@ -149,6 +137,8 @@ def index():
 
 @app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
 def get_guides(location, language, startdate, enddate):
+    print("let's see if session persists")
+    print(session)
     out = []
     for guide in mongo.db.guides.find({ "$and": [
         {"locations" : location},
@@ -209,23 +199,6 @@ def get_bookings_as_traveller(id):
         return jsonify(out)
 
 
-# post new booking
-
-# {
-#     "traveller": "60b6326339b7417d0f2649ad",
-#     "guide": "60b47b595c7aa6b557654a30",
-#     "location": "your mom",
-#     "date": "Tomorrow, I guess",
-#     "start_time": "lol",
-#     "end_time": "ecks Dee",
-#     "meeting_location": "deez nuts",
-#     "details": "I have ligma",
-#     "status": "pending",
-#     "conversation": "098123098312980"
-# }
-
-
-
 @app.post("/api/bookings")
 def add_booking():
     booking_body = request.json
@@ -239,7 +212,7 @@ def add_booking():
     new_conv_id = mongo.db.conversations.insert_one(conversation_body).inserted_id
     booking_body["conversation"] = mongo.db.conversations.find_one({"_id": ObjectId(new_conv_id)})
     mongo.db.bookings.insert_one(booking_body)
-    print("asll done yo")
+    print("all done yo")
     return "ok"
 
 
@@ -282,17 +255,6 @@ def add_message_to_conversation(id):
     message = request.json
     mongo.db.conversations.update_one({"_id": ObjectId(id)}, { "$push": {"messages": message}})
     return "Sent"
-    
-
-# vvv mock
-# @app.get("/api/messages/<partner_id>")
-# def get_conversation(partner_id):
-#     out = []
-#     for message in mongo.db.conversations.find({"traveller": partner_id}):
-#         out.append(message)
-#     print(out)
-#     return jsonify(out)
-
 
 
 # post new guide
