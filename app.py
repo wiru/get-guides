@@ -314,7 +314,7 @@ def chatMessage(payload):
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for mongoId, socketId in connectedSockets.items():
         if mongoId == payload["to"]:
-            print('relayMessage: ', message, room=socketId)
+            print('relayMessage: ', message, socketId)
             emit('relayMessage', message, room=socketId),
             return
 
@@ -324,7 +324,7 @@ def typingStatus(payload):
     for mongoId, socketId in connectedSockets.items():
         if mongoId == payload["to"]:
             print("THE IF STATEMENT IS FIRING")
-            print('typing status: ', payload, room=socketId)
+            print('typing status: ', payload, socketId)
             emit('typingStatus', payload["status"], room=socketId),
             return # return here incase socket duplicated
 
