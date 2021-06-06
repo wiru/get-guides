@@ -98,12 +98,9 @@ def searchUser(gid, email, name):
 # AUTHLIB
 @app.route("/auth")
 def isLogged():
+    print(session)
     if 'authObj' in session:
-        if 'loggedIn' in session['authObj']:
-            if session['authObj']["loggedIn"] == True:
-                socket.emit('updateId', session['authObj']['id'])
-            socket.emit('authResult', session['authObj'])
-
+        return jsonify(session['authObj'])
     return ("", 204)
 
 @app.route('/login')
@@ -136,6 +133,12 @@ def authorize():
     print('after emitting auth Object')
     # do something with the token and profile
     return redirect('https://getguides.herokuapp.com/')
+
+@app.route('/logout')
+def logout():
+    for key in list(session.keys()):
+        session.pop(key)
+    return redirect('/')
 
 # SOCKET.IO
 

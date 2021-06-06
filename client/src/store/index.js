@@ -109,10 +109,6 @@ export default new Vuex.Store({
   },
   // async stuff - Use "dispatch"
   actions: {
-    login(state) {
-      this.$router.push("/login");
-    },
-
     async receiveMessage(state, payload) {
       console.log("this was received:", payload);
     },
@@ -139,9 +135,9 @@ export default new Vuex.Store({
     async getSingleGuide(state, payload) {
       console.log("getSingleGuide called", payload);
       try {
-        const data = // WEBLINK HERE
-        (await axios.get(`https://g1000.herokuapp.com/api/guides/${payload}`))
-          .data;
+        const data = ( // WEBLINK HERE
+          await axios.get(`https://g1000.herokuapp.com/api/guides/${payload}`)
+        ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
         console.log("state commit setSingleGuide happened");

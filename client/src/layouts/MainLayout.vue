@@ -4,10 +4,10 @@
       <q-toolbar>
         <q-btn
           v-if="
-              this.$store.state.userType === 'traveller' ||
+            this.$store.state.userType === 'traveller' ||
               this.$store.state.userType === 'guide' ||
               this.$store.state.userType === 'admin'
-            "
+          "
           flat
           dense
           round
@@ -35,32 +35,31 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      
-      bordered
-      content-class="bg-grey-1"
-    >
+    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-1">
       <q-list>
         <q-item-label header class="text-grey-8">
           Essential Links
         </q-item-label>
-        
-        <div v-if="this.$store.state.userType==='guide'">
-        <ProfileLink
-          v-for="link in profileLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+
+        <div v-if="this.$store.state.userType === 'guide'">
+          <ProfileLink
+            v-for="link in profileLinks"
+            :key="link.title"
+            v-bind="link"
+          />
         </div>
-        
+
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
         />
-        
 
+        <EssentialLink
+          v-if="this.$store.state.loggedIn === true"
+          :key="logoutData.title"
+          v-bind="logoutData"
+        />
       </q-list>
     </q-drawer>
 
@@ -73,9 +72,15 @@
 <script>
 import EssentialLink from "components/EssentialLink.vue";
 import ProfileLink from "components/ProfileLink.vue";
+const logoutData = {
+  title: "Logout",
+  caption: "Bye bye",
+  icon: "favorite",
+  view: "Logout"
+};
 
 const profileData = [
-{
+  {
     title: "My Profile",
     caption: "Show and edit your own Profile",
     icon: "person",
@@ -110,16 +115,10 @@ const linksData = [
     view: "Chats"
   },
   {
-    title: 'About Us',
-    caption: 'The team behind Get Guides',
-    icon: 'favorite',
-    view: 'AboutUs'
-  },
-  {
-    title: "Logout",
-    caption: "Bye bye",
+    title: "About Us",
+    caption: "The team behind Get Guides",
     icon: "favorite",
-    view: "Logout"
+    view: "AboutUs"
   }
 ];
 
@@ -130,7 +129,8 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
-      profileLinks: profileData
+      profileLinks: profileData,
+      logoutData: logoutData
     };
   },
   methods: {
@@ -153,6 +153,4 @@ export default {
       content-class="bg-grey-1"
     >
 */
-
 </script>
-
