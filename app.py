@@ -288,6 +288,7 @@ def add_traveller():
 
 
 connectedSockets = {}
+
 @socket.event
 def connect(sid):
     print('CONNECTED')

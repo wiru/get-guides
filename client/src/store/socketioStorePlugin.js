@@ -20,6 +20,18 @@ export default function createSocketioPlugin(socket) {
         store.commit("setUsergid", payload.gid);
       }
     });
+    socket.on("changeView", () => {
+      console.log("store access here");
+      store.state.currentView = "HowTo";
+    });
+    socket.on("relayMessage", message => {
+      console.log("Message Arrived");
+      store.commit("appendMessage", message);
+    });
+    socket.on("typingStatus", bool => {
+      console.log("Typing Status Arrived");
+      store.commit("settypingStatus", bool);
+    });
     socket.on("chatUpdate", payload => store.commit("chatUpdate", payload));
   };
 }

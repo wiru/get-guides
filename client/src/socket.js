@@ -23,16 +23,5 @@ socket.on("updateId", userId => {
   id = userId;
   console.log("newId is: ", id);
 });
-socket.on("changeView", () => {
-  console.log("store access here");
-  this.$store.state.currentView = "HowTo";
-});
-socket.on("relayMessage", message => {
-  console.log("Message Arrived");
-  this.$store.commit("appendMessage", message);
-});
-socket.on("typingStatus", bool => {
-  console.log("Typing Status Arrived");
-  this.$store.commit("settypingStatus", bool);
-});
+
 export default socket;
