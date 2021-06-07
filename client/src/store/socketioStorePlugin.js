@@ -24,17 +24,17 @@ export default function createSocketioPlugin(socket) {
       console.log("store access here");
       store.state.currentView = "HowTo";
     });
-    socket.on("relayMessage", message => {
-      console.log("CHECKING CURRENT CHAT");
-      if (store.state.sendTo === message['from']) {
-        console.log("CHECK OK. MESSAGE RECEIVED")
-        store.commit("appendMessage", message);
-      }
-    });
-    socket.on("typingStatus", bool => {
-      console.log("Typing Status Arrived");
-      store.commit("settypingStatus", bool);
-    });
+    // socket.on("relayMessage", message => {
+    //   console.log("CHECKING CURRENT CHAT");
+    //   if (store.state.sendTo === message['from']) {
+    //     console.log("CHECK OK. MESSAGE RECEIVED")
+    //     store.commit("appendMessage", message);
+    //   }
+    // });
+    // socket.on("typingStatus", bool => {
+    //   console.log("Typing Status Arrived");
+    //   store.commit("settypingStatus", bool);
+    // });
     socket.on("chatUpdate", payload => store.commit("chatUpdate", payload));
   };
 }

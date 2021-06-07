@@ -40,11 +40,11 @@
 import socket from "../socket";
 
 export default {
-    computed: {
-      chatCheck() {
-        return this.$store.chatChecker
-      }
-    },
+    // computed: {
+    //   chatCheck() {
+    //     return this.$store.chatChecker
+    //   }
+    // },
     watch: {
       chatCheck(val) {
         messageLog = thisthis.$store.state.currentChatLog
@@ -68,6 +68,13 @@ export default {
         console.log("TYPING STATUS ON LISTNER")        
         if (this.$store.state.currentChat === payload.to) {
           this.typingStatus = payload.status
+        }
+      }),
+      socket.on("relayMessage", message => {
+        console.log("CHECKING CURRENT CHAT");
+        if (you === message['from']) {
+          console.log("CHECK OK. MESSAGE RECEIVED AND PUSHING")
+          this.$store.state.currentChatLog.push(message);
         }
       })
     },
@@ -100,6 +107,9 @@ export default {
           timestamp: date
         })
         this.newMessage = ""
+      },
+      receiveMessage() {
+
       }
     },
 }
