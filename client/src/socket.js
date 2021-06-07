@@ -1,10 +1,10 @@
 import io from "socket.io-client";
 
 // WEBLINK HERE
-const socket = io("wss://g1000.herokuapp.com")
+const socket = io("wss://getguides.herokuapp.com")
 
 // http://localhost:5000
-// wss://g1000.herokuapp.com
+// wss://getguides.herokuapp.com
 
 socket.on("connect", () => {
   console.log("connected now");
