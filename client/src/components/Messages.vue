@@ -115,6 +115,9 @@ export default {
       },
       scrollToBottom() {
         let chatPage = this.$refs.chatPage.$el
+        console.log("STB METHOD FIRED")
+        console.log("CHAT PAGE", chatPage)
+        console.log("CHAT PAGE HEIGHT", chatPage.scrollHeight)
         setTimeout(() => {
           window.scrollTo(0, chatPage.scrollHeight)}, 20);
         }
