@@ -5,6 +5,7 @@
     <Bookings v-if="this.$store.state.currentView === 'Bookings'" />
     <SelectedProfile v-if="this.$store.state.currentView === 'SelectedProfile'" />
     <MyProfile v-if="this.$store.state.currentView === 'MyProfile'" />
+    <EditProfile v-if="this.$store.state.currentView === 'EditProfile'" />
     <Chats v-if="this.$store.state.currentView === 'Chats'" />
     <Messages v-if="this.$store.state.currentView === 'Messages'" />
     <HowTo v-if="this.$store.state.currentView === 'HowTo'" />
@@ -12,6 +13,7 @@
     <Login v-if="this.$store.state.currentView === 'Login'" />
     <Logout v-if="this.$store.state.currentView === 'Logout'" />
     <Registration v-if="this.$store.state.currentView === 'Registration'" />
+
   </q-page>
 </template>
 
@@ -21,6 +23,7 @@ import SearchResults from "../components/SearchResults.vue";
 import Bookings from "../components/Bookings.vue";
 import SelectedProfile from "../components/SelectedProfile.vue";
 import MyProfile from "../components/MyProfile.vue";
+import EditProfile from "../components/EditProfile.vue";
 import Messages from "../components/Messages.vue";
 import Chats from "../components/Chats.vue";
 import HowTo from "../components/HowTo.vue";
@@ -37,6 +40,7 @@ export default {
     Bookings,
     SelectedProfile,
     MyProfile,
+    EditProfile,
     Chats,
     Messages,
     HowTo,
