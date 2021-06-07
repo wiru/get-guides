@@ -218,5 +218,11 @@ export default new Vuex.Store({
       socket.emit("newGuideRegistration", payload);
       console.log("newGuideRegistration on front");
     }
+  },
+  getters: {
+    chatChecker(state) {
+      console.log("GETTTTTAAAAAAAAAZZZZ")
+      return Object.keys(state.currentChatLog).length
+    }
   }
 });

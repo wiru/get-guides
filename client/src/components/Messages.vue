@@ -2,7 +2,7 @@
   <q-page class="flex full-width column">
     <div class="q-pa-md column col justify-end">
       <q-chat-message
-        v-for="message in this.$store.state.currentChatLog"
+        v-for="message in messageLog"
         :key="message.text"
         :text="[message.text]"
         :sent="message.from == me"
@@ -40,6 +40,29 @@
 import socket from "../socket";
 
 export default {
+    computed: {
+      chatCheck() {
+        return this.$store.chatChecker
+      }
+    },
+    watch: {
+      chatCheck(val) {
+        messageLog = thisthis.$store.state.currentChatLog
+      },
+      newMessage: function() {
+        if (this.newMessage !== "") {
+          this.typingStatus = true;
+        } else {
+          this.typingStatus = false;
+        }
+        console.log("NS", this.typingStatus)
+        console.log("SHOULD EMIT TS NOW")
+        socket.emit("typingStatus", {
+            to: "60b47b595c7aa6b557654a30",
+            status: this.typingStatus
+        })
+      }
+    },
     created() {
       this.$socket.on('typingStatus', (payload)=>{
         if (this.$store.state.currentChat === payload.to) {
@@ -58,31 +81,6 @@ export default {
       }
     },
     // This should allow for hot-reloading of typing status 
-    watch: {
-      'this.$store.state.currentChatLog': {
-        deep: true,
-        handler() {
-          console.log("FUCKSTICKS")
-        }
-      },
-      newMessage: function() {
-        if (this.newMessage !== "") {
-          this.typingStatus = true;
-        } else {
-          this.typingStatus = false;
-        }
-        console.log("NS", this.typingStatus)
-        console.log("SHOULD EMIT TS NOW")
-        socket.emit("typingStatus", {
-            to: "60b47b595c7aa6b557654a30",
-            status: this.typingStatus
-        })
-      },
-      messageLog: function() {
-        console.log("HELLO")
-        console.log("LOG", log)
-      }
-    },
 	  methods: {
       sendMessage() {
         let date = Date.now()
