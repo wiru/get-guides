@@ -58,6 +58,7 @@ export default {
         console.log("SHOULD EMIT TS NOW")
         socket.emit("typingStatus", {
             to: this.you,
+            from: this.me,
             status: this.myTypingStatus
         })
       }
@@ -66,8 +67,8 @@ export default {
       socket.on('typingStatus', (payload)=>{
         console.log("TYPING STATUS ON LISTNER")
         console.log("THISYOU", this.you)
-        console.log("PAYTO", payload.to)        
-        if (this.you === payload.to) {
+        console.log("PAYTO", payload)        
+        if (this.you === payload.from) {
           this.theirTypingStatus = payload.status
         }
       }),

@@ -328,7 +328,10 @@ def typingStatus(payload):
         if mongoId == payload["to"]:
             print("THE IF STATEMENT IS FIRING")
             print('typing status: ', payload, socketId)
-            emit('typingStatus', payload["status"], room=socketId),
+            emit('typingStatus', { 
+                'status': payload["status"], 
+                'from': payload["from"] 
+                }, room=socketId),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':
