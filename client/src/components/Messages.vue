@@ -74,7 +74,7 @@ export default {
         console.log("CHECKING CURRENT CHAT");
         if (you === message['from']) {
           console.log("CHECK OK. MESSAGE RECEIVED AND PUSHING")
-          messageLog.push(message);
+          this.messageLog.push(message);
         }
       })
     },
@@ -93,7 +93,7 @@ export default {
       sendMessage() {
         let date = Date.now()
         console.log("PUSHING TO CHAT LOG")
-        messageLog.push({
+        this.messageLog.push({
           text: this.newMessage,
           from: this.$store.state.id,
           timestamp: date
