@@ -30,15 +30,15 @@ class JSONEncoder(json.JSONEncoder):
 
 # The two lines below have to be added to the .env file to run flask
 # create .env and add follwoing 2 lines.
-#  
+#
 # FLASK_APP=app.py
 # FLASK_ENV=development
-# 
+#
 # alias python= python3
 # Add .env to gitignore
 #
 # then do pipenv install (this installs everything mentioned in the pipfile)
-# 
+#
 # to run (any) python file, a virtual environment has to be created
 # this has to be done by running 'pipenv shell' (step has to be done after .env file is prepared)
 # After this, type "flask run" into cmd/bash
@@ -51,7 +51,7 @@ google = oauth.register(
     name='google',
     client_id=os.environ.get('OAUTH_ID'),
     client_secret=os.environ.get('OAUTH_SECRET'),
-    access_token_url='https://accounts.google.com/o/oauth2/token',    
+    access_token_url='https://accounts.google.com/o/oauth2/token',
     access_token_params=None,
     authorize_url='https://accounts.google.com/o/oauth2/auth',
     authorize_params=None,
@@ -61,13 +61,8 @@ google = oauth.register(
 
 # SOCKET.IO #
 app.config['SECRET_KEY'] = 'secret!' # MAKE THIS HARDER FOR PRODUCTION
-# import socketio
-
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 socket = SocketIO(app, cors_allowed_origins='*')
-# thread = None
-# thread_lock = Lock()
-
 CORS(app)
 
 cors = CORS(app, resource={
@@ -79,7 +74,7 @@ mongo = PyMongo(app)
 
 def searchUser(gid, email, name):
     guide = mongo.db.guides.find_one({"gid": gid}, {'_id':1})
-    if guide: 
+    if guide:
         return {
             'path': 'SelectedProfile',
             'id': str(guide['_id']),
@@ -100,6 +95,13 @@ def searchUser(gid, email, name):
             }
 
 # AUTHLIB
+@app.route("/auth")
+def isLogged():
+    print(session)
+    if 'authObj' in session:
+        return jsonify(session['authObj'])
+    return ("", 204)
+
 @app.route('/login')
 def login():
     google = oauth.create_client('google')
@@ -114,18 +116,20 @@ def authorize():
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
-    print(user_info['id'])
 
     #check user_info against data in database
-    authObj = searchUser(
-        user_info['id'], 
+    session["authObj"] = searchUser(
+        user_info['id'],
         user_info['email'],
         user_info['name'])
-    # session['email'] = user_info['email'] # This needs to be changed for security. We should take userinfo from above and query the database so we dont pass around googleinfo.
-    socket.emit('updateId', user_info['id'])
-    socket.emit('authResult', authObj)
-    # do something with the token and profile
-    return redirect('https://getguides.herokuapp.com/')
+    
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    for key in list(session.keys()):
+        session.pop(key)
+    return redirect('/')
 
 
 # Stripe integration
@@ -211,6 +215,8 @@ def index():
 
 @app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
 def get_guides(location, language, startdate, enddate):
+    print("let's see if session persists")
+    print(session)
     out = []
     for guide in mongo.db.guides.find({ "$and": [
         {"locations" : location},
@@ -270,24 +276,6 @@ def get_bookings_as_traveller(id):
             })
         return jsonify(out)
 
-
-# post new booking
-
-# {
-#     "traveller": "60b6326339b7417d0f2649ad",
-#     "guide": "60b47b595c7aa6b557654a30",
-#     "location": "your mom",
-#     "date": "Tomorrow, I guess",
-#     "start_time": "lol",
-#     "end_time": "ecks Dee",
-#     "meeting_location": "deez nuts",
-#     "details": "I have ligma",
-#     "status": "pending",
-#     "conversation": "098123098312980"
-# }
-
-
-
 @app.post("/api/bookings")
 def add_booking():
     booking_body = request.json
@@ -305,7 +293,7 @@ def add_booking():
     return "ok"
 
 
-    
+
 #     conversations = mongo.db.conversations
 #     return jsonify(conversations.find_one({"_id": request.form.id}))
 
@@ -337,7 +325,7 @@ def get_messages_from_conversation(id):
     conversation["_id"] = str(conversation["_id"])
     conversation["traveller"] = mongo.db.travellers.find_one({"_id": ObjectId(conversation["traveller"])}, {"name":1, "avatar":1})
     conversation["guide"] = mongo.db.guides.find_one({"_id": ObjectId(conversation["guide"])}, {"name":1, "avatar":1})
-    
+
     return JSONEncoder().encode(conversation)
 
 @app.post("/api/conversations/<id>/messages")
@@ -345,16 +333,6 @@ def add_message_to_conversation(id):
     message = request.json
     mongo.db.conversations.update_one({"_id": ObjectId(id)}, { "$push": {"messages": message}})
     return "Sent"
-    
-
-# vvv mock
-# @app.get("/api/messages/<partner_id>")
-# def get_conversation(partner_id):
-#     out = []
-#     for message in mongo.db.conversations.find({"traveller": partner_id}):
-#         out.append(message)
-#     print(out)
-#     return jsonify(out)
 
 
 # post new guide
@@ -388,48 +366,45 @@ def add_traveller():
         })
 
 
-
-# post new message
-@app.post("/api/messages/<message_ID>")
-def post_message():
-    conversation = mongo.db.conversations.find_one({"_id": request.form.id})
-    mongo.db.conversations[request.form.id]['messages'] ({
-        "from": request.form.sender,
-        "text": request.form.text,
-        "timestamp": datetime.datetime.now().replace(microsecond=0)
-    })
 connectedSockets = {}
+
 @socket.event
-def connect(sid):
+def connect():
     print('CONNECTED')
-    print(sid)
-    print(request.sid)
-    if sid["token"] != "blank": 
-        connectedSockets[request.sid] = sid["token"]
-    print(connectedSockets)
+    print('this is the socket id ', request.sid)
 
 @socket.event
 def disconnect():
+    print(request.sid)
     print('DISCONNECTED')
+
+@socket.event
+def matchSocketWithMongoId(payload):
+    print("THIS IS THE MATCH FUNCTION")
+    print("MONGOID", payload)
+    print("REQUEST.SID", request.sid)
+    connectedSockets[payload] = request.sid
+    print("CONNECTED SOCKETS", connectedSockets)
 
 # chat message receiver
 @socket.event
 def chatMessage(payload):
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
-    for socket, id in connectedSockets:
-        if id == payload["to"]:
-            print('relayMessage: ', message, socket)
-            emit('relayMessage', message, socket),
+    for mongoId, socketId in connectedSockets.items():
+        if mongoId == payload["to"]:
+            print('relayMessage: ', message, socketId)
+            emit('relayMessage', message, room=socketId),
             return
 
 @socket.event
 def typingStatus(payload):
-    print('TYPING STATUS CHANGE', payload)
-    for socket, id in connectedSockets:
-        if id == payload["to"]:
-            print('typing status: ', payload, socket)
-            emit('typingStatus', payload["status"], socket),
+    print('TYPING STATUS CHANGE')
+    for mongoId, socketId in connectedSockets.items():
+        if mongoId == payload["to"]:
+            print("THE IF STATEMENT IS FIRING")
+            print('typing status: ', payload, socketId)
+            emit('typingStatus', payload["status"], room=socketId),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':
@@ -444,4 +419,4 @@ if __name__ == '__main__':
         # Make Authorize route
         # add oauth register
         # register on google for oauth
-        # added 1 test email "test@test.com" on google. 
+        # added 1 test email "test@test.com" on google.
