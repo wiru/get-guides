@@ -30,11 +30,11 @@
           <img v-bind:src="this.$store.state.singleGuide.avatar" />
         </q-avatar>
         <q-btn
-          id="chat-btn"
+          id="edit-btn"
           class="absolute-top-right"
           color="deep-orange"
-          icon="chat"
-          @click="startChat"
+          icon="edit"
+          @click="editProfile"
         />
       </div>
     </div>
@@ -62,7 +62,7 @@
 import { date } from "quasar";
 
 export default {
-  name: "SelectedProfile",
+  name: "MyProfile",
   data: () => ({
     left: true,
     date: ""
@@ -78,11 +78,13 @@ export default {
     //   const parts = date.split("/");
     //   return parts[2] % 2 === 0;
     // },
-    startChat() {
-      this.$store.dispatch("someShit");
-      // this.$store.state.currentView = "Messages";
+    editProfile() {
+     this.$store.state.currentView = "EditProfile";
       // this.$store.dispatch("getChatLogs", id);
     }
+  },
+  created () {
+    this.$store.dispatch("getSingleGuide", this.$store.state.id)
   }
 };
 </script>
@@ -93,7 +95,7 @@ export default {
   margin-right: 1.25vw;
 }
 
-#chat-btn {
+#edit-btn {
   margin-top: 14.5vh;
   margin-right: 1vh;
   width: 25vw;

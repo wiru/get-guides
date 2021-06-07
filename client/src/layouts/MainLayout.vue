@@ -84,7 +84,7 @@ const profileData = [
     title: "My Profile",
     caption: "Show and edit your own Profile",
     icon: "person",
-    view: "SelectedProfile"
+    view: "MyProfile"
   }
 ];
 
