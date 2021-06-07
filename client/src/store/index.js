@@ -74,7 +74,9 @@ export default new Vuex.Store({
     setGuidePackage(state, payload) {
       this.state.guidePackage = payload;
     },
-
+    setGuidePackageUpdate(state, payload) {
+      this.state.guidePackageUpdate = payload;
+    },
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
       console.log("Setter's");
@@ -217,6 +219,10 @@ export default new Vuex.Store({
     async guidePackage(state, payload) {
       axios.post(`http://localhost:5000/api/newguideregistration`, payload)
       console.log("newGuideRegistration on front");
+    },
+    async guidePackageUpdate(state, payload) {
+      axios.post(`http://localhost:5000/api/guideupdate`, payload)
+      console.log("guide Update on front")
     }
   }
 });

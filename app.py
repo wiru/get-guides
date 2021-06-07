@@ -260,7 +260,6 @@ def add_message_to_conversation(id):
 @app.post("/api/newguideregistration")
 def add_guide():
     newguide = request.json
-    print(newguide['language'])
     mongo.db.guides.insert_one({
         'name': newguide['username'],
         'gid': newguide['gid'],
@@ -276,11 +275,28 @@ def add_guide():
         })
     return "ok"
 
+# update existing guide
+@app.post("/api/guideupdate")
+def update_guide():
+    guideUpdate = request.json 
+    mongo.db.guides.update_one({"_id": ObjectId(guideUpdate["id"])},  
+    { "$set": {
+        "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
+        "languages": guideUpdate['language'],
+        "bio": guideUpdate['bio'],
+        "weekdays": guideUpdate['availabledays'],
+        "locations": guideUpdate['location'],
+        "bookings": [],
+        "rate": guideUpdate['rate'],
+        }})
+    return "ok"
+
+# mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
+
 # post new traveller
 @app.post("/api/newtravellerregistration")
 def add_traveller():
     newtraveller = request.json
-    print(newtraveller)
     mongo.db.travellers.insert_one({
         'name': newtraveller['username'],
         'gid': newtraveller['gid'],

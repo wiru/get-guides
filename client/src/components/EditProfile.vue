@@ -2,10 +2,10 @@
     <div id="editprofile">
         <h1> Edit own profile </h1>
         <br/>
-        <span>Please update the necessary fields in the following fields to finish the editing process.</span>
+        <span>Please update the necessary fields to finish the editing process.</span>
         <br/>
         <q-select disable filled v-model="username" :username="username" />
-        <q-select disable filled v-model="emailaddress" :emailaddress="emailaddress" />
+        <!-- <q-select disable filled v-model="emailaddress" :emailaddress="emailaddress" /> -->
         <br/>
             <q-dialog v-model="alert">
             <q-card>
@@ -46,21 +46,24 @@ export default {
     name: 'EditProfile',
 	methods: {
         editGuide () {
-            if (this.usermodel !== null && this.username !== "" && this.emailaddress !== "" && this.locationmodel !== null && this.languagemodel !== null && this.availabledaysmodel !== null && this.ratemodel !== null && this.biomodel !== null && this.$store.state.gid !== "") {
+            console.log(this.usermodel, this.username, this.locationmodel, this.languagemodel, this.availabledaysmodel, this.ratemodel, this.biomodel)
+            if (this.usermodel !== null && this.username !== "" && this.locationmodel !== null && this.languagemodel !== null && this.availabledaysmodel !== null && this.ratemodel !== null && this.biomodel !== null) {
             
-             let guidePackage = {}
-            guidePackage["usertype"] = this.usermodel
-            guidePackage["username"] = this.username
-            guidePackage["email"] = this.emailaddress
-            guidePackage["location"] = this.locationmodel
-            guidePackage["language"] = this.languagemodel
-            guidePackage["availabledays"] = this.availabledaysmodel
-            guidePackage["rate"] = this.ratemodel
-            guidePackage["bio"] = this.biomodel
-            guidePackage["gid"] = this.$store.state.gid
-            //console.log(guidePackage)
-            //this.$store.commit("setGuidePackage", guidePackage)
-            //this.$store.dispatch('guidePackage', guidePackage)
+            let guidePackageUpdate = {}
+            guidePackageUpdate["usertype"] = this.usermodel
+            guidePackageUpdate["username"] = this.username
+            //guidePackageUpdate["email"] = this.emailaddress
+            guidePackageUpdate["location"] = this.locationmodel
+            guidePackageUpdate["language"] = this.languagemodel
+            guidePackageUpdate["availabledays"] = this.availabledaysmodel
+            guidePackageUpdate["rate"] = this.ratemodel
+            guidePackageUpdate["bio"] = this.biomodel
+            //guidePackageUpdate["gid"] = this.$store.state.gid
+            guidePackageUpdate["id"] =this.$store.state.id
+
+            //console.log(guidePackageUpdate)
+            this.$store.commit("setGuidePackageUpdate", guidePackageUpdate)
+            this.$store.dispatch('guidePackageUpdate', guidePackageUpdate)
             this.$store.commit("changeView", "MyProfile")
             }
             else {this.alert = true}
@@ -70,18 +73,18 @@ export default {
     },
     data () {
         return {
-            usermodel: null,
-            locationmodel: null,
-            languagemodel: null,
-            availabledaysmodel: null,
-            ratemodel: null,
-            biomodel: null,
+            usermodel: "guide",
+            locationmodel: this.$store.state.singleGuide.locations,
+            languagemodel: this.$store.state.singleGuide.languages,
+            availabledaysmodel: this.$store.state.singleGuide.weekdays,
+            ratemodel: this.$store.state.singleGuide.rate,
+            biomodel: this.$store.state.singleGuide.bio,
             usertype: ['traveller', 'guide'],
             location: ['nikko', 'tokyo', 'osaka'],
             languages: ['english', 'japanese', 'italian'],
             availabledays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
-            username: this.$store.state.name,
-            emailaddress: this.$store.state.email,
+            username: this.$store.state.singleGuide.name,
+            //emailaddress: this.$store.state.email,
             dense: true,
             alert: false,
             }
