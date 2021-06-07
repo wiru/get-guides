@@ -60,21 +60,21 @@ export default {
     // This should allow for hot-reloading of typing status 
     watch: {
       newMessage: function() {
-        let newStatus = false;
         if (this.newMessage !== "") {
-          newStatus = true;
+          this.typingStatus = true;
+        } else {
+          this.typingStatus = false;
         }
-        console.log("NS", newStatus)
+        console.log("NS", this.typingStatus)
         console.log("SHOULD EMIT TS NOW")
         socket.emit("typingStatus", {
             to: "60b47b595c7aa6b557654a30",
-            status: newStatus
+            status: this.typingStatus
         })
       },
-      scrollPage: {
-        messageLog: function(log) {
-          console.log(log)
-        }
+      messageLog: function() {
+        console.log("HELLO")
+        console.log("LOG", log)
       }
     },
 	  methods: {
