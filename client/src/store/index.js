@@ -11,7 +11,7 @@ const socketioPlugin = createSocketioPlugin(socket);
 export default new Vuex.Store({
   state: {
     currentView: "Login",
-    userType: "guide",
+    userType: "",
     // Changed for Auth
     id: "",
     name: "",
@@ -211,11 +211,11 @@ export default new Vuex.Store({
     },
     // For Registration
     async travellerPackage(state, payload) {
-      socket.emit("newTravellerRegistration", payload);
+      axios.post(`http://localhost:5000/api/newtravellerregistration`, payload);
       console.log("newTravellerRegistration on front");
     },
     async guidePackage(state, payload) {
-      socket.emit("newGuideRegistration", payload);
+      axios.post(`http://localhost:5000/api/newguideregistration`, payload)
       console.log("newGuideRegistration on front");
     }
   }
