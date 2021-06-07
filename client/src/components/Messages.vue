@@ -10,7 +10,7 @@
         :sent="message.from == me"
         :bg-color="message.from == me ? 'green-5' : 'grey-4'"
       />
-      <q-spinner-dots v-if="typingStatus" size="2rem" />
+      <q-spinner-dots v-if="theirTypingStatus" size="2rem" />
     </div>
     <q-footer elevated>
       <q-toolbar>
@@ -42,11 +42,6 @@
 import socket from "../socket";
 
 export default {
-    // computed: {
-    //   chatCheck() {
-    //     return this.$store.chatChecker
-    //   }
-    // },
     watch: {
       messageLog: function (val) {
         console.log(val);
@@ -55,15 +50,15 @@ export default {
       },
       newMessage: function() {
         if (this.newMessage !== "") {
-          this.typingStatus = true;
+          this.myTypingStatus = true;
         } else {
-          this.typingStatus = false;
+          this.myTypingStatus = false;
         }
-        console.log("NS", this.typingStatus)
+        console.log("NS", this.myTypingStatus)
         console.log("SHOULD EMIT TS NOW")
         socket.emit("typingStatus", {
             to: this.you,
-            status: this.typingStatus
+            status: this.myTypingStatus
         })
       }
     },
@@ -71,7 +66,7 @@ export default {
       socket.on('typingStatus', (payload)=>{
         console.log("TYPING STATUS ON LISTNER")        
         if (this.$store.state.currentChat === payload.to) {
-          this.typingStatus = payload.status
+          this.theirTypingStatus = payload.status
         }
       }),
       socket.on("relayMessage", message => {
@@ -86,7 +81,8 @@ export default {
     data() {
       return {
         messageLog: this.$store.state.currentChatLog,
-        typingStatus: false,
+        myTypingStatus: false,
+        theirTypingStatus: false,
         me: this.$store.state.id,
         you: this.$store.state.sendTo,
         newMessage: ''
