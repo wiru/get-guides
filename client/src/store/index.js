@@ -11,7 +11,7 @@ const socketioPlugin = createSocketioPlugin(socket);
 export default new Vuex.Store({
   state: {
     currentView: "Login",
-    userType: "guide",
+    userType: "",
     // Changed for Auth
     id: "",
     name: "",
