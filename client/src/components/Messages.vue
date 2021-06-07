@@ -40,11 +40,11 @@
 import socket from "../socket";
 
 export default {
-    // computed: {
-    //   chatCheck() {
-    //     return this.$store.chatChecker
-    //   }
-    // },
+    computed: {
+      chatCheck() {
+        return this.$store.chatChecker
+      }
+    },
     watch: {
       chatCheck(val) {
         messageLog = thisthis.$store.state.currentChatLog
@@ -92,11 +92,13 @@ export default {
 	  methods: {
       sendMessage() {
         let date = Date.now()
+        console.log("PUSHING TO CHAT LOG")
         this.$store.state.currentChatLog.push({
           text: this.newMessage,
           from: this.$store.state.id,
           timestamp: date
         })
+        console.log("PRE CHAT EMIT")
         socket.emit(
           'chatMessage', 
         {
