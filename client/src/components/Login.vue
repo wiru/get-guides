@@ -1,10 +1,16 @@
 <template>
   <div id="Login">
-    <h1>Welcome to Get Guides!</h1>
-    <span>Please log in to continue.</span>
-    <br />
-    <br />
-    <button @click="loginAction">LOGIN</button>
+    <div v-if="$q.platform.is.desktop">
+      I'm only rendered on desktop!
+    </div>
+
+    <div v-if="$q.platform.is.mobile">
+      <h1>Welcome to Get Guides!</h1>
+      <span>Please log in to continue.</span>
+      <br />
+      <br />
+      <button @click="loginAction">LOGIN</button>
+    </div>
   </div>
 </template>
 
