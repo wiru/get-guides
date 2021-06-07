@@ -61,7 +61,7 @@ export default {
     watch: {
       newMessage: function() {
         let newStatus = false;
-        if (newMessage !== "") {
+        if (this.newMessage !== "") {
           newStatus = true;
         }
         console.log("NS", newStatus)
