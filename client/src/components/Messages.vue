@@ -8,7 +8,7 @@
         :sent="message.from == me"
         :bg-color="message.from == me ? 'green-5' : 'grey-4'"
       />
-      <q-spinner-dots v-if="typingCheck" size="2rem" />
+      <q-spinner-dots v-if="typingStatus" size="2rem" />
     </div>
     <q-footer elevated>
       <q-toolbar>
@@ -50,7 +50,8 @@ export default {
     name: 'Messages',
     data() {
       return {
-        typingStatus: false,
+        messageLog: this.$store.state.currentChatLog,
+        typingStatus: true,
         me: this.$store.state.id,
         you: this.$store.state.sendTo,
         newMessage: ''
@@ -69,6 +70,11 @@ export default {
             to: "60b47b595c7aa6b557654a30",
             status: newStatus
         })
+      },
+      scrollPage: {
+        messageLog: function(log) {
+          console.log(log)
+        }
       }
     },
 	  methods: {
