@@ -30,7 +30,7 @@ export default {
       this.$store.commit("setUserType", "traveller");
       this.$store.commit("changeView", payload.path);
       this.$store.commit("loggedIn", payload.loggedIn);
-    } else if (payload.path === "SelectedProfile") {
+    } else if (payload.path === "MyProfile") {
       this.$store.commit("setUserId", payload.id);
       this.$store.commit("setUserType", "guide");
       this.$store.commit("changeView", payload.path);

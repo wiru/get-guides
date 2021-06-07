@@ -62,7 +62,7 @@
 import { date } from "quasar";
 
 export default {
-  name: "SelectedProfile",
+  name: "MyProfile",
   data: () => ({
     left: true,
     date: ""
@@ -83,6 +83,9 @@ export default {
       // this.$store.state.currentView = "Messages";
       // this.$store.dispatch("getChatLogs", id);
     }
+  },
+  created () {
+    this.$store.dispatch("getSingleGuide", this.$store.state.id)
   }
 };
 </script>
