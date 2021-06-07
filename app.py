@@ -195,7 +195,7 @@ def get_bookings_as_traveller(id):
             "status": booking['status'],
             "conv_id": str(booking['conversation']['_id'])
             })
-        return jsonify(out)
+    return jsonify(out)
 
 @app.post("/api/bookings")
 def add_booking():
@@ -210,7 +210,6 @@ def add_booking():
     new_conv_id = mongo.db.conversations.insert_one(conversation_body).inserted_id
     booking_body["conversation"] = mongo.db.conversations.find_one({"_id": ObjectId(new_conv_id)})
     mongo.db.bookings.insert_one(booking_body)
-    print("asll done yo")
     return "ok"
 
 
