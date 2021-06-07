@@ -19,8 +19,7 @@
             outlined
             rounded
             label="Message" 
-            dense
-            @change="typingStatus">
+            dense>
             <template v-slot:after>
               <q-btn
               @click="sendMessage"
@@ -41,18 +40,35 @@
 import socket from "../socket";
 
 export default {
+    created() {
+      this.$socket.on('typingStatus', (payload)=>{
+        if (this.$store.state.currentChat === payload.to) {
+          this.typingStatus = payload.status
+        }
+      })
+    },
     name: 'Messages',
     data() {
       return {
+        typingStatus: false,
         me: this.$store.state.id,
         you: this.$store.state.sendTo,
         newMessage: ''
       }
     },
     // This should allow for hot-reloading of typing status 
-    computed: {
-      typingCheck() {
-        return this.$store.state.typingStatus      
+    watch: {
+      newMessage: function() {
+        let newStatus = false;
+        if (newMessage !== "") {
+          newStatus = true;
+        }
+        console.log("NS", newStatus)
+        console.log("SHOULD EMIT TS NOW")
+        socket.emit("typingStatus", {
+            to: "60b47b595c7aa6b557654a30",
+            status: newStatus
+        })
       }
     },
 	  methods: {
@@ -62,10 +78,6 @@ export default {
           text: this.newMessage,
           from: this.$store.state.id,
           timestamp: date
-        })
-        socket.emit("typingStatus", {
-          to: this.$store.state.sendTo,
-          status: false
         })
         socket.emit(
           'chatMessage', 
@@ -77,20 +89,6 @@ export default {
           timestamp: date
         })
         this.newMessage = ""
-      },
-      typingStatus() {
-        console.log("TYPING")
-        if (this.newMessage === "") {
-          socket.emit("typingStatus", {
-            to: this.$store.state.sendTo,
-            status: false
-          })
-        } else {
-          socket.emit("typingStatus", {
-            to: this.$store.state.sendTo,
-            status: true
-          })
-        }
       }
     },
 }

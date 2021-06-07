@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 
 // WEBLINK HERE
-const socket = io("wss://getguides.herokuapp.com")
+const socket = io("wss://g1000.herokuapp.com")
 
 // http://localhost:5000
 // wss://getguides.herokuapp.com
