@@ -64,8 +64,10 @@ export default {
     },
     created() {
       socket.on('typingStatus', (payload)=>{
-        console.log("TYPING STATUS ON LISTNER")        
-        if (this.$store.state.currentChat === payload.to) {
+        console.log("TYPING STATUS ON LISTNER")
+        console.log("THISYOU", this.you)
+        console.log("PAYTO", payload.to)        
+        if (this.you === payload.to) {
           this.theirTypingStatus = payload.status
         }
       }),
