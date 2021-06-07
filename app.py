@@ -195,7 +195,7 @@ def get_bookings_as_traveller(id):
             "status": booking['status'],
             "conv_id": str(booking['conversation']['_id'])
             })
-        return jsonify(out)
+    return jsonify(out)
 
 @app.post("/api/bookings")
 def add_booking():
