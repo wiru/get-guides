@@ -112,6 +112,7 @@ def authorize():
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
+    print(user_info)
 
     #check user_info against data in database
     session["authObj"] = searchUser(
