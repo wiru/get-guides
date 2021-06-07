@@ -135,25 +135,38 @@ def logout():
 def checkout():
     checkout_body = request.json
     print('not broken yet @ endpoint')
-    stripe.checkout.Session.create(
+    stripeSession = stripe.checkout.Session.create(
         # success_url = os.environ['SUCCESS_URL'] or 'http://localhost:8000',
         # cancel_url = os.environ['CANCEL_URL'] or 'http://localhost:8000',
-        success_url = 'http://localhost:8080',
-        cancel_url = 'http://localhost:8080',
+        success_url = os.environ['STRIPE_REDIRECT'],
+        cancel_url = os.environ['STRIPE_REDIRECT'],
         payment_method_types = ['card'],
-        currency = checkout_body['currency'],
-        line_items = [
-            {
-                data: {
-                    price: {
-                        currency: checkout_body['currency'],
-                        type: 'one_time',
-                        product: 'prod_JbgK1IfDyPCFS7'
-                    },
-                    quantity: 1,
-                }
-            }
-        ],
+        # currency = checkout_body['currency'],
+        line_items = [{
+            'price_data': {
+                'currency': checkout_body['currency'],
+                'product_data': {
+                    'name': 'Custom Tour',
+                },
+                'unit_amount': checkout_body['amount'],
+            },
+            'quantity': 1,
+        }],
+        mode = 'payment'
+    )
+    return jsonify(stripeSession["id"])
+        # line_items = [
+        #     {
+        #         data: {
+        #             price: {
+        #                 currency: checkout_body['currency'],
+        #                 type: 'one_time',
+        #                 product: 'prod_JbgK1IfDyPCFS7'
+        #             },
+        #             quantity: 1,
+        #         }
+        #     }
+        # ],
         # line_items = [
         #     {
         #     'price_data': {
@@ -165,8 +178,8 @@ def checkout():
         #         }
         #     }
         # ],
-        mode = 'payment'
-    )
+    #     mode = 'payment'
+    # )
 
   # TO-DO: Register the sessionId for future callbacks.
   # res.json({ id: session.id});

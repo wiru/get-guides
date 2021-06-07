@@ -16,15 +16,18 @@
 
 <script>
 import axios from "axios";
+import serverLink from "../serverLink";
 export default {
   name: "Login",
   methods: {
     loginAction() {
-      window.location.replace(`${window.location.origin}/login`);
+      window.location.replace(`${serverLink}/login`);
     }
   },
   async created() {
-    const payload = (await axios.get(`${window.location.origin}/auth`)).data;
+    console.log("this is server link", serverLink);
+    const payload = (await axios.get(`${serverLink}/auth`)).data;
+    console.log(payload);
     if (payload.path === "Search") {
       this.$store.commit("setUserId", payload.id);
       this.$store.commit("setUserType", "traveller");

@@ -79,7 +79,8 @@ export default {
     //   return parts[2] % 2 === 0;
     // },
     openBookingStartChat() {
-      this.$store.dispatch("someShit");
+      console.log("test");
+      // this.$store.dispatch("openBookingStartChat", date);
       // this.$store.state.currentView = "Messages";
       // this.$store.dispatch("getChatLogs", id);
     }
