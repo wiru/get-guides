@@ -59,11 +59,9 @@ export default {
     },
     // This should allow for hot-reloading of typing status 
     watch: {
-      'this.$store.state.currentChatLog': {
-        handler: function(val) {
-          console.log("BALLSACK")
-        },
-        deep: true
+      'this.$store.state.currentChatLog'() {
+        deep: true,
+        console.log("FUCKSTICKS")
       },
       newMessage: function() {
         if (this.newMessage !== "") {
