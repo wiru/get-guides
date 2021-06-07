@@ -58,7 +58,7 @@ export default {
         console.log("NS", this.typingStatus)
         console.log("SHOULD EMIT TS NOW")
         socket.emit("typingStatus", {
-            to: "60b47b595c7aa6b557654a30",
+            to: this.you,
             status: this.typingStatus
         })
       }
@@ -82,7 +82,7 @@ export default {
     data() {
       return {
         messageLog: this.$store.state.currentChatLog,
-        typingStatus: true,
+        typingStatus: false,
         me: this.$store.state.id,
         you: this.$store.state.sendTo,
         newMessage: ''
@@ -109,9 +109,6 @@ export default {
           timestamp: date
         })
         this.newMessage = ""
-      },
-      receiveMessage() {
-
       }
     },
 }
