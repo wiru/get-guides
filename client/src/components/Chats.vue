@@ -45,7 +45,7 @@
       openChat(id) {
         this.$store.commit("setCurrentChat", id)
         this.$store.dispatch("getChatLog", id)
-        this.$store.commit("changeView", "Messages")
+        // this.$store.commit("changeView", "Messages")
       }
   },
   created() {

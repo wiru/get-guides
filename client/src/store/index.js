@@ -161,6 +161,7 @@ export default new Vuex.Store({
       console.log(data[to]._id)
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
+      this.state.currentView = "Messages"
     },
 
     async getTravellerChats(state, payload) {
