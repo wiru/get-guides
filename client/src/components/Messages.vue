@@ -72,7 +72,7 @@ export default {
       }),
       socket.on("relayMessage", message => {
         console.log("CHECKING CURRENT CHAT");
-        if (you === message['from']) {
+        if (this.you === message['from']) {
           console.log("CHECK OK. MESSAGE RECEIVED AND PUSHING")
           this.messageLog.push(message);
         }
