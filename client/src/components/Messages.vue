@@ -1,5 +1,7 @@
 <template>
-  <q-page class="flex full-width column">
+  <q-page 
+  ref="chatPage"
+  class="flex full-width column">
     <div class="q-pa-md column col justify-end">
       <q-chat-message
         v-for="message in messageLog"
@@ -46,7 +48,9 @@ export default {
     //   }
     // },
     watch: {
-      messageLog: function () {
+      messageLog: function (val) {
+        console.log(val);
+        this.scrollToBottom();
         return console.log("WATCH MESSAGE LOG FIRED")
       },
       newMessage: function() {
@@ -109,7 +113,12 @@ export default {
           timestamp: date
         })
         this.newMessage = ""
-      }
+      },
+      scrollToBottom() {
+        let chatPage = this.$refs.chatPage.$el
+        setTimeout(() => {
+          window.scrollTo(0, chatPage.scrollHeight)}, 20);
+        }
     },
 }
 </script>
