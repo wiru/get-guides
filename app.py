@@ -310,10 +310,12 @@ def matchSocketWithMongoId(payload):
 # chat message receiver
 @socket.event
 def chatMessage(payload):
+    print('CHAT EMIT ARRIVES')
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for mongoId, socketId in connectedSockets.items():
         if mongoId == payload["to"]:
+            print('CHAT IF STMENT PASSES')
             print('relayMessage: ', message, socketId)
             emit('relayMessage', message, room=socketId),
             return
