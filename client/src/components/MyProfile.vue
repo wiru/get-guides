@@ -34,7 +34,7 @@
           class="absolute-top-right"
           color="deep-orange"
           icon="chat"
-          @click="startChat"
+          @click="openBookingStartChat"
         />
       </div>
     </div>
@@ -78,7 +78,7 @@ export default {
     //   const parts = date.split("/");
     //   return parts[2] % 2 === 0;
     // },
-    startChat() {
+    openBookingStartChat() {
       this.$store.dispatch("someShit");
       // this.$store.state.currentView = "Messages";
       // this.$store.dispatch("getChatLogs", id);

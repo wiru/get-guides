@@ -46,7 +46,7 @@ export default new Vuex.Store({
     },
     // Changed for Auth
     setUserId(state, payload) {
-      console.log("setuserid function in store ", payload)
+      console.log("setuserid function in store ", payload);
       this.state.id = payload;
       socket.emit("matchSocketWithMongoId", payload);
     },
@@ -107,6 +107,9 @@ export default new Vuex.Store({
     },
     setTypingStatus(state, bool) {
       this.state.typingStatus = bool;
+    },
+    setCheckoutSessionId(state, payload) {
+      this.state.checkoutSessionId = payload;
     }
   },
   // async stuff - Use "dispatch"
@@ -137,8 +140,11 @@ export default new Vuex.Store({
     async getSingleGuide(state, payload) {
       console.log("getSingleGuide called", payload);
       try {
-        const data = ( // WEBLINK HERE
-          await axios.get(`https://getguides.herokuapp.com/api/guides/${payload}`)
+        const data = // WEBLINK HERE
+        (
+          await axios.get(
+            `https://getguides.herokuapp.com/api/guides/${payload}`
+          )
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -158,7 +164,7 @@ export default new Vuex.Store({
       console.log("messages: ", data.messages);
       let to = this.state.userType === "guide" ? "traveller" : "guide";
       this.state.currentChatLog = data.messages;
-      console.log(data[to]._id)
+      console.log(data[to]._id);
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
     },
@@ -186,13 +192,12 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `https://getguides.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
+          `${window.location.origin}/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
 
       this.state.bookings = data;
-
-      console.log(this.state);
+      console.log("get bookings data: ", data);
     },
     async someShit(state, payload) {
       let data = {
@@ -217,6 +222,16 @@ export default new Vuex.Store({
     async guidePackage(state, payload) {
       socket.emit("newGuideRegistration", payload);
       console.log("newGuideRegistration on front");
+    },
+
+    async stripeCheckout(state, payload) {
+      console.log("payload @ store: ", payload);
+      axios
+        .post(`${window.location.origin}/api/checkout-session`, payload)
+        .then(response => {
+          console.log(JSON.stringify("api checkout response: ", response.data));
+          state.commit("setCheckoutSessionId", response.data.id);
+        });
     }
   }
 });

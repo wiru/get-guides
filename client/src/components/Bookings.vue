@@ -7,7 +7,7 @@
         </q-item>
 
         <q-expansion-item
-          :key="booking.id"
+          :key="booking.meeting_location"
           v-for="booking in this.$store.state.bookings"
           v-bind:label="booking.date"
         >
@@ -19,6 +19,15 @@
               <q-card-section>{{ booking.start_time }}</q-card-section>
               <q-card-section>{{ booking.end_time }}</q-card-section>
               <q-card-section>{{ booking.details }}</q-card-section>
+              <q-card-section>{{ booking.price }}</q-card-section>
+              <q-card-section>{{ booking.currency }}</q-card-section>
+              <q-btn
+                v-if="booking.type === 'paid'"
+                id="pay"
+                color="deep-orange"
+                icon="credit_card"
+                @click="checkout(booking.price, booking.currency)"
+              />
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -37,7 +46,16 @@
 <script>
 export default {
   name: "Bookings",
-  methods: {},
+  methods: {
+    checkout(price, currency) {
+      let payload = {
+        amount: price,
+        currency: currency
+      };
+      console.log("payload @ component: ", payload);
+      this.$store.dispatch("stripeCheckout", payload);
+    }
+  },
   created() {
     this.$store.dispatch("getBookings");
   }
