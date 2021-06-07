@@ -40,14 +40,14 @@
 import socket from "../socket";
 
 export default {
-    computed: {
-      chatCheck() {
-        return this.$store.chatChecker
-      }
-    },
+    // computed: {
+    //   chatCheck() {
+    //     return this.$store.chatChecker
+    //   }
+    // },
     watch: {
-      chatCheck(val) {
-        messageLog = thisthis.$store.state.currentChatLog
+      messageLog: function () {
+        return console.log("WATCH MESSAGE LOG FIRED")
       },
       newMessage: function() {
         if (this.newMessage !== "") {
@@ -74,7 +74,7 @@ export default {
         console.log("CHECKING CURRENT CHAT");
         if (you === message['from']) {
           console.log("CHECK OK. MESSAGE RECEIVED AND PUSHING")
-          this.$store.state.currentChatLog.push(message);
+          messageLog.push(message);
         }
       })
     },
@@ -93,7 +93,7 @@ export default {
       sendMessage() {
         let date = Date.now()
         console.log("PUSHING TO CHAT LOG")
-        this.$store.state.currentChatLog.push({
+        messageLog.push({
           text: this.newMessage,
           from: this.$store.state.id,
           timestamp: date
