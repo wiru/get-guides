@@ -142,7 +142,7 @@ export default new Vuex.Store({
       console.log("getSingleGuide called", payload);
       try {
         const data = ( // WEBLINK HERE
-          await axios.get(`https://getguides.herokuapp.com/api/guides/${payload}`)
+          await axios.get(`https://localhost:5000/api/guides/${payload}`)
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -155,7 +155,7 @@ export default new Vuex.Store({
     async getChatLog(state, payload) {
       const data = (
         await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/${payload}/messages`
+          `https://localhost:5000/api/conversations/${payload}/messages`
         )
       ).data;
       console.log("data: ", data);
@@ -171,7 +171,7 @@ export default new Vuex.Store({
       console.log("getTrav payload should be id: ", payload);
       const data = (
         await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/traveller/${payload}`
+          `https://localhost:5000/api/conversations/traveller/${payload}`
         )
       ).data;
       state.commit("setChatList", data);
@@ -180,7 +180,7 @@ export default new Vuex.Store({
     async getGuideChats(state, payload) {
       const data = (
         await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/guide/${payload}`
+          `https://localhost:5000/api/conversations/guide/${payload}`
         )
       ).data;
       state.commit("setChatList", data);
@@ -190,7 +190,7 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `https://getguides.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
+          `https://localhost:5000/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
 
@@ -211,7 +211,7 @@ export default new Vuex.Store({
         status: "pending",
         conversation: "098123098312980"
       };
-      axios.post(`https://getguides.herokuapp.com/api/bookings`, data);
+      axios.post(`https://localhost:5000/api/bookings`, data);
     },
     // For Registration
     async travellerPackage(state, payload) {
@@ -223,7 +223,7 @@ export default new Vuex.Store({
       console.log("newGuideRegistration on front");
     },
     async stripeCheckout(state, payload) {
-      axios.post('https://getguides.herokuapp.com/api/checkout-session', payload).then((response) => {
+      axios.post('https://localhost:5000/api/checkout-session', payload).then((response) => {
         console.log(JSON.stringify(response.data));
         state.commit("setCheckoutSessionId", response.data.id);
     })

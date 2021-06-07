@@ -19,6 +19,13 @@
               <q-card-section>{{ booking.start_time }}</q-card-section>
               <q-card-section>{{ booking.end_time }}</q-card-section>
               <q-card-section>{{ booking.details }}</q-card-section>
+              <q-card-section>{{ booking.price }} {{booking.currency}}</q-card-section>
+              <q-btn v-if="booking.type === 'free'"
+                id="pay"
+                color="deep-orange"
+                icon="credit_card"
+                @click="checkout(booking.id, booking.price, booking.currency)"
+              />
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -37,38 +44,20 @@
 <script>
 export default {
   name: "Bookings",
-  methods: {},
+  methods: {
+    checkout(id, price, currency) {
+      const payload = {
+        id: id,
+        amount: price,
+        currency: currency
+      }
+      this.store.dispatch("stripeCheckout", payload)
+    }
+  },
   created() {
     this.$store.dispatch("getBookings");
   }
 };
-
-/*
-
-<q-list bordered>
-        <q-item v-ripple>
-          <q-item-section>Pending bookings</q-item-section>
-        </q-item>
-
-        <q-expansion-item
-          :key="booking.id"
-          v-for="booking in this.$store.state.bookings"
-          label="I can't name this dynamically"
-        >
-          <q-card>
-            <q-card-section>
-              <q-card-section>{{ booking.date }}</q-card-section>
-              <q-card-section>{{ booking.location }}</q-card-section>
-              <q-card-section>{{ booking.meeting_location }}</q-card-section>
-              <q-card-section>{{ booking.start_time }}</q-card-section>
-              <q-card-section>{{ booking.end_time }}</q-card-section>
-              <q-card-section>{{ booking.details }}</q-card-section>
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
-      </q-list>
-
-*/
 </script>
 
 <style scoped></style>
