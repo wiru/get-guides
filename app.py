@@ -3,6 +3,10 @@ from threading import Lock
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, url_for, redirect, jsonify, send_from_directory, render_template, session, request
 import datetime
+import stripe
+
+# TO-DO: move to .env
+stripe.api_key = os.environ['API_KEY']
 
 from flask_pymongo import PyMongo
 
@@ -123,6 +127,81 @@ def authorize():
     # do something with the token and profile
     return redirect('https://getguides.herokuapp.com/')
 
+
+# Stripe integration
+@app.post('api/checkout-session')
+def checkout(payload):
+    stripe.checkout.sessions.create(
+        success_url = os.environ['SUCCESS_URL'] or 'http://localhost:8000',
+        cancel_url = os.environ['CANCEL_URL'] or 'http://localhost:8000',
+        payment_method_types = ['card'],
+        items = [
+            {
+            'price_data': {
+                # 1000000jpy SHOULD be equivalent to 1万, 5000usd to $50
+                'unit_amount': payload['amount'],
+                'currency': payload['currency'],
+                # ID from stripe dashboard mapped to "Custom Tour"
+                'product': 'prod_JbgK1IfDyPCFS7'
+                }
+            }
+        ],
+        mode = 'payment'
+    )
+
+  # TO-DO: Register the sessionId for future callbacks.
+  # res.json({ id: session.id});
+
+# to retrieve a session use the "id" in the response
+# stripe.checkout.Session.retrieve(
+#   "cs_test_DCqHZPdSM5iqHrpgEMylv9PXoh7U5qR5joW6EUYc838UArpV3Hm9A2Mn",
+# )  
+
+# Model of Stripe response:
+
+# {
+#   "id": "cs_test_DCqHZPdSM5iqHrpgEMylv9PXoh7U5qR5joW6EUYc838UArpV3Hm9A2Mn",
+#   "object": "checkout.session",
+#   "allow_promotion_codes": null,
+#   "amount_subtotal": null,
+#   "amount_total": null,
+#   "billing_address_collection": null,
+#   "cancel_url": "https://example.com/cancel",
+#   "client_reference_id": null,
+#   "currency": null,
+#   "customer": null,
+#   "customer_details": null,
+#   "customer_email": null,
+#   "livemode": false,
+#   "locale": null,
+#   "metadata": {},
+#   "mode": "payment",
+#   "payment_intent": "pi_1EUnBEF5IfL0eXz99dkRR60n",
+#   "payment_method_options": {},
+#   "payment_method_types": [
+#     "card"
+#   ],
+#   "payment_status": "unpaid",
+#   "setup_intent": null,
+#   "shipping": null,
+#   "shipping_address_collection": null,
+#   "submit_type": null,
+#   "subscription": null,
+#   "success_url": "https://example.com/success",
+#   "total_details": null
+# }
+
+# ================================
+# ================================
+
+
+# WebHooks
+
+# charge.failed
+# charge.succeeded
+# payment_intent.payment_failed
+# payment_intent.succeeded
+
 # SOCKET.IO
 
 @app.get("/")
@@ -143,7 +222,7 @@ def get_guides(location, language, startdate, enddate):
         out.append(guide)
     print(out)
     return jsonify(out)
-
+ 
 # datetime.datetime(2012, 3, 23, 23, 24, 55, 173504)
 # >>> datetime.datetime.today().weekday()
 

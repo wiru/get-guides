@@ -28,7 +28,8 @@ export default new Vuex.Store({
     bookings: [],
     filteredGuides: [],
     somethingStupid: 0,
-    loggedIn: "false"
+    loggedIn: "false",
+    checkoutSessionId: ""
   },
   plugins: [socketioPlugin],
   // sync stuff - Use "commit"
@@ -105,6 +106,9 @@ export default new Vuex.Store({
     },
     setTypingStatus(state, bool) {
       this.state.typingStatus = bool;
+    },
+    setCheckoutSessionId(state, payload) {
+      this.state.checkoutSessionId = payload;
     }
   },
   // async stuff - Use "dispatch"
@@ -218,6 +222,12 @@ export default new Vuex.Store({
     async guidePackage(state, payload) {
       socket.emit("newGuideRegistration", payload);
       console.log("newGuideRegistration on front");
+    },
+    async stripeCheckout(state, payload) {
+      axios.post('https://getguides.herokuapp.com/api/checkout-session', payload).then((response) => {
+        console.log(JSON.stringify(response.data));
+        state.commit("setCheckoutSessionId", response.data.id);
+    })
     }
   }
 });
