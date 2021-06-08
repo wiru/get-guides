@@ -25,13 +25,13 @@
 
         <span>Please confirm the type of account you would like to create:</span>
         <q-select outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" />
-            <div id="travelreg" v-if="(usermodel === 'Traveller')">
+            <div id="travelreg" v-if="(usermodel === 'traveller')">
                 <br/>
                 <span>You're all set! Please confirm to finish the registration.</span>
                 <br/>
                 <q-btn id="travelconfirm" @click="registerTraveller" color="primary" label="Finish" />
             </div>
-            <div id="guidereg" v-if="(usermodel === 'Guide')">
+            <div id="guidereg" v-if="(usermodel === 'guide')">
                 <br/>          
                 <q-input filled v-model="biomodel" type="string" maxlength=160 placeholder="Please write a short bio about yourself!" hint="max 160 characters" :dense="dense" />
                 <br/>
