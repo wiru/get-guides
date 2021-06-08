@@ -344,6 +344,7 @@ def add_guide():
         "locations": newguide['location'],
         "bookings": [],
         "rate": newguide['rate'],
+        'unavailable_dates': newguide['unavailable_dates'],
         })
     returnId = mongo.db.guides.find_one({'name': newguide['username']}, {"_id": 1})
     print(JSONEncoder().encode(returnId["_id"]))
