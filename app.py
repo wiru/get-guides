@@ -256,7 +256,7 @@ def add_message_to_conversation(id):
 
 
 # post new guide
-@app.post("/api/newguideregistration")
+@app.post("/api/guides/newguideregistration")
 def add_guide():
     newguide = request.json
     mongo.db.guides.insert_one({
@@ -275,7 +275,7 @@ def add_guide():
     return "ok"
 
 # update existing guide
-@app.post("/api/guideupdate")
+@app.post("/api/guides/update")
 def update_guide():
     guideUpdate = request.json 
     mongo.db.guides.update_one({"_id": ObjectId(guideUpdate["id"])},  
@@ -293,7 +293,7 @@ def update_guide():
 # mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
 
 # post new traveller
-@app.post("/api/newtravellerregistration")
+@app.post("/api/travellers/newtravellerregistration")
 def add_traveller():
     newtraveller = request.json
     mongo.db.travellers.insert_one({

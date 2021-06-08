@@ -213,15 +213,15 @@ export default new Vuex.Store({
     },
     // For Registration
     async travellerPackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/newtravellerregistration`, payload);
+      axios.post(`https://getguides.herokuapp.com/api/travellers/newtravellerregistration`, payload);
       console.log("newTravellerRegistration on front");
     },
     async guidePackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/newguideregistration`, payload)
+      axios.post(`https://getguides.herokuapp.com/api/guides/newguideregistration`, payload)
       console.log("newGuideRegistration on front");
     },
     async guidePackageUpdate(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guideupdate`, payload)
+      axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload)
       console.log("guide Update on front")
     }
   }
