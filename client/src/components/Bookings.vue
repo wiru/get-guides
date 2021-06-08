@@ -22,7 +22,10 @@
               <q-card-section>{{ booking.price }}</q-card-section>
               <q-card-section>{{ booking.currency }}</q-card-section>
               <q-btn
-                v-if="booking.type === 'paid'"
+                v-if="
+                  booking.type === 'paid' &&
+                    this.$store.state.userType === 'traveller'
+                "
                 id="pay"
                 color="deep-orange"
                 icon="credit_card"

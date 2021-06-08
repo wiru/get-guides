@@ -19,6 +19,11 @@ export default new Vuex.Store({
     email: "",
     gid: "",
     sendTo: "",
+    searchQuery: {
+      location: "",
+      language: "",
+      date: ""
+    },
     travellerPackage: {},
     guidePackage: {},
     ////
@@ -68,6 +73,22 @@ export default new Vuex.Store({
     },
     setUsergid(state, payload) {
       this.state.gid = payload;
+    },
+    setSearchQuery(state, payload) {
+      this.state.searchQuery = payload;
+      console.log("In store, setSearchQuery", payload);
+      // this.state.searchQuery.date =
+      // this.state.searchQuery.date.substring(0, 4) +
+      // "/" +
+      // this.state.searchQuery.date.substring(4, 6) +
+      // "/" +
+      // this.state.searchQuery.date.substring(6, 8);
+
+      console.log(
+        "maybe I did it right ",
+        this.state.searchQuery.date,
+        Date.now()
+      );
     },
     setTravellerPackage(state, payload) {
       this.state.travellerPackage = payload;
@@ -142,6 +163,7 @@ export default new Vuex.Store({
       const language = payload.language;
       const date = payload.date;
       const meme = payload.meme;
+      console.log("date async ", date, Date.now());
       const data = (
         await axios.get(
           // WEBLINK HERE
