@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import serverLink from "../serverLink";
 import createSocketioPlugin from "./socketioStorePlugin";
 import socket from "../socket";
 
@@ -46,7 +47,7 @@ export default new Vuex.Store({
     },
     // Changed for Auth
     setUserId(state, payload) {
-      console.log("setuserid function in store ", payload)
+      console.log("setuserid function in store ", payload);
       this.state.id = payload;
       socket.emit("matchSocketWithMongoId", payload);
     },
@@ -81,6 +82,7 @@ export default new Vuex.Store({
       this.state.filteredGuides = payload;
       console.log("Setter's");
       console.log(this.state.filteredGuides);
+      this.state.currentView = "SearchResults";
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -92,10 +94,20 @@ export default new Vuex.Store({
       this.state.singleGuide.bio = payload.bio;
       this.state.singleGuide.gallery = payload.gallery;
       this.state.singleGuide.rate = payload.rate;
-      this.state.singleGuide.unavailableDates = payload.unavailable_dates;
-      console.log("setter function");
+      console.log("before ", payload.unavailable_dates);
+      let toBeFilteredOut = payload.unavailable_dates;
+      toBeFilteredOut = toBeFilteredOut.map(function(el) {
+        return (
+          el.substring(0, 4) +
+          "/" +
+          el.substring(4, 6) +
+          "/" +
+          el.substring(6, 8)
+        );
+      });
+      this.state.singleGuide.unavailableDates = toBeFilteredOut;
+      this.state.currentView = "SelectedProfile";
       this.state.somethingStupid += 1;
-      console.log("forced render", Date.now());
     },
 
     setChatList(state, payload) {
@@ -109,6 +121,9 @@ export default new Vuex.Store({
     },
     setTypingStatus(state, bool) {
       this.state.typingStatus = bool;
+    },
+    setCheckoutSessionId(state, payload) {
+      this.state.checkoutSessionId = payload;
     }
   },
   // async stuff - Use "dispatch"
@@ -130,7 +145,7 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `/api/guides/search/${location}/${language}/${date}/${meme}`
+          `${serverLink}/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
       state.commit("setFilteredGuides", data);
@@ -139,8 +154,11 @@ export default new Vuex.Store({
     async getSingleGuide(state, payload) {
       console.log("getSingleGuide called", payload);
       try {
-        const data = ( // WEBLINK HERE
-          await axios.get(`https://getguides.herokuapp.com/api/guides/${payload}`)
+        const data = (
+          await axios.get(
+            // WEBLINK HERE
+            `${serverLink}/api/guides/${payload}`
+          )
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -152,34 +170,29 @@ export default new Vuex.Store({
 
     async getChatLog(state, payload) {
       const data = (
-        await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/${payload}/messages`
-        )
+        await axios.get(`${serverLink}/api/conversations/${payload}/messages`)
       ).data;
       console.log("data: ", data);
       console.log("messages: ", data.messages);
       let to = this.state.userType === "guide" ? "traveller" : "guide";
       this.state.currentChatLog = data.messages;
-      console.log(data[to]._id)
+      console.log(data[to]._id);
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
+      this.state.currentView = "Messages";
     },
 
     async getTravellerChats(state, payload) {
       console.log("getTrav payload should be id: ", payload);
       const data = (
-        await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/traveller/${payload}`
-        )
+        await axios.get(`${serverLink}/api/conversations/traveller/${payload}`)
       ).data;
       state.commit("setChatList", data);
     },
 
     async getGuideChats(state, payload) {
       const data = (
-        await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/guide/${payload}`
-        )
+        await axios.get(`${serverLink}/api/conversations/guide/${payload}`)
       ).data;
       state.commit("setChatList", data);
     },
@@ -188,15 +201,14 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `https://getguides.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
+          `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
 
       this.state.bookings = data;
-
-      console.log(this.state);
+      console.log("get bookings data: ", data);
     },
-    async someShit(state, payload) {
+    async openBookingStartChat(state, payload) {
       let data = {
         traveller: "60b6326339b7417d0f2649ad",
         guide: "60b47b595c7aa6b557654a30",
@@ -209,7 +221,7 @@ export default new Vuex.Store({
         status: "pending",
         conversation: "098123098312980"
       };
-      axios.post(`https://getguides.herokuapp.com/api/bookings`, data);
+      axios.post(`${serverLink}/api/bookings`, data);
     },
     // For Registration
     async travellerPackage(state, payload) {
@@ -227,10 +239,16 @@ export default new Vuex.Store({
       .then(state.commit("changeView", "HowTo"))
     
     },
+   
     async guidePackageUpdate(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload)
-      
-      console.log("guide Update on front", )
+      axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload);
+      console.log("guide Update on front");
+    }
+  },
+  getters: {
+    chatChecker(state) {
+      console.log("GETTTTTAAAAAAAAAZZZZ");
+      return Object.keys(state.currentChatLog).length;
     }
   }
 });

@@ -3,11 +3,13 @@ from threading import Lock
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, url_for, redirect, jsonify, send_from_directory, render_template, session, request
 import datetime
+import stripe
+
+stripe.api_key = 'sk_test_51IyBaBBjEZPN4gtmddzdTsU3OJD7t9iMSDKsSbMdLcbkvwERsA8oRtAKlJHWd9v8r3ZP9wqV9ntweO50qAiHxXFy00is0SZ7K4'
 
 from flask_pymongo import PyMongo
 
-from flask_socketio import SocketIO, emit, join_room, leave_room, \
-    close_room, rooms, disconnect
+from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
 
 import os
 
@@ -74,14 +76,17 @@ def searchUser(gid, email, name):
         return {
             'path': 'MyProfile',
             'id': str(guide['_id']),
-            'loggedIn': True
+            'loggedIn': True,
+            'userType': 'guide'
             }
     traveler = mongo.db.travellers.find_one({"gid": gid}, {'_id':1})
     if traveler:
         return {
             'path': 'Search',
             'id': str(traveler['_id']),
-            'loggedIn': True}
+            'loggedIn': True,
+            'userType': 'traveller'
+            }
     return {
             'path': 'Registration',
             'loggedIn': False,
@@ -104,7 +109,7 @@ def login():
     redirect_uri = url_for('authorize', _external=True)
     return google.authorize_redirect(redirect_uri)
 
-    # If authorized we this route takes us to app redirect
+# If authorized we this route takes us to app redirect
 @app.route('/authorize')
 def authorize():
     google = oauth.create_client('google')
@@ -112,6 +117,7 @@ def authorize():
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
+    print(user_info)
 
     #check user_info against data in database
     session["authObj"] = searchUser(
@@ -126,6 +132,67 @@ def logout():
     for key in list(session.keys()):
         session.pop(key)
     return redirect('/')
+
+
+# Stripe integration
+@app.post('/api/checkout-session')
+def checkout():
+    checkout_body = request.json
+    print('not broken yet @ endpoint')
+    stripeSession = stripe.checkout.Session.create(
+        # success_url = os.environ['SUCCESS_URL'] or 'http://localhost:8000',
+        # cancel_url = os.environ['CANCEL_URL'] or 'http://localhost:8000',
+        success_url = os.environ['STRIPE_REDIRECT'],
+        cancel_url = os.environ['STRIPE_REDIRECT'],
+        payment_method_types = ['card'],
+        # currency = checkout_body['currency'],
+        line_items = [{
+            'price_data': {
+                'currency': checkout_body['currency'],
+                'product_data': {
+                    'name': 'Custom Tour',
+                },
+                'unit_amount': checkout_body['amount'],
+            },
+            'quantity': 1,
+        }],
+        mode = 'payment'
+    )
+    return jsonify(stripeSession["id"])
+
+# Model of Stripe response:
+
+# {
+#   "id": "cs_test_DCqHZPdSM5iqHrpgEMylv9PXoh7U5qR5joW6EUYc838UArpV3Hm9A2Mn",
+#   "object": "checkout.session",
+#   "allow_promotion_codes": null,
+#   "amount_subtotal": null,
+#   "amount_total": null,
+#   "billing_address_collection": null,
+#   "cancel_url": "https://example.com/cancel",
+#   "client_reference_id": null,
+#   "currency": null,
+#   "customer": null,
+#   "customer_details": null,
+#   "customer_email": null,
+#   "livemode": false,
+#   "locale": null,
+#   "metadata": {},
+#   "mode": "payment",
+#   "payment_intent": "pi_1EUnBEF5IfL0eXz99dkRR60n",
+#   "payment_method_options": {},
+#   "payment_method_types": [
+#     "card"
+#   ],
+#   "payment_status": "unpaid",
+#   "setup_intent": null,
+#   "shipping": null,
+#   "shipping_address_collection": null,
+#   "submit_type": null,
+#   "subscription": null,
+#   "success_url": "https://example.com/success",
+#   "total_details": null
+# }
 
 # SOCKET.IO
 
@@ -174,7 +241,10 @@ def get_bookings_as_guide(id):
             "end_time": booking['end_time'],
             "meeting_location": booking['meeting_location'],
             "details": booking['details'],
+            "price": booking['price'],
+            "currency": booking['currency'],
             "status": booking['status'],
+            "type": booking['type'],
             "conv_id": str(booking['conversation']['_id'])
             })
     return jsonify(out)
@@ -192,7 +262,10 @@ def get_bookings_as_traveller(id):
             "end_time": booking['end_time'],
             "meeting_location": booking['meeting_location'],
             "details": booking['details'],
+            "price": booking['price'],
             "status": booking['status'],
+            "currency": booking['currency'],
+            "type": booking['type'],
             "conv_id": str(booking['conversation']['_id'])
             })
     return jsonify(out)
@@ -333,10 +406,12 @@ def matchSocketWithMongoId(payload):
 # chat message receiver
 @socket.event
 def chatMessage(payload):
+    print('CHAT EMIT ARRIVES')
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for mongoId, socketId in connectedSockets.items():
         if mongoId == payload["to"]:
+            print('CHAT IF STMENT PASSES')
             print('relayMessage: ', message, socketId)
             emit('relayMessage', message, room=socketId),
             return
@@ -348,7 +423,10 @@ def typingStatus(payload):
         if mongoId == payload["to"]:
             print("THE IF STATEMENT IS FIRING")
             print('typing status: ', payload, socketId)
-            emit('typingStatus', payload["status"], room=socketId),
+            emit('typingStatus', { 
+                'status': payload["status"], 
+                'from': payload["from"] 
+                }, room=socketId),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':

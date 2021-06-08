@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex full-width">
-    <q-list bordered>
+    <q-list class="full-width" bordered>
       <q-item v-for="user in this.$store.state.chatList" 
       :key="user._id" 
       class="q-my-sm" 
@@ -45,7 +45,7 @@
       openChat(id) {
         this.$store.commit("setCurrentChat", id)
         this.$store.dispatch("getChatLog", id)
-        this.$store.commit("changeView", "Messages")
+        // this.$store.commit("changeView", "Messages")
       }
   },
   created() {

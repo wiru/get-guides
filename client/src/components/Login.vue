@@ -10,36 +10,41 @@
       <br />
       <br />
       <button @click="loginAction">LOGIN</button>
+      <button @click="loginFront">LOGIN:8080</button>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import serverLink from "../serverLink";
 export default {
   name: "Login",
   methods: {
     loginAction() {
-      window.location.replace(`${window.location.origin}/login`);
+      window.location.replace(`${serverLink}/login`);
+    },
+    loginFront() {
+      this.$store.commit("setUserId", "60b98f9d1b2a8142eec9753e");
+      this.$store.commit("setUserType", "traveller");
+      this.$store.commit("changeView", "Search");
+      this.$store.commit("loggedIn", true);
     }
   },
   async created() {
-    const payload = (await axios.get(`${window.location.origin}/auth`)).data;
-    if (payload.path === "Search") {
-      this.$store.commit("setUserId", payload.id);
-      this.$store.commit("setUserType", "traveller");
-      this.$store.commit("changeView", payload.path);
-      this.$store.commit("loggedIn", payload.loggedIn);
-    } else if (payload.path === "MyProfile") {
-      this.$store.commit("setUserId", payload.id);
-      this.$store.commit("setUserType", "guide");
-      this.$store.commit("changeView", payload.path);
-      this.$store.commit("loggedIn", payload.loggedIn);
-    } else if (payload.path === "Registration") {
-      this.$store.commit("setUserName", payload.name);
-      this.$store.commit("setUserEmail", payload.email);
-      this.$store.commit("setUsergid", payload.gid);
-      this.$store.commit("changeView", payload.path);
+    const payload = (await axios.get(`${serverLink}/auth`)).data;
+    if (payload) {
+      if (payload.path === "Registration") {
+        this.$store.commit("setUserName", payload.name);
+        this.$store.commit("setUserEmail", payload.email);
+        this.$store.commit("setUsergid", payload.gid);
+        this.$store.commit("changeView", payload.path);
+      } else {
+        this.$store.commit("setUserId", payload.id);
+        this.$store.commit("setUserType", payload.userType);
+        this.$store.commit("changeView", payload.path);
+        this.$store.commit("loggedIn", payload.loggedIn);
+      }
     }
   }
 };
