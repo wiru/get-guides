@@ -92,6 +92,7 @@ export default new Vuex.Store({
       this.state.singleGuide.rate = payload.rate;
       this.state.singleGuide.unavailableDates = payload.unavailable_dates;
       console.log("setter function");
+      state.currentView = "SelectedProfile";
       this.state.somethingStupid += 1;
       console.log("forced render", Date.now());
     },
