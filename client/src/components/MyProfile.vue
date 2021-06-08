@@ -79,12 +79,12 @@ export default {
     //   return parts[2] % 2 === 0;
     // },
     editProfile() {
-     this.$store.state.currentView = "EditProfile";
+      this.$store.state.currentView = "EditProfile";
       // this.$store.dispatch("getChatLogs", id);
     }
   },
-  created () {
-    this.$store.dispatch("getSingleGuide", this.$store.state.id)
+  created() {
+    this.$store.dispatch("getSingleGuide", this.$store.state.id);
   }
 };
 </script>

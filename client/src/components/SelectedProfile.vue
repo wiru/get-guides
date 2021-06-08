@@ -40,10 +40,10 @@
     </div>
     <div id="mid">
       <div id="bio">
-        <h9>More about me:</h9>
+        <p>More about me:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.bio }}</p>
-        <h9>I'm unavailable:</h9>
+        <p>I'm unavailable:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
       </div>
@@ -72,7 +72,8 @@ export default {
     optionsFn(validDate) {
       validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
       // returns true or false for every date in the month
-      console.log(validDate);
+      console.log(this.$store.state.singleGuide.unavailableDates);
+      console.log("Date Boolean", validDate);
       return validDate;
     },
     // optionsFn(date) {

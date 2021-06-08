@@ -15,6 +15,7 @@ flask_socketio = "*"
 authlib = "*"
 requests = "*"
 eventlet = "==0.30.2"
+stripe = "*"
 
 [scripts]
 start = "flask run"
