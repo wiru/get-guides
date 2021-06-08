@@ -42,6 +42,9 @@
 import socket from "../socket";
 
 export default {
+    mounted() {
+      this.scrollToBottom()
+    },
     watch: {
       messageLog: function (val) {
         console.log(val);
