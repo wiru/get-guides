@@ -345,7 +345,9 @@ def add_guide():
         "bookings": [],
         "rate": newguide['rate'],
         })
-    return "ok"
+    returnId = mongo.db.guides.find_one({'name': newguide['username']}, {"_id": 1})
+    print(JSONEncoder().encode(returnId["_id"]))
+    return JSONEncoder().encode(returnId["_id"])
 
 # update existing guide
 @app.post("/api/guides/update")
@@ -376,7 +378,9 @@ def add_traveller():
         "email": newtraveller['email'],
         "bookings": [],
         })
-    return "ok"
+    returnId = mongo.db.travellers.find_one({'name': newtraveller['username']}, {"_id": 1})
+    print(JSONEncoder().encode(returnId["_id"]))
+    return JSONEncoder().encode(returnId["_id"])
 
 
 connectedSockets = {}
