@@ -24,8 +24,8 @@
 export default {
   methods: {
     changeView(view) {
-      console.log(view)
       this.$store.commit("changeView", view)
+      this.$emit('clicked')
     }
   },
   name: 'EssentialLink',

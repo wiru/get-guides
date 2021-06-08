@@ -74,7 +74,7 @@ def searchUser(gid, email, name):
     guide = mongo.db.guides.find_one({"gid": gid}, {'_id':1})
     if guide:
         return {
-            'path': 'SelectedProfile',
+            'path': 'MyProfile',
             'id': str(guide['_id']),
             'loggedIn': True,
             'userType': 'guide'
@@ -117,6 +117,7 @@ def authorize():
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
+    print(user_info)
 
     #check user_info against data in database
     session["authObj"] = searchUser(
@@ -328,34 +329,54 @@ def add_message_to_conversation(id):
 
 
 # post new guide
-@app.post("/api/guides/<name>")
+@app.post("/api/guides/newguideregistration")
 def add_guide():
+    newguide = request.json
     mongo.db.guides.insert_one({
-        'name': request.form.name,
+        'name': newguide['username'],
+        'gid': newguide['gid'],
         "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
         "gallery": [],
-        "email": request.form.email,
-        "languages": [
-            {"italian": 5},
-            {"arabic": 5},
-            {"english": 4},
-        ],
-        "bio": request.form.bio,
-        "weekdays": request.form.weekdays,
-        "locations": request.form.locations,
+        "email": newguide['email'],
+        "languages": newguide['language'],
+        "bio": newguide['bio'],
+        "weekdays": newguide['availabledays'],
+        "locations": newguide['location'],
         "bookings": [],
-        "rate": 0,
+        "rate": newguide['rate'],
         })
+    return "ok"
+
+# update existing guide
+@app.post("/api/guides/update")
+def update_guide():
+    guideUpdate = request.json 
+    mongo.db.guides.update_one({"_id": ObjectId(guideUpdate["id"])},  
+    { "$set": {
+        "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
+        "languages": guideUpdate['language'],
+        "bio": guideUpdate['bio'],
+        "weekdays": guideUpdate['availabledays'],
+        "locations": guideUpdate['location'],
+        "bookings": [],
+        "rate": guideUpdate['rate'],
+        }})
+    return "ok"
+
+# mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
 
 # post new traveller
-@app.post("/api/travellers/<name>")
+@app.post("/api/travellers/newtravellerregistration")
 def add_traveller():
+    newtraveller = request.json
     mongo.db.travellers.insert_one({
-        'name': request.form.name,
+        'name': newtraveller['username'],
+        'gid': newtraveller['gid'],
         "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
-        "email": request.form.email,
+        "email": newtraveller['email'],
         "bookings": [],
         })
+    return "ok"
 
 
 connectedSockets = {}
@@ -381,10 +402,12 @@ def matchSocketWithMongoId(payload):
 # chat message receiver
 @socket.event
 def chatMessage(payload):
+    print('CHAT EMIT ARRIVES')
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for mongoId, socketId in connectedSockets.items():
         if mongoId == payload["to"]:
+            print('CHAT IF STMENT PASSES')
             print('relayMessage: ', message, socketId)
             emit('relayMessage', message, room=socketId),
             return
@@ -396,7 +419,10 @@ def typingStatus(payload):
         if mongoId == payload["to"]:
             print("THE IF STATEMENT IS FIRING")
             print('typing status: ', payload, socketId)
-            emit('typingStatus', payload["status"], room=socketId),
+            emit('typingStatus', { 
+                'status': payload["status"], 
+                'from': payload["from"] 
+                }, room=socketId),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':
