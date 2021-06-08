@@ -80,7 +80,6 @@ export default {
     //   return parts[2] % 2 === 0;
     // },
     startChat(id) {
-      this.$store.state.currentView = "Messages";
       this.$store.dispatch("getChatLogs", id);
     }
   }
@@ -94,7 +93,7 @@ export default {
 }
 
 #chat-btn {
-  margin-top: 14.5vh;
+  margin-top: 30px;
   margin-right: 1vh;
   width: 25vw;
 }

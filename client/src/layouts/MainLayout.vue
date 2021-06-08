@@ -46,6 +46,7 @@
             v-for="link in profileLinks"
             :key="link.title"
             v-bind="link"
+            @clicked="onClickChild"
           />
         </div>
 
@@ -53,6 +54,7 @@
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
+          @clicked="leftDrawerOpen = !leftDrawerOpen"
         />
 
         <EssentialLink
@@ -62,7 +64,6 @@
         />
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -141,7 +142,7 @@ export default {
         this.$store.commit("changeView", "Search");
       else if (this.$store.state.currentView === "SelectedProfile")
         this.$store.commit("changeView", "SearchResults");
-    }
+    },
   }
 };
 

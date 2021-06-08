@@ -94,6 +94,7 @@ export default new Vuex.Store({
       this.state.singleGuide.rate = payload.rate;
       this.state.singleGuide.unavailableDates = payload.unavailable_dates;
       console.log("setter function");
+      state.currentView = "SelectedProfile";
       this.state.somethingStupid += 1;
       console.log("forced render", Date.now());
     },
@@ -140,7 +141,7 @@ export default new Vuex.Store({
       console.log("getSingleGuide called", payload);
       try {
         const data = ( // WEBLINK HERE
-          await axios.get(`https://getguides.herokuapp.com/api/guides/${payload}`)
+          await axios.get(`https://g1000.herokuapp.com/api/guides/${payload}`)
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -153,7 +154,7 @@ export default new Vuex.Store({
     async getChatLog(state, payload) {
       const data = (
         await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/${payload}/messages`
+          `https://g1000.herokuapp.com/api/conversations/${payload}/messages`
         )
       ).data;
       console.log("data: ", data);
@@ -163,13 +164,14 @@ export default new Vuex.Store({
       console.log(data[to]._id)
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
+      this.state.currentView = "Messages"
     },
 
     async getTravellerChats(state, payload) {
       console.log("getTrav payload should be id: ", payload);
       const data = (
         await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/traveller/${payload}`
+          `https://g1000.herokuapp.com/api/conversations/traveller/${payload}`
         )
       ).data;
       state.commit("setChatList", data);
@@ -178,7 +180,7 @@ export default new Vuex.Store({
     async getGuideChats(state, payload) {
       const data = (
         await axios.get(
-          `https://getguides.herokuapp.com/api/conversations/guide/${payload}`
+          `https://g1000.herokuapp.com/api/conversations/guide/${payload}`
         )
       ).data;
       state.commit("setChatList", data);
@@ -188,7 +190,7 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `https://getguides.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
+          `https://g1000.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
 
@@ -209,7 +211,7 @@ export default new Vuex.Store({
         status: "pending",
         conversation: "098123098312980"
       };
-      axios.post(`https://getguides.herokuapp.com/api/bookings`, data);
+      axios.post(`https://g1000.herokuapp.com/api/bookings`, data);
     },
     // For Registration
     async travellerPackage(state, payload) {
@@ -223,6 +225,12 @@ export default new Vuex.Store({
     async guidePackageUpdate(state, payload) {
       axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload)
       console.log("guide Update on front")
+    }
+  },
+  getters: {
+    chatChecker(state) {
+      console.log("GETTTTTAAAAAAAAAZZZZ")
+      return Object.keys(state.currentChatLog).length
     }
   }
 });

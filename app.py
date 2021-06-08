@@ -112,6 +112,7 @@ def authorize():
     resp = google.get('userinfo')
     resp.raise_for_status()
     user_info = resp.json()
+    print(user_info)
 
     #check user_info against data in database
     session["authObj"] = searchUser(
@@ -329,10 +330,12 @@ def matchSocketWithMongoId(payload):
 # chat message receiver
 @socket.event
 def chatMessage(payload):
+    print('CHAT EMIT ARRIVES')
     message = {"from": payload["from"], "text": payload["text"], "timestamp": payload["timestamp"]}
     mongo.db.conversations.update_one({"_id": ObjectId(payload["conversationId"])}, { "$push": {"messages": message}})
     for mongoId, socketId in connectedSockets.items():
         if mongoId == payload["to"]:
+            print('CHAT IF STMENT PASSES')
             print('relayMessage: ', message, socketId)
             emit('relayMessage', message, room=socketId),
             return
@@ -344,7 +347,10 @@ def typingStatus(payload):
         if mongoId == payload["to"]:
             print("THE IF STATEMENT IS FIRING")
             print('typing status: ', payload, socketId)
-            emit('typingStatus', payload["status"], room=socketId),
+            emit('typingStatus', { 
+                'status': payload["status"], 
+                'from': payload["from"] 
+                }, room=socketId),
             return # return here incase socket duplicated
 
 if __name__ == '__main__':
