@@ -74,7 +74,9 @@ export default new Vuex.Store({
     setGuidePackage(state, payload) {
       this.state.guidePackage = payload;
     },
-
+    setGuidePackageUpdate(state, payload) {
+      this.state.guidePackageUpdate = payload;
+    },
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
       console.log("Setter's");
@@ -213,12 +215,16 @@ export default new Vuex.Store({
     },
     // For Registration
     async travellerPackage(state, payload) {
-      socket.emit("newTravellerRegistration", payload);
+      axios.post(`https://getguides.herokuapp.com/api/travellers/newtravellerregistration`, payload);
       console.log("newTravellerRegistration on front");
     },
     async guidePackage(state, payload) {
-      socket.emit("newGuideRegistration", payload);
+      axios.post(`https://getguides.herokuapp.com/api/guides/newguideregistration`, payload)
       console.log("newGuideRegistration on front");
+    },
+    async guidePackageUpdate(state, payload) {
+      axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload)
+      console.log("guide Update on front")
     }
   },
   getters: {
