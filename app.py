@@ -278,12 +278,14 @@ def add_booking():
         "guide": booking_body["guide"],
         "messages": []
     }
+    print(booking_body)
+    print(conversation_body)
     # make a conversation
     # if a conversation doesn't exist already
     new_conv_id = mongo.db.conversations.insert_one(conversation_body).inserted_id
     booking_body["conversation"] = mongo.db.conversations.find_one({"_id": ObjectId(new_conv_id)})
     mongo.db.bookings.insert_one(booking_body)
-    return "ok"
+    return JSONEncoder().encode(new_conv_id)
 
 
 

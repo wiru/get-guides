@@ -3,7 +3,6 @@
     <div id="top">
       <div id="guide-data" class="absolute-top-left">
         <p>Name: {{ this.$store.state.singleGuide.name }}</p>
-        <!-- <p>Location: {{ this.$store.state.singleGuide.location }}</p> -->
         <p class="pre-chip">I can guide you in:</p>
         <q-chip
           v-for="location in this.$store.state.singleGuide.locations"
@@ -29,13 +28,6 @@
         <q-avatar id="avatar" rounded size="25vw" class="absolute-top-right">
           <img v-bind:src="this.$store.state.singleGuide.avatar" />
         </q-avatar>
-        <q-btn
-          id="chat-btn"
-          class="absolute-top-right"
-          color="deep-orange"
-          icon="chat"
-          @click="startChat(singleGuide.id)"
-        />
       </div>
     </div>
     <div id="mid">
@@ -43,15 +35,19 @@
         <p>More about me:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.bio }}</p>
-        <p>I'm unavailable:</p>
-        <p></p>
-        <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
       </div>
     </div>
     <div id="bot">
       <div class="q-pa-md">
         <div class="q-gutter-md">
           <q-date v-model="date" :options="optionsFn" minimal />
+          <q-btn
+            id="chat-btn"
+            color="red"
+            icon="chat"
+            label="Request a booking"
+            @click="startChat()"
+          />
         </div>
       </div>
     </div>
@@ -60,6 +56,8 @@
 
 <script>
 import { date } from "quasar";
+import axios from "axios";
+import serverLink from "../serverLink";
 
 export default {
   name: "SelectedProfile",
@@ -70,19 +68,43 @@ export default {
 
   methods: {
     optionsFn(validDate) {
-      validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
       // returns true or false for every date in the month
-      console.log(this.$store.state.singleGuide.unavailableDates);
-      console.log("Date Boolean", validDate);
-      return validDate;
+      if (this.$store.state.singleGuide.unavailableDates.includes(validDate)) {
+        return false;
+      } else if (validDate >= date.formatDate(Date.now(), "YYYY/MM/DD")) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    // optionsFn(date) {
-    //   const parts = date.split("/");
-    //   return parts[2] % 2 === 0;
-    // },
-    startChat(id) {
-      this.$store.dispatch("getChatLogs", id);
+    async startChat() {
+      let bookingBody = {
+        traveller: this.$store.state.id,
+        guide: this.$store.state.singleGuide.id,
+        location: this.$store.state.searchQuery.location,
+        date: this.date,
+        start_time: "",
+        end_time: "",
+        meeting_location: "",
+        details: "",
+        status: "pending",
+        conversation: "",
+        price: "",
+        currency: "",
+        type: "free"
+      };
+      const newConvo = (
+        await axios.post(`${serverLink}/api/bookings`, bookingBody)
+      ).data;
+      this.$store.commit("setCurrentChat", newConvo);
+      this.$store.dispatch("getChatLog", newConvo);
+      console.log(newConvo);
+      // id = this.$store.state.singleGuide.id
+      // this.$store.dispatch("getChatLogs", id);
     }
+  },
+  mounted() {
+    this.date = this.$store.state.searchQuery.date;
   }
 };
 </script>
@@ -94,9 +116,7 @@ export default {
 }
 
 #chat-btn {
-  margin-top: 30px;
-  margin-right: 1vh;
-  width: 25vw;
+  margin-right: 10px;
 }
 
 #guide-data {
@@ -117,3 +137,5 @@ textarea {
   margin-bottom: -3px;
 }
 </style>
+
+/* { "traveller": "", "guide": "", "location": "", "date": "", } */

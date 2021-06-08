@@ -19,6 +19,11 @@ export default new Vuex.Store({
     email: "",
     gid: "",
     sendTo: "",
+    searchQuery: {
+      location: "",
+      language: "",
+      date: ""
+    },
     travellerPackage: {},
     guidePackage: {},
     ////
@@ -70,6 +75,22 @@ export default new Vuex.Store({
     setUsergid(state, payload) {
       this.state.gid = payload;
     },
+    setSearchQuery(state, payload) {
+      this.state.searchQuery = payload;
+      console.log("In store, setSearchQuery", payload);
+      // this.state.searchQuery.date =
+      // this.state.searchQuery.date.substring(0, 4) +
+      // "/" +
+      // this.state.searchQuery.date.substring(4, 6) +
+      // "/" +
+      // this.state.searchQuery.date.substring(6, 8);
+
+      console.log(
+        "maybe I did it right ",
+        this.state.searchQuery.date,
+        Date.now()
+      );
+    },
     setTravellerPackage(state, payload) {
       this.state.travellerPackage = payload;
     },
@@ -107,7 +128,7 @@ export default new Vuex.Store({
         );
       });
       this.state.singleGuide.unavailableDates = toBeFilteredOut;
-      this.state.currentView = "SelectedProfile"
+      this.state.currentView = "SelectedProfile";
       this.state.somethingStupid += 1;
     },
     setSelf(state, payload) {
@@ -168,6 +189,7 @@ export default new Vuex.Store({
       const language = payload.language;
       const date = payload.date;
       const meme = payload.meme;
+      console.log("date async ", date, Date.now());
       const data = (
         await axios.get(
           // WEBLINK HERE
@@ -211,7 +233,6 @@ export default new Vuex.Store({
       }
     },
 
-
     async getChatLog(state, payload) {
       const data = (
         await axios.get(`${serverLink}/api/conversations/${payload}/messages`)
@@ -248,7 +269,9 @@ export default new Vuex.Store({
           `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
-
+      console.log(
+        `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
+      );
       this.state.bookings = data;
       console.log("get bookings data: ", data);
     },
@@ -269,21 +292,22 @@ export default new Vuex.Store({
     },
     // For Registration
     async travellerPackage(state, payload) {
-      axios.post(`${serverLink}/api/travellers/newtravellerregistration`, payload)
-      .then(data => state.commit("setUserId", data["data"]))
-      .then(state.commit("setUserType", "traveller"))
-      .then(state.commit("loggedIn", true))
-      .then(state.commit("changeView", "HowTo"))
+      axios
+        .post(`${serverLink}/api/travellers/newtravellerregistration`, payload)
+        .then(data => state.commit("setUserId", data["data"]))
+        .then(state.commit("setUserType", "traveller"))
+        .then(state.commit("loggedIn", true))
+        .then(state.commit("changeView", "HowTo"));
     },
     async guidePackage(state, payload) {
-      axios.post(`${serverLink}/api/guides/newguideregistration`, payload)
-      .then(data => state.commit("setUserId", data["data"]))
-      .then(state.commit("setUserType", "guide"))
-      .then(state.commit("loggedIn", true))
-      .then(state.commit("changeView", "HowTo"))
-    
+      axios
+        .post(`${serverLink}/api/guides/newguideregistration`, payload)
+        .then(data => state.commit("setUserId", data["data"]))
+        .then(state.commit("setUserType", "guide"))
+        .then(state.commit("loggedIn", true))
+        .then(state.commit("changeView", "HowTo"));
     },
-   
+
     async guidePackageUpdate(state, payload) {
       axios.post(`${serverLink}/api/guides/update`, payload);
       console.log("guide Update on front");
