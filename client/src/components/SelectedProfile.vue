@@ -93,7 +93,7 @@ export default {
 }
 
 #chat-btn {
-  margin-top: 300px;
+  margin-top: 30px;
   margin-right: 1vh;
   width: 25vw;
 }
