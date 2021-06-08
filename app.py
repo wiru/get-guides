@@ -76,14 +76,17 @@ def searchUser(gid, email, name):
         return {
             'path': 'SelectedProfile',
             'id': str(guide['_id']),
-            'loggedIn': True
+            'loggedIn': True,
+            'userType': 'guide'
             }
     traveler = mongo.db.travellers.find_one({"gid": gid}, {'_id':1})
     if traveler:
         return {
             'path': 'Search',
             'id': str(traveler['_id']),
-            'loggedIn': True}
+            'loggedIn': True,
+            'userType': 'traveller'
+            }
     return {
             'path': 'Registration',
             'loggedIn': False,
@@ -106,7 +109,7 @@ def login():
     redirect_uri = url_for('authorize', _external=True)
     return google.authorize_redirect(redirect_uri)
 
-    # If authorized we this route takes us to app redirect
+# If authorized we this route takes us to app redirect
 @app.route('/authorize')
 def authorize():
     google = oauth.create_client('google')
@@ -155,39 +158,6 @@ def checkout():
         mode = 'payment'
     )
     return jsonify(stripeSession["id"])
-        # line_items = [
-        #     {
-        #         data: {
-        #             price: {
-        #                 currency: checkout_body['currency'],
-        #                 type: 'one_time',
-        #                 product: 'prod_JbgK1IfDyPCFS7'
-        #             },
-        #             quantity: 1,
-        #         }
-        #     }
-        # ],
-        # line_items = [
-        #     {
-        #     'price_data': {
-        #         # 1000000jpy SHOULD be equivalent to 1万, 5000usd to $50
-        #         'unit_amount': checkout_body['amount'],
-        #         'currency': checkout_body['currency'],
-        #         # ID from stripe dashboard mapped to "Custom Tour"
-        #         'product': 'prod_JbgK1IfDyPCFS7'
-        #         }
-        #     }
-        # ],
-    #     mode = 'payment'
-    # )
-
-  # TO-DO: Register the sessionId for future callbacks.
-  # res.json({ id: session.id});
-
-# to retrieve a session use the "id" in the response
-# stripe.checkout.Session.retrieve(
-#   "cs_test_DCqHZPdSM5iqHrpgEMylv9PXoh7U5qR5joW6EUYc838UArpV3Hm9A2Mn",
-# )  
 
 # Model of Stripe response:
 
@@ -222,18 +192,6 @@ def checkout():
 #   "success_url": "https://example.com/success",
 #   "total_details": null
 # }
-
-# ================================
-# ================================
-
-
-# WebHooks
-
-# charge.failed
-# charge.succeeded
-# payment_intent.payment_failed
-# payment_intent.succeeded
-
 
 # SOCKET.IO
 

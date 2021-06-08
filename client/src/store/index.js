@@ -80,6 +80,7 @@ export default new Vuex.Store({
       this.state.filteredGuides = payload;
       console.log("Setter's");
       console.log(this.state.filteredGuides);
+      state.currentView = "SearchResults";
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -91,10 +92,19 @@ export default new Vuex.Store({
       this.state.singleGuide.bio = payload.bio;
       this.state.singleGuide.gallery = payload.gallery;
       this.state.singleGuide.rate = payload.rate;
-      this.state.singleGuide.unavailableDates = payload.unavailable_dates;
-      console.log("setter function");
+      console.log("before ", payload.unavailable_dates);
+      let toBeFilteredOut = payload.unavailable_dates;
+      toBeFilteredOut = toBeFilteredOut.map(function(el) {
+        return (
+          el.substring(0, 4) +
+          "/" +
+          el.substring(4, 6) +
+          "/" +
+          el.substring(6, 8)
+        );
+      });
+      this.state.singleGuide.unavailableDates = toBeFilteredOut;
       this.state.somethingStupid += 1;
-      console.log("forced render", Date.now());
     },
 
     setChatList(state, payload) {
@@ -217,15 +227,6 @@ export default new Vuex.Store({
     async guidePackage(state, payload) {
       socket.emit("newGuideRegistration", payload);
       console.log("newGuideRegistration on front");
-    },
-
-    async stripeCheckout(state, payload) {
-      console.log("payload @ store: ", payload);
-
-      // const session = await response.json();
-      // const result = await stripe.redirectToCheckout({
-      //     sessionId: session.id,
-      // })
     }
   }
 });
