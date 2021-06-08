@@ -217,12 +217,15 @@ export default new Vuex.Store({
       console.log("newTravellerRegistration on front");
     },
     async guidePackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guides/newguideregistration`, payload)
-      console.log("newGuideRegistration on front");
+      axios.post(`http://localhost:5000/api/guides/newguideregistration`, payload)
+      .then(data => state.commit("setUserId", data["data"]))
+      .then(() => state.commit("setView", "MyProfile"))
+      //console.log("newGuideRegistration on front, ")
     },
     async guidePackageUpdate(state, payload) {
       axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload)
-      console.log("guide Update on front")
+      
+      console.log("guide Update on front", )
     }
   }
 });
