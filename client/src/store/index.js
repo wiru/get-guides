@@ -232,7 +232,7 @@ export default new Vuex.Store({
       .then(state.commit("changeView", "HowTo"))
     },
     async guidePackage(state, payload) {
-      axios.post(`http://localhost:5000/api/guides/newguideregistration`, payload)
+      axios.post(`https://getguides.herokuapp.com/api/guides/newguideregistration`, payload)
       .then(data => state.commit("setUserId", data["data"]))
       .then(state.commit("setUserType", "guide"))
       .then(state.commit("loggedIn", true))
