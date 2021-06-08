@@ -25,9 +25,9 @@ export default {
       window.location.replace(`${serverLink}/login`);
     },
     loginFront() {
-      this.$store.commit("setUserId", "60b98f9d1b2a8142eec9753e");
-      this.$store.commit("setUserType", "traveller");
-      this.$store.commit("changeView", "Search");
+      this.$store.commit("setUserId", "60bf1ab6a0c3c6cc70e0fc55");
+      this.$store.commit("setUserType", "guide");
+      this.$store.commit("changeView", "HowTo");
       this.$store.commit("loggedIn", true);
     }
   },

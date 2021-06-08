@@ -83,6 +83,7 @@ export default {
             guidePackage["rate"] = this.ratemodel
             guidePackage["bio"] = this.biomodel
             guidePackage["gid"] = this.$store.state.gid
+            guidePackage["unavailable_dates"] = []
             //console.log(guidePackage)
             this.$store.commit("setGuidePackage", guidePackage)
             this.$store.dispatch('guidePackage', guidePackage)

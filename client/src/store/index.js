@@ -27,6 +27,7 @@ export default new Vuex.Store({
     typingStatus: false,
     chatList: [],
     singleGuide: {},
+    guideSelf: {},
     bookings: [],
     filteredGuides: [],
     somethingStupid: 0,
@@ -106,7 +107,32 @@ export default new Vuex.Store({
         );
       });
       this.state.singleGuide.unavailableDates = toBeFilteredOut;
-      this.state.currentView = "SelectedProfile";
+      this.state.currentView = "SelectedProfile"
+      this.state.somethingStupid += 1;
+    },
+    setSelf(state, payload) {
+      this.state.guideSelf.id = payload._id;
+      this.state.guideSelf.name = payload.name;
+      this.state.guideSelf.avatar = payload.avatar;
+      this.state.guideSelf.languages = payload.languages;
+      this.state.guideSelf.locations = payload.locations;
+      this.state.guideSelf.weekdays = payload.weekdays;
+      this.state.guideSelf.bio = payload.bio;
+      this.state.guideSelf.gallery = payload.gallery;
+      this.state.guideSelf.rate = payload.rate;
+      console.log("before ", payload.unavailable_dates);
+      let toBeFilteredOut = payload.unavailable_dates;
+      toBeFilteredOut = toBeFilteredOut.map(function(el) {
+        return (
+          el.substring(0, 4) +
+          "/" +
+          el.substring(4, 6) +
+          "/" +
+          el.substring(6, 8)
+        );
+      });
+      this.state.guideSelf.unavailableDates = toBeFilteredOut;
+      //this.state.currentView = "MyProfile"
       this.state.somethingStupid += 1;
     },
 
@@ -168,6 +194,24 @@ export default new Vuex.Store({
       }
     },
 
+    async getSelf(state, payload) {
+      console.log("getSelf called", payload);
+      try {
+        const data = (
+          await axios.get(
+            // WEBLINK HERE
+            `${serverLink}/api/guides/${payload}`
+          )
+        ).data;
+        console.log(data);
+        state.commit("setSelf", data);
+        console.log("state commit setSelf happened");
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+
     async getChatLog(state, payload) {
       const data = (
         await axios.get(`${serverLink}/api/conversations/${payload}/messages`)
@@ -225,14 +269,14 @@ export default new Vuex.Store({
     },
     // For Registration
     async travellerPackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/travellers/newtravellerregistration`, payload)
+      axios.post(`${serverLink}/api/travellers/newtravellerregistration`, payload)
       .then(data => state.commit("setUserId", data["data"]))
       .then(state.commit("setUserType", "traveller"))
       .then(state.commit("loggedIn", true))
       .then(state.commit("changeView", "HowTo"))
     },
     async guidePackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guides/newguideregistration`, payload)
+      axios.post(`${serverLink}/api/guides/newguideregistration`, payload)
       .then(data => state.commit("setUserId", data["data"]))
       .then(state.commit("setUserType", "guide"))
       .then(state.commit("loggedIn", true))
@@ -241,7 +285,7 @@ export default new Vuex.Store({
     },
    
     async guidePackageUpdate(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload);
+      axios.post(`${serverLink}/api/guides/update`, payload);
       console.log("guide Update on front");
     }
   },
