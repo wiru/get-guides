@@ -82,7 +82,7 @@ export default new Vuex.Store({
       this.state.filteredGuides = payload;
       console.log("Setter's");
       console.log(this.state.filteredGuides);
-      state.currentView = "SearchResults";
+      this.state.currentView = "SearchResults";
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -106,6 +106,7 @@ export default new Vuex.Store({
         );
       });
       this.state.singleGuide.unavailableDates = toBeFilteredOut;
+      this.state.currentView = "SelectedProfile";
       this.state.somethingStupid += 1;
     },
 
