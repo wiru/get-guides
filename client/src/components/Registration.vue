@@ -66,7 +66,6 @@ export default {
             //console.log(travellerPackage)
             this.$store.commit("setTravellerPackage", travellerPackage)
             this.$store.dispatch('travellerPackage', travellerPackage)
-            this.$store.commit("changeView", "Login")
             }
             
             else {this.alert = true}
