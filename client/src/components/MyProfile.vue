@@ -2,11 +2,11 @@
   <div id="my-profile" :key="this.$store.state.somethingStupid">
     <div id="top">
       <div id="guide-data" class="absolute-top-left">
-        <p>Name: {{ this.$store.state.singleGuide.name }}</p>
-        <!-- <p>Location: {{ this.$store.state.singleGuide.location }}</p> -->
+        <p>Name: {{ this.$store.state.guideSelf.name }}</p>
+        <!-- <p>Location: {{ this.$store.state.guideSelf.location }}</p> -->
         <p class="pre-chip">I can guide you in:</p>
         <q-chip
-          v-for="location in this.$store.state.singleGuide.locations"
+          v-for="location in this.$store.state.guideSelf.locations"
           :key="location.fakeValueThatIMadeUp"
           clickable
           color="primary"
@@ -16,7 +16,7 @@
         </q-chip>
         <p class="pre-chip">I can speak:</p>
         <q-chip
-          v-for="language in this.$store.state.singleGuide.languages"
+          v-for="language in this.$store.state.guideSelf.languages"
           :key="language.fakeValueThatIMadeUp"
           clickable
           color="primary"
@@ -27,7 +27,7 @@
       </div>
       <div id="avatar-container" class="q-pa-md q-gutter-sm">
         <q-avatar id="avatar" rounded size="25vw" class="absolute-top-right">
-          <img v-bind:src="this.$store.state.singleGuide.avatar" />
+          <img v-bind:src="this.$store.state.guideSelf.avatar" />
         </q-avatar>
         <q-btn
           id="edit-btn"
@@ -42,10 +42,10 @@
       <div id="bio">
         <p>More about me:</p>
         <p></p>
-        <p>{{ this.$store.state.singleGuide.bio }}</p>
+        <p>{{ this.$store.state.guideSelf.bio }}</p>
         <p>I'm unavailable:</p>
         <p></p>
-        <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
+        <p>{{ this.$store.state.guideSelf.unavailableDates }}</p>
       </div>
     </div>
     <div id="bot">
@@ -84,7 +84,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("getSingleGuide", this.$store.state.id);
+    this.$store.dispatch("getSelf", this.$store.state.id);
   }
 };
 </script>
