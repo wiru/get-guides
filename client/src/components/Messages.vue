@@ -9,7 +9,7 @@
         :text="[message.text]"
         :sent="message.from == me"
         :bg-color="message.from == me ? 'green-5' : 'grey-4'"
-      />
+      />Hello
       <q-spinner-dots v-if="theirTypingStatus" size="2rem" />
     </div>
     <q-footer elevated>

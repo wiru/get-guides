@@ -13,7 +13,7 @@
 
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>
+      <q-item-label class="text-white" caption>
         {{ caption }}
       </q-item-label>
     </q-item-section>
@@ -24,8 +24,9 @@
 export default {
   methods: {
     changeView(view) {
-      console.log(view)
+      // console.log(view)
       this.$store.commit("changeView", view)
+      this.$emit('clicked')
     }
   },
   name: 'ProfileLink',

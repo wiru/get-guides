@@ -1,5 +1,6 @@
 <template>
   <q-page class="flex flex-center">
+    <transition name="fade">
     <Search v-if="this.$store.state.currentView === 'Search'" />
     <SearchResults v-if="this.$store.state.currentView === 'SearchResults'" />
     <Bookings v-if="this.$store.state.currentView === 'Bookings'" />
@@ -13,7 +14,7 @@
     <Login v-if="this.$store.state.currentView === 'Login'" />
     <Logout v-if="this.$store.state.currentView === 'Logout'" />
     <Registration v-if="this.$store.state.currentView === 'Registration'" />
-
+    </transition>
   </q-page>
 </template>
 

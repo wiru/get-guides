@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar v-if="this.$store.state.currentView !== 'Login'">
         <q-btn
           v-if="
             this.$store.state.userType === 'traveller' ||
@@ -35,18 +35,19 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-1">
+    <q-drawer class="text-white" color="white" v-model="leftDrawerOpen" content-class="bg-red-6">
       <q-list>
-        <q-item-label header class="text-grey-8">
+        <q-item-label header class="text-white">
           Essential Links
         </q-item-label>
 
-        <div v-if="this.$store.state.userType === 'guide'">
+        <div 
+        v-if="this.$store.state.userType === 'guide'">
           <ProfileLink
             v-for="link in profileLinks"
             :key="link.title"
             v-bind="link"
-            @clicked="onClickChild"
+            @clicked="leftDrawerOpen = !leftDrawerOpen"
           />
         </div>
 
@@ -64,7 +65,7 @@
         />
       </q-list>
     </q-drawer>
-    <q-page-container>
+    <q-page-container >
       <router-view />
     </q-page-container>
   </q-layout>
@@ -146,12 +147,9 @@ export default {
   }
 };
 
-/* Original drawer code
-<q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-*/
 </script>
+<style lang="scss">
+body {
+  background-color: $grey-1;
+}
+</style>

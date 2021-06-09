@@ -1,9 +1,11 @@
 <template>
-  <div id="my-profile" :key="this.$store.state.somethingStupid">
+<q-page>
+  Hello
+</q-page>
+  <!-- <div id="my-profile" :key="this.$store.state.somethingStupid">
     <div id="top">
-      <div id="guide-data" class="absolute-top-left">
         <p>Name: {{ this.$store.state.singleGuide.name }}</p>
-        <!-- <p>Location: {{ this.$store.state.singleGuide.location }}</p> -->
+        <p>Location: {{ this.$store.state.singleGuide.location }}</p>
         <p class="pre-chip">I can guide you in:</p>
         <q-chip
           v-for="location in this.$store.state.singleGuide.locations"
@@ -24,7 +26,6 @@
         >
           {{ language }}
         </q-chip>
-      </div>
       <div id="avatar-container" class="q-pa-md q-gutter-sm">
         <q-avatar id="avatar" rounded size="25vw" class="absolute-top-right">
           <img v-bind:src="this.$store.state.singleGuide.avatar" />
@@ -36,13 +37,45 @@
           icon="edit"
           @click="editProfile"
         />
-      </div>
-    </div>
-    <div id="mid">
-      <div id="bio">
-        <p>More about me:</p>
-        <p></p>
-        <p>{{ this.$store.state.singleGuide.bio }}</p>
+
+      <q-carousel
+        v-model="slide"
+        swipeable
+        animated
+        :padding="padding"
+        :vertical="vertical"
+        :arrows="arrows"
+        :navigation="navigation"
+        :navigation-position="navPos"
+        height="300px"
+        class="bg-purple text-white rounded-borders"
+      >
+        <q-carousel-slide name="style" class="column no-wrap flex-center">
+          <q-icon name="style" size="56px" />
+          <div class="q-mt-md text-center">
+            {{ lorem }}
+          </div>
+        </q-carousel-slide>
+        <q-carousel-slide name="tv" class="column no-wrap flex-center">
+          <q-icon name="live_tv" size="56px" />
+          <div class="q-mt-md text-center">
+            {{ lorem }}
+          </div>
+        </q-carousel-slide>
+        <q-carousel-slide name="layers" class="column no-wrap flex-center">
+          <q-icon name="layers" size="56px" />
+          <div class="q-mt-md text-center">
+            {{ lorem }}
+          </div>
+        </q-carousel-slide>
+        <q-carousel-slide name="map" class="column no-wrap flex-center">
+          <q-icon name="terrain" size="56px" />
+          <div class="q-mt-md text-center">
+            {{ lorem }}
+          </div>
+        </q-carousel-slide>
+      </q-carousel>
+
         <p>I'm unavailable:</p>
         <p></p>
         <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
@@ -55,7 +88,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -101,10 +134,6 @@ export default {
   width: 25vw;
 }
 
-#guide-data {
-  margin-top: 1vh;
-  margin-left: 3vw;
-}
 
 textarea {
   font-size: 3vh;

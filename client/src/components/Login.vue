@@ -1,15 +1,26 @@
 <template>
-  <div id="Login">
+  <div class="fullscreen bg-teal-2 text-white text-center q-pa-md flex flex-center">
     <div v-if="$q.platform.is.desktop">
       I'm only rendered on desktop!
     </div>
 
-    <div v-if="$q.platform.is.mobile">
-      <h1>Welcome to Get Guides!</h1>
-      <span>Please log in to continue.</span>
-      <br />
-      <br />
-      <button @click="loginAction">LOGIN</button>
+    <div class="fullscreen column" v-if="$q.platform.is.mobile">
+      <div class="col">
+        <q-img
+          src="../assets/GG-white-red.png"
+        />
+      </div>
+      <div class="col-1">
+        <q-btn @click="loginAction" style="width: 150px" :loading="loading2" color="red">
+          Login
+          <template v-slot:loading>
+            Loading...
+          </template>
+        </q-btn>
+      </div>
+      <div class="col-1">
+        <p @click="loginAction" class="self-center">Register</p>
+      </div>
     </div>
   </div>
 </template>
