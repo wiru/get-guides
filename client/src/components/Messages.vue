@@ -1,17 +1,16 @@
 <template>
-  <q-page class="flex full-width column">
-      <q-banner inline-actions class="text-white bg-red">
-      User is offline.
-    </q-banner>
+  <q-page 
+  ref="chatPage"
+  class="flex full-width column">
     <div class="q-pa-md column col justify-end">
       <q-chat-message
-        v-for="message in messages"
+        v-for="message in messageLog"
         :key="message.text"
-        :name="message.from"
         :text="[message.text]"
-        :sent="message.from == 'me' ? true : false"
-        :bg-color="message.from == 'me' ? 'green-5' : 'grey-4'"
+        :sent="message.from == me"
+        :bg-color="message.from == me ? 'green-5' : 'grey-4'"
       />
+      <q-spinner-dots v-if="theirTypingStatus" size="2rem" />
     </div>
     <q-footer elevated>
       <q-toolbar>
@@ -40,40 +39,88 @@
 </template>
 
 <script>
+import socket from "../socket";
 
 export default {
-    name: 'Messages',
-    data() {
-      return { 
-        newMessage: '',
-        messages: [ 
-          {
-            text: 'hey dickhead! :)',
-            from: 'me'
-          },
-          {
-            text: 'Fuck you, you dick',
-            from: 'you'
-          },
-          {
-            text: "Oh don't be such a goon",
-            from: 'me'
-          },
-          {
-            text: "You're the fucking goon",
-            from: 'you'
-          }
-        ]
+    watch: {
+      messageLog: function (val) {
+        console.log(val);
+        this.scrollToBottom();
+        return console.log("WATCH MESSAGE LOG FIRED")
+      },
+      newMessage: function() {
+        if (this.newMessage !== "") {
+          this.myTypingStatus = true;
+        } else {
+          this.myTypingStatus = false;
+        }
+        console.log("NS", this.myTypingStatus)
+        console.log("SHOULD EMIT TS NOW")
+        socket.emit("typingStatus", {
+            to: this.you,
+            from: this.me,
+            status: this.myTypingStatus
+        })
       }
     },
+    created() {
+      socket.on('typingStatus', (payload)=>{
+        console.log("TYPING STATUS ON LISTNER")
+        console.log("THISYOU", this.you)
+        console.log("PAYTO", payload)        
+        if (this.you === payload.from) {
+          this.theirTypingStatus = payload.status
+        }
+      }),
+      socket.on("relayMessage", message => {
+        console.log("CHECKING CURRENT CHAT");
+        if (this.you === message['from']) {
+          console.log("CHECK OK. MESSAGE RECEIVED AND PUSHING")
+          this.messageLog.push(message);
+        }
+      })
+    },
+    name: 'Messages',
+    data() {
+      return {
+        messageLog: this.$store.state.currentChatLog,
+        myTypingStatus: false,
+        theirTypingStatus: false,
+        me: this.$store.state.id,
+        you: this.$store.state.sendTo,
+        newMessage: ''
+      }
+    },
+    // This should allow for hot-reloading of typing status 
 	  methods: {
       sendMessage() {
-        this.messages.push({
+        let date = Date.now()
+        console.log("PUSHING TO CHAT LOG")
+        this.messageLog.push({
           text: this.newMessage,
-          from: 'me'
+          from: this.$store.state.id,
+          timestamp: date
         })
-        this.newMessage = ''
-      }
+        console.log("PRE CHAT EMIT")
+        socket.emit(
+          'chatMessage', 
+        {
+          conversationId: this.$store.state.currentChat, 
+          text: this.newMessage,
+          from: this.$store.state.id,
+          to: this.$store.state.sendTo,
+          timestamp: date
+        })
+        this.newMessage = ""
+      },
+      scrollToBottom() {
+        let chatPage = this.$refs.chatPage.$el
+        console.log("STB METHOD FIRED")
+        console.log("CHAT PAGE", chatPage)
+        console.log("CHAT PAGE HEIGHT", chatPage.scrollHeight)
+        setTimeout(() => {
+          window.scrollTo(0, chatPage.scrollHeight)}, 20);
+        }
     },
 }
 </script>

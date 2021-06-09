@@ -1,12 +1,22 @@
 <template>
   <div id="my-profile" :key="this.$store.state.somethingStupid">
     <div id="top">
-      <div id="guide-data" class="fixed-top-left">
-        <p>Name: {{ this.$store.state.singleGuide.name }}</p>
-        <!-- <p>Location: {{ this.$store.state.singleGuide.location }}</p> -->
-        <p>I can guide you in:</p>
+      <div id="guide-data" class="absolute-top-left">
+        <p>Name: {{ this.$store.state.guideSelf.name }}</p>
+        <!-- <p>Location: {{ this.$store.state.guideSelf.location }}</p> -->
+        <p class="pre-chip">I can guide you in:</p>
         <q-chip
-          v-for="language in this.$store.state.singleGuide.languages"
+          v-for="location in this.$store.state.guideSelf.locations"
+          :key="location.fakeValueThatIMadeUp"
+          clickable
+          color="primary"
+          text-color="white"
+        >
+          {{ location }}
+        </q-chip>
+        <p class="pre-chip">I can speak:</p>
+        <q-chip
+          v-for="language in this.$store.state.guideSelf.languages"
           :key="language.fakeValueThatIMadeUp"
           clickable
           color="primary"
@@ -15,21 +25,33 @@
           {{ language }}
         </q-chip>
       </div>
-      <div id="avatar" class="q-pa-md q-gutter-sm fixed-top-right">
-        <q-avatar rounded size="25vw">
-          <img v-bind:src="this.$store.state.singleGuide.avatar" />
+      <div id="avatar-container" class="q-pa-md q-gutter-sm">
+        <q-avatar id="avatar" rounded size="25vw" class="absolute-top-right">
+          <img v-bind:src="this.$store.state.guideSelf.avatar" />
         </q-avatar>
+        <q-btn
+          id="edit-btn"
+          class="absolute-top-right"
+          color="deep-orange"
+          icon="edit"
+          @click="editProfile"
+        />
       </div>
     </div>
     <div id="mid">
       <div id="bio">
-        <p>{{ this.$store.state.singleGuide.bio }}</p>
+        <p>More about me:</p>
+        <p></p>
+        <p>{{ this.$store.state.guideSelf.bio }}</p>
+        <p>I'm unavailable:</p>
+        <p></p>
+        <p>{{ this.$store.state.guideSelf.unavailableDates }}</p>
       </div>
     </div>
     <div id="bot">
       <div class="q-pa-md">
         <div class="q-gutter-md">
-          <q-date v-model="date" :options="optionsFn2" minimal />
+          <q-date v-model="date" :options="optionsFn" minimal />
         </div>
       </div>
     </div>
@@ -37,6 +59,8 @@
 </template>
 
 <script>
+import { date } from "quasar";
+
 export default {
   name: "MyProfile",
   data: () => ({
@@ -45,26 +69,40 @@ export default {
   }),
 
   methods: {
-    optionsFn2(date) {
-      const parts = date.split("/");
-      return parts[2] % 2 === 0;
+    optionsFn(validDate) {
+      validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
+      // returns true or false for every date in the month
+      return validDate;
+    },
+    // optionsFn(date) {
+    //   const parts = date.split("/");
+    //   return parts[2] % 2 === 0;
+    // },
+    editProfile() {
+      this.$store.state.currentView = "EditProfile";
+      // this.$store.dispatch("getChatLogs", id);
     }
   },
   created() {
-    console.log("call start", Date.now());
-    this.$store.dispatch("getSingleGuide");
-    this.avatar = this.$store.state.singleGuide.avatar;
+    this.$store.dispatch("getSelf", this.$store.state.id);
   }
 };
 </script>
 
 <style scoped>
 #avatar {
-  margin-top: 5vh;
+  margin-top: 1vh;
+  margin-right: 1.25vw;
+}
+
+#edit-btn {
+  margin-top: 14.5vh;
+  margin-right: 1vh;
+  width: 25vw;
 }
 
 #guide-data {
-  margin-top: 8vh;
+  margin-top: 1vh;
   margin-left: 3vw;
 }
 
@@ -74,6 +112,10 @@ textarea {
 
 #bio {
   padding: 10px;
-  margin-top: 25vh;
+  margin-top: 24vh;
+}
+
+.pre-chip {
+  margin-bottom: -3px;
 }
 </style>

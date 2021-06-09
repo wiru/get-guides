@@ -3,6 +3,11 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="
+            this.$store.state.userType === 'traveller' ||
+              this.$store.state.userType === 'guide' ||
+              this.$store.state.userType === 'admin'
+          "
           flat
           dense
           round
@@ -15,37 +20,50 @@
           {{ this.$store.state.currentView }}
         </q-toolbar-title>
 
-        <q-btn 
-        v-if="this.$store.state.currentView === 'Messages'"
-        @click="goToChats" 
-        dense
-        flat 
-        icon="arrow_back" 
-        label="Back" />
+        <q-btn
+          v-if="
+            this.$store.state.currentView === 'Messages' ||
+              this.$store.state.currentView === 'SelectedProfile' ||
+              this.$store.state.currentView === 'SearchResults'
+          "
+          @click="goBack"
+          dense
+          flat
+          icon="arrow_back"
+          label="Back"
+        />
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
+    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-1">
       <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
+        <q-item-label header class="text-grey-8">
           Essential Links
         </q-item-label>
+
+        <div v-if="this.$store.state.userType === 'guide'">
+          <ProfileLink
+            v-for="link in profileLinks"
+            :key="link.title"
+            v-bind="link"
+            @clicked="onClickChild"
+          />
+        </div>
+
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
+          @clicked="leftDrawerOpen = !leftDrawerOpen"
+        />
+
+        <EssentialLink
+          v-if="this.$store.state.loggedIn === true"
+          :key="logoutData.title"
+          v-bind="logoutData"
         />
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -53,72 +71,78 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from "components/EssentialLink.vue";
+import ProfileLink from "components/ProfileLink.vue";
+const logoutData = {
+  title: "Logout",
+  caption: "Bye bye",
+  icon: "favorite",
+  view: "Logout"
+};
+
+const profileData = [
+  {
+    title: "My Profile",
+    caption: "Show and edit your own Profile",
+    icon: "person",
+    view: "MyProfile"
+  }
+];
 
 const linksData = [
   {
-    title: 'Search',
-    caption: 'Search for Guides',
-    icon: 'code',
-    view: 'Search'
+    title: "Search",
+    caption: "Search for Guides",
+    icon: "code",
+    view: "Search"
+  },
+
+  {
+    title: "Bookings",
+    caption: "Check your bookings",
+    icon: "book_online",
+    view: "Bookings"
   },
   {
-    title: 'My Profile',
-    caption: 'Show/edit My Profile',
-    icon: 'chat',
-    view: 'MyProfile'
+    title: "How to",
+    caption: "How to use the App",
+    icon: "help_outline",
+    view: "HowTo"
   },
   {
-    title: 'Bookings',
-    caption: 'Check your bookings',
-    icon: 'book_online',
-    view: 'Bookings'
+    title: "Chats",
+    caption: "Your chats",
+    icon: "message",
+    view: "Chats"
   },
   {
-    title: 'How to',
-    caption: 'How to use the App',
-    icon: 'question_mark',
-    view: 'HowTo'
-  },
-  {
-    title: 'Chats',
-    caption: 'Your chats',
-    icon: 'message',
-    view: 'Chats'
-  },
-  {
-    title: 'Messages',
-    caption: 'Your messages',
-    icon: 'message',
-    view: 'Messages'
-  },
-  {
-    title: 'About Us',
-    caption: 'The team behind Get Guides',
-    icon: 'favorite',
-    view: 'AboutUs'
-  },
-  {
-    title: 'Logout',
-    caption: 'Bye bye',
-    icon: 'favorite',
-    view: 'Logout'
+    title: "About Us",
+    caption: "The team behind Get Guides",
+    icon: "favorite",
+    view: "AboutUs"
   }
 ];
 
 export default {
-  name: 'MainLayout',
-  components: { EssentialLink },
-  data () {
+  name: "MainLayout",
+  components: { EssentialLink, ProfileLink },
+  data() {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
-    }
+      essentialLinks: linksData,
+      profileLinks: profileData,
+      logoutData: logoutData
+    };
   },
   methods: {
-    goToChats() {
-      this.$store.commit("changeView", "Chats")
+    goBack() {
+      if (this.$store.state.currentView === "Messages")
+        this.$store.commit("changeView", "Chats");
+      else if (this.$store.state.currentView === "SearchResults")
+        this.$store.commit("changeView", "Search");
+      else if (this.$store.state.currentView === "SelectedProfile")
+        this.$store.commit("changeView", "SearchResults");
     }
-  },
-}
+  }
+};
 </script>

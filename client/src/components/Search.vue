@@ -36,11 +36,12 @@
           <template v-slot:before>
             <q-btn icon="today" round color="primary">
               <q-popup-proxy
-                @before-show="startDate"
+                ref="datePicker"
                 transition-show="scale"
                 transition-hide="scale"
               >
                 <q-date
+                  @input="() => $refs.datePicker.hide()"
                   v-model="startDate"
                   title="Start Date"
                   subtitle="Select the first day"
@@ -54,39 +55,6 @@
               v-if="startDate !== ''"
               name="close"
               @click="startDate = ''"
-              class="cursor-pointer"
-            />
-          </template>
-        </q-input>
-
-        <q-input
-          :disable="true"
-          filled
-          bottom-slots
-          v-model="endDate"
-          label="Select end date"
-        >
-          <template v-slot:before>
-            <q-btn icon="event" round color="primary">
-              <q-popup-proxy
-                @before-show="endDate"
-                transition-show="scale"
-                transition-hide="scale"
-              >
-                <q-date
-                  v-model="endDate"
-                  title="End Date"
-                  subtitle="Select the last day"
-                />
-              </q-popup-proxy>
-            </q-btn>
-          </template>
-
-          <template v-slot:append>
-            <q-icon
-              v-if="language !== ''"
-              name="close"
-              @click="language = ''"
               class="cursor-pointer"
             />
           </template>
@@ -113,29 +81,28 @@ export default {
 
     language: "",
 
-    startDate: "",
-
-    endDate: ""
+    startDate: ""
   }),
 
   methods: {
     search() {
-      let newDate = this.startDate.split("/").join("");
-      console.log(`New Date is: ${newDate}`);
-
-      this.$store.dispatch("getFilteredGuides", {
-        location: this.location,
-        language: this.language,
-        date: newDate,
+      const filterGuidesObj = {
+        location: this.location.toLowerCase(),
+        language: this.language.toLowerCase(),
+        date: this.startDate.split("/").join(""),
         meme: "69420"
-      });
+      };
+      const setQueryObj = {
+        location: this.location.toLowerCase(),
+        language: this.language.toLowerCase(),
+        date: this.startDate,
+        meme: "69420"
+      };
+      this.$store.dispatch("getFilteredGuides", filterGuidesObj);
+      this.$store.commit("setSearchQuery", setQueryObj);
     }
   }
 };
 </script>
 
-<style scoped>
-h1 {
-  color: hotpink;
-}
-</style>
+<style scoped></style>
