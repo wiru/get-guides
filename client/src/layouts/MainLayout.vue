@@ -142,16 +142,7 @@ export default {
         this.$store.commit("changeView", "Search");
       else if (this.$store.state.currentView === "SelectedProfile")
         this.$store.commit("changeView", "SearchResults");
-    },
+    }
   }
 };
-
-/* Original drawer code
-<q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-*/
 </script>

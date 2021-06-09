@@ -32,16 +32,17 @@
           </template>
         </q-input>
 
-        <q-input filled bottom-slots v-model="startDate" label="Select date">
+        <q-input filled bottom-slots v-model="date" label="Select date">
           <template v-slot:before>
             <q-btn icon="today" round color="primary">
               <q-popup-proxy
-                @before-show="startDate"
+                ref="datePicker"
                 transition-show="scale"
                 transition-hide="scale"
               >
                 <q-date
-                  v-model="startDate"
+                  @input="() => $refs.datePicker.hide()"
+                  v-model="date"
                   title="Start Date"
                   subtitle="Select the first day"
                 />
@@ -51,42 +52,9 @@
 
           <template v-slot:append>
             <q-icon
-              v-if="startDate !== ''"
+              v-if="date !== ''"
               name="close"
-              @click="startDate = ''"
-              class="cursor-pointer"
-            />
-          </template>
-        </q-input>
-
-        <q-input
-          :disable="true"
-          filled
-          bottom-slots
-          v-model="endDate"
-          label="Select end date"
-        >
-          <template v-slot:before>
-            <q-btn icon="event" round color="primary">
-              <q-popup-proxy
-                @before-show="endDate"
-                transition-show="scale"
-                transition-hide="scale"
-              >
-                <q-date
-                  v-model="endDate"
-                  title="End Date"
-                  subtitle="Select the last day"
-                />
-              </q-popup-proxy>
-            </q-btn>
-          </template>
-
-          <template v-slot:append>
-            <q-icon
-              v-if="language !== ''"
-              name="close"
-              @click="language = ''"
+              @click="date = ''"
               class="cursor-pointer"
             />
           </template>
@@ -132,5 +100,3 @@ export default {
   }
 };
 </script>
-
-<style scoped></style>

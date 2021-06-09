@@ -2,19 +2,16 @@ from flask_cors import CORS
 from threading import Lock
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, url_for, redirect, jsonify, send_from_directory, render_template, session, request
-import datetime
-import stripe
-
-stripe.api_key = 'sk_test_51IyBaBBjEZPN4gtmddzdTsU3OJD7t9iMSDKsSbMdLcbkvwERsA8oRtAKlJHWd9v8r3ZP9wqV9ntweO50qAiHxXFy00is0SZ7K4'
-
 from flask_pymongo import PyMongo
-
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
-
-import os
-
-import json
 from bson import ObjectId
+import datetime, stripe, os, json
+
+stripe.api_key = os.environ['STRIPE_BACKEND_KEY']
+
+
+
+
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -278,12 +275,14 @@ def add_booking():
         "guide": booking_body["guide"],
         "messages": []
     }
+    print(booking_body)
+    print(conversation_body)
     # make a conversation
     # if a conversation doesn't exist already
     new_conv_id = mongo.db.conversations.insert_one(conversation_body).inserted_id
     booking_body["conversation"] = mongo.db.conversations.find_one({"_id": ObjectId(new_conv_id)})
     mongo.db.bookings.insert_one(booking_body)
-    return "ok"
+    return JSONEncoder().encode(new_conv_id)
 
 
 
