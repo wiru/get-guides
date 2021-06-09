@@ -7,7 +7,7 @@
         </q-item>
 
         <q-expansion-item
-          :key="booking.meeting_location"
+          :key="booking._id"
           v-for="booking in this.$store.state.bookings"
           v-bind:label="booking.date"
         >
@@ -73,9 +73,6 @@ export default {
       // this.$refs.checkoutRef.redirectToCheckout();
     }
   },
-  created() {
-    this.$store.dispatch("getBookings");
-  }
 };
 
 /*

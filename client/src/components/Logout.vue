@@ -15,8 +15,4 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  color: hotpink;
-  font-size: 34pt;
-}
 </style>

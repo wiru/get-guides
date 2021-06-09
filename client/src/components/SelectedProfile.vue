@@ -1,5 +1,5 @@
 <template>
-  <div id="my-profile" :key="this.$store.state.somethingStupid">
+  <div id="SelectedProfile">
     <div id="top">
       <div id="guide-data" class="absolute-top-left">
         <p>Name: {{ this.$store.state.singleGuide.name }}</p>
@@ -93,11 +93,17 @@ export default {
         currency: "",
         type: "free"
       };
-      const newConvo = (
+      const newConvoId = (
         await axios.post(`${serverLink}/api/bookings`, bookingBody)
       ).data;
-      this.$store.commit("setCurrentChat", newConvo);
-      this.$store.dispatch("getChatLog", newConvo);
+
+      this.$store.commit("setCurrentChat", newConvoId);
+
+      const payload = {
+        id: newConvoId,
+        nextPage: "Messages"
+      }
+      this.$store.dispatch("getChatLog", payload);
       console.log(newConvo);
       // id = this.$store.state.singleGuide.id
       // this.$store.dispatch("getChatLogs", id);

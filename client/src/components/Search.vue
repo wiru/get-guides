@@ -93,6 +93,8 @@ export default {
         location: this.location.toLowerCase(),
         language: this.language.toLowerCase(),
         date: newDate,
+        // To-Do remove meme:
+        // => remove last parameter from app.py getFilteredGuides endpoint
         meme: "69420",
         nextPage: "SearchResults"
       });

@@ -42,7 +42,15 @@ export default {
       } else {
         this.$store.commit("setUserId", payload.id);
         this.$store.commit("setUserType", payload.userType);
-        this.$store.commit("changeView", payload.path);
+        if (payload.userType === 'traveller') {
+          this.$store.commit("changeView", payload.path);
+        } else if (payload.userType === 'guide') {
+          const secondaryPayload = {
+            id: payload.id,
+            nextPage: "MyProfile"
+          }
+          this.$store.dispatch("getUser", secondaryPayload);
+        }
         this.$store.commit("loggedIn", payload.loggedIn);
       }
     }

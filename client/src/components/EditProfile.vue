@@ -69,8 +69,6 @@ export default {
             else {this.alert = true}
         }
     },
-    mounted() {
-    },
     data () {
         return {
             usermodel: "guide",
