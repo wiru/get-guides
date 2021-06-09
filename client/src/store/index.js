@@ -81,9 +81,6 @@ export default new Vuex.Store({
     },
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
-      console.log("Setter's");
-      console.log(this.state.filteredGuides);
-      this.state.currentView = "SearchResults";
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -175,6 +172,7 @@ export default new Vuex.Store({
         )
       ).data;
       state.commit("setFilteredGuides", data);
+      state.commit("changeView", payload.nextPage);
     },
 
     async getSingleGuide(state, payload) {
@@ -280,7 +278,8 @@ export default new Vuex.Store({
       .then(data => state.commit("setUserId", data["data"]))
       .then(state.commit("setUserType", "guide"))
       .then(state.commit("loggedIn", true))
-      .then(state.commit("changeView", "HowTo"))
+      .then(state.dispatch("getSelf", state.id))
+      .then(state.commit("changeView", "MyProfile"))
     
     },
    

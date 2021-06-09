@@ -113,21 +113,20 @@ export default {
 
     language: "",
 
-    startDate: "",
-
-    endDate: ""
+    date: "",
   }),
 
   methods: {
     search() {
-      let newDate = this.startDate.split("/").join("");
+      let newDate = this.date.split("/").join("");
       console.log(`New Date is: ${newDate}`);
 
       this.$store.dispatch("getFilteredGuides", {
         location: this.location.toLowerCase(),
         language: this.language.toLowerCase(),
         date: newDate,
-        meme: "69420"
+        meme: "69420",
+        nextPage: "SearchResults"
       });
     }
   }

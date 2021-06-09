@@ -13,7 +13,6 @@
     <Login v-if="this.$store.state.currentView === 'Login'" />
     <Logout v-if="this.$store.state.currentView === 'Logout'" />
     <Registration v-if="this.$store.state.currentView === 'Registration'" />
-
   </q-page>
 </template>
 
