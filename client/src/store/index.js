@@ -77,13 +77,6 @@ export default new Vuex.Store({
     setSearchQuery(state, payload) {
       this.state.searchQuery = payload;
       console.log("In store, setSearchQuery", payload);
-      // this.state.searchQuery.date =
-      // this.state.searchQuery.date.substring(0, 4) +
-      // "/" +
-      // this.state.searchQuery.date.substring(4, 6) +
-      // "/" +
-      // this.state.searchQuery.date.substring(6, 8);
-
       console.log(
         "maybe I did it right ",
         this.state.searchQuery.date,
@@ -96,9 +89,7 @@ export default new Vuex.Store({
     setGuidePackage(state, payload) {
       this.state.guidePackage = payload;
     },
-    setGuidePackageUpdate(state, payload) {
-      this.state.guidePackageUpdate = payload;
-    },
+
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
     },
@@ -279,12 +270,13 @@ export default new Vuex.Store({
       state.commit("setUserId", newGuideId)
       state.commit("setUserType", "guide")
       state.commit("loggedIn", true)
-      state.dispatch("getUser", {id: newGuideId, nextPage: 'MyProfile' })    
+      state.dispatch("getUser", {id: newGuideId, nextPage: 'MyProfile' })
+      state.commit("changeView", "MyProfile");
     },
    
     async guidePackageUpdate(state, payload) {
       axios.post(`${serverLink}/api/guides/update`, payload);
-      console.log("guide Update on front");
+      state.commit("changeView", "MyProfile");
     }
   },
   getters: {
