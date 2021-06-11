@@ -62,10 +62,17 @@ export default {
             guidePackageUpdate["id"] =this.$store.state.id
 
             //console.log(guidePackageUpdate)
-            this.$store.commit("setUser", guidePackageUpdate)
+            
             this.$store.commit("setGuidePackageUpdate", guidePackageUpdate)
             this.$store.dispatch('guidePackageUpdate', guidePackageUpdate)
+            
+            const inefficientPayload = {
+            id: this.$store.state.id,
+            nextPage: "MyProfile"
             }
+            this.$store.dispatch("getUser", inefficientPayload)
+            }
+            
             else {this.alert = true}
         }
     },
