@@ -1,32 +1,59 @@
 <template>
 <q-page>
-  <q-card class="my-card">
-      <q-card-section>
-        <div class="text-h6">Our Changing Planet</div>
-        <div class="text-subtitle2">by John Doe</div>
-      </q-card-section>
+  <div class="flex row">
+  <q-card class="q-ma-sm my-card col-9">
+    <q-card-section class="teal-9">
+      <div class="text-h6">Will Saville</div>
+      <div class="text-subtitle2">Professional Guide</div>
+      <!-- <div class="text-subtitle2">by John Doe</div> -->
+    </q-card-section>
 
-      <q-tabs v-model="tab" class="text-teal">
-        <q-tab label="Tab one" name="one" />
-        <q-tab label="Tab two" name="two" />
-      </q-tabs>
+    <q-tabs v-model="tab" class="text-teal">
+      <q-tab label="Places" name="one" />
+      <q-tab label="Languages" name="two" />
+    </q-tabs>
 
-      <q-separator />
+    <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="one">
-          The QCard component is a great way to display important pieces of grouped content.
-        </q-tab-panel>
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="one">
+        <q-chip
+          v-for="location in this.$store.state.singleGuide.locations"
+          :key="location.fakeValueThatIMadeUp"
+          clickable
+          square
+          text-color="white"
+          class="bg-primary"
+        >
+          {{ location }}
+        </q-chip>
+      </q-tab-panel>
 
         <q-tab-panel name="two">
-          With so much content to display at once, and often so little screen real-estate,
-          Cards have fast become the design pattern of choice for many companies, including
-          the likes of Google and Twitter.
+          <q-chip
+            v-for="location in this.$store.state.singleGuide.languages"
+            :key="location.fakeValueThatIMadeUp"
+            clickable
+            square  
+            class="bg-primary"
+            text-color="white"
+          >
+            {{ location }}
+         </q-chip>
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
-
-<q-carousel
+    <div class="q-py-sm q-pr-sm flex justify-center flex-center column col">
+      <q-img class="col full-width overflow-hidden rounded-borders" :fit="cover" v-bind:src="this.$store.state.singleGuide.avatar" />
+      <q-btn class="q-mt-sm full-width" @click="loginAction" :loading="loading2" color="primary">
+        Chat
+        <template v-slot:loading>
+          Loading...
+        </template>
+      </q-btn>
+    </div>
+  </div>
+    <q-carousel
         v-model="slide"
         transition-prev="scale"
         transition-next="scale"
@@ -34,10 +61,10 @@
         animated
         control-color="white"
         navigation
-        padding
         arrows
-        height="300px"
-        class="bg-primary text-white shadow-1 rounded-borders"
+        padding
+        height="250px"
+        class="bg-primary text-white shadow-1"
       >
         <q-carousel-slide name="style" class="column no-wrap flex-center">
           <q-icon name="style" size="56px" />
@@ -64,8 +91,9 @@
           </div>
         </q-carousel-slide>
       </q-carousel>
-
-
+    <div class="flex justify-center q-pa-md">
+      <q-date v-model="date" :options="optionsFn" minimal />
+    </div>
 </q-page>
   <!-- <div id="my-profile" :key="this.$store.state.somethingStupid">
       <q-card dark bordered class="bg-grey-9 my-card">
@@ -123,55 +151,10 @@
         />
       </div>
 
-<q-carousel
-        v-model="slide"
-        swipeable
-        animated
-        :padding="padding"
-        :vertical="vertical"
-        :arrows="arrows"
-        :navigation="navigation"
-        :navigation-position="navPos"
-        height="300px"
-        class="bg-purple text-white rounded-borders"
-      >
-        <q-carousel-slide name="style" class="column no-wrap flex-center">
-          <q-icon name="style" size="56px" />
-          <div class="q-mt-md text-center">
-            HELLO
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide name="tv" class="column no-wrap flex-center">
-          <q-icon name="live_tv" size="56px" />
-          <div class="q-mt-md text-center">
-            HELLO
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide name="layers" class="column no-wrap flex-center">
-          <q-icon name="layers" size="56px" />
-          <div class="q-mt-md text-center">
-            HELLO
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide name="map" class="column no-wrap flex-center">
-          <q-icon name="terrain" size="56px" />
-          <div class="q-mt-md text-center">
-            HELLO
-          </div>
-        </q-carousel-slide>
-      </q-carousel>
 
 
 
 
-        <h9>More about me:</h9>
-        <p></p>
-        <p>{{ this.$store.state.singleGuide.bio }}</p>
-        <h9>I'm unavailable:</h9>
-        <p></p>
-        <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
-        <div class="q-gutter-md">
-          <q-date v-model="date" :options="optionsFn" minimal />
         </div>
   </div> -->
 </template>
@@ -188,7 +171,13 @@ export default {
     left: true,
     date: ""
   }),
-
+  watch: {
+    vertical (val) {
+      this.navPos = val === true
+        ? 'right'
+        : 'bottom'
+    }
+  },
   methods: {
     optionsFn(validDate) {
       validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");

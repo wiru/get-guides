@@ -1,5 +1,6 @@
 <template>
   <div id="search">
+    <q-card class="q-ma-sm q-pa-lg my-card col-9">
     <div class="q-pa-md">
       <div class="q-gutter-y-md column" style="width: 60vw">
         <q-input filled bottom-slots v-model="location" label="Select location">
@@ -96,11 +97,12 @@
           size="2vh"
           class="q-px-xl q-py-xs"
           color="primary"
-          label="Search Guides"
+          label="Search"
           @click="search"
         />
       </div>
     </div>
+    </q-card>
   </div>
 </template>
 

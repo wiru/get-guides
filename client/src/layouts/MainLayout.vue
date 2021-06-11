@@ -150,6 +150,8 @@ export default {
 </script>
 <style lang="scss">
 body {
-  background-color: $grey-1;
+  background-color: $teal-1;
+  background-image: url("../assets/brushDiag.png") repeat 0 0;
+
 }
 </style>
