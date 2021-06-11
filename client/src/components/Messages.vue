@@ -25,7 +25,9 @@
             <template v-slot:after>
               <q-btn
               @click="sendMessage"
-              round 
+              round
+              type="submit"
+              :loading="submitting" 
               color="white"
               dense 
               flat 
@@ -42,6 +44,9 @@
 import socket from "../socket";
 
 export default {
+    mounted() {
+      this.scrollToBottom()
+    },
     watch: {
       messageLog: function (val) {
         console.log(val);
