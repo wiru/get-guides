@@ -1,5 +1,5 @@
 <template>
-  <div id="my-profile" :key="this.$store.state.somethingStupid">
+  <div id="my-profile">
     <div id="top">
       <div id="guide-data" class="absolute-top-left">
         <p>Name: {{ this.$store.state.guideSelf.name }}</p>
@@ -43,9 +43,6 @@
         <p>More about me:</p>
         <p></p>
         <p>{{ this.$store.state.guideSelf.bio }}</p>
-        <p>I'm unavailable:</p>
-        <p></p>
-        <p>{{ this.$store.state.guideSelf.unavailableDates }}</p>
       </div>
     </div>
     <div id="bot">
@@ -70,22 +67,20 @@ export default {
 
   methods: {
     optionsFn(validDate) {
-      validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
       // returns true or false for every date in the month
-      return validDate;
+      if (this.$store.state.guideSelf.unavailableDates.includes(validDate)) {
+        return false;
+      } else if (validDate >= date.formatDate(Date.now(), "YYYY/MM/DD")) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    // optionsFn(date) {
-    //   const parts = date.split("/");
-    //   return parts[2] % 2 === 0;
-    // },
+
     editProfile() {
       this.$store.state.currentView = "EditProfile";
-      // this.$store.dispatch("getChatLogs", id);
     }
   },
-  created() {
-    this.$store.dispatch("getSelf", this.$store.state.id);
-  }
 };
 </script>
 

@@ -24,8 +24,12 @@
 export default {
   methods: {
     changeView(view) {
-      console.log(view)
-      this.$store.commit("changeView", view)
+
+      const payload = {
+        id: this.$store.state.id,
+        nextPage: view
+      }
+      this.$store.dispatch("getUser", payload);
     }
   },
   name: 'ProfileLink',

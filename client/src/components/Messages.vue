@@ -127,6 +127,6 @@ export default {
 
 <style scoped>
 h1 {
-    color: rgb(105, 255, 125);
+    color: #235;
 }
 </style>
