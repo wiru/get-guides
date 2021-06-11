@@ -24,8 +24,24 @@
 export default {
   methods: {
     changeView(view) {
-      this.$store.commit("changeView", view)
-      this.$emit('clicked')
+      if (view === 'Search' || 'HowTo' || 'AboutUs') {
+        this.$store.commit("changeView", view)
+      }
+      if (view === 'Bookings') {
+        this.$store.dispatch("getBookings");
+      }
+      if (view === 'Chats') {
+        const payload = {
+          id: this.$store.state.id,
+          nextPage: view
+        }
+        if (this.$store.state.userType === "traveller") {
+          this.$store.dispatch("getTravellerChats", payload)
+        } else {
+          this.$store.dispatch("getGuideChats", payload)
+        }
+        console.log("This is inside Essential Link, getchats", payload)
+      }
     }
   },
   name: 'EssentialLink',

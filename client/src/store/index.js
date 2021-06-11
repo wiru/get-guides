@@ -35,7 +35,6 @@ export default new Vuex.Store({
     guideSelf: {},
     bookings: [],
     filteredGuides: [],
-    somethingStupid: 0,
     loggedIn: "false"
   },
   plugins: [socketioPlugin],
@@ -78,13 +77,6 @@ export default new Vuex.Store({
     setSearchQuery(state, payload) {
       this.state.searchQuery = payload;
       console.log("In store, setSearchQuery", payload);
-      // this.state.searchQuery.date =
-      // this.state.searchQuery.date.substring(0, 4) +
-      // "/" +
-      // this.state.searchQuery.date.substring(4, 6) +
-      // "/" +
-      // this.state.searchQuery.date.substring(6, 8);
-
       console.log(
         "maybe I did it right ",
         this.state.searchQuery.date,
@@ -97,14 +89,9 @@ export default new Vuex.Store({
     setGuidePackage(state, payload) {
       this.state.guidePackage = payload;
     },
-    setGuidePackageUpdate(state, payload) {
-      this.state.guidePackageUpdate = payload;
-    },
+
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
-      console.log("Setter's");
-      console.log(this.state.filteredGuides);
-      this.state.currentView = "SearchResults";
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -128,10 +115,8 @@ export default new Vuex.Store({
         );
       });
       this.state.singleGuide.unavailableDates = toBeFilteredOut;
-      this.state.currentView = "SelectedProfile";
-      this.state.somethingStupid += 1;
     },
-    setSelf(state, payload) {
+    setUser(state, payload) {
       this.state.guideSelf.id = payload._id;
       this.state.guideSelf.name = payload.name;
       this.state.guideSelf.avatar = payload.avatar;
@@ -153,16 +138,17 @@ export default new Vuex.Store({
         );
       });
       this.state.guideSelf.unavailableDates = toBeFilteredOut;
-      //this.state.currentView = "MyProfile"
-      this.state.somethingStupid += 1;
+    },
+
+    setBookings(state, payload){
+      this.state.bookings = payload;
     },
 
     setChatList(state, payload) {
-      console.log("setChatList payload: ", payload);
       this.state.chatList = payload;
-      console.log("chat list is : ", this.state.chatList);
-      // console.log(this.state.chatList[0].traveller.name)
+      console.log("State after setting: ", this.state.chatList)
     },
+
     appendMessage(state, message) {
       this.state.currentChatLog.push(message);
     },
@@ -189,14 +175,13 @@ export default new Vuex.Store({
       const language = payload.language;
       const date = payload.date;
       const meme = payload.meme;
-      console.log("date async ", date, Date.now());
       const data = (
         await axios.get(
-          // WEBLINK HERE
           `${serverLink}/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
       state.commit("setFilteredGuides", data);
+      state.commit("changeView", payload.nextPage);
     },
 
     async getSingleGuide(state, payload) {
@@ -204,30 +189,26 @@ export default new Vuex.Store({
       try {
         const data = (
           await axios.get(
-            // WEBLINK HERE
-            `${serverLink}/api/guides/${payload}`
+            `${serverLink}/api/guides/${payload.id}`
           )
         ).data;
-        console.log(data);
         state.commit("setSingleGuide", data);
-        console.log("state commit setSingleGuide happened");
+        state.commit("changeView", payload.nextPage);
       } catch (e) {
         console.log(e);
       }
     },
 
-    async getSelf(state, payload) {
-      console.log("getSelf called", payload);
+    async getUser(state, payload) {
       try {
         const data = (
           await axios.get(
-            // WEBLINK HERE
-            `${serverLink}/api/guides/${payload}`
+            `${serverLink}/api/guides/${payload.id}`
           )
         ).data;
-        console.log(data);
-        state.commit("setSelf", data);
-        console.log("state commit setSelf happened");
+
+        state.commit("setUser", data);
+        state.commit("changeView", payload.nextPage)
       } catch (e) {
         console.log(e);
       }
@@ -235,7 +216,7 @@ export default new Vuex.Store({
 
     async getChatLog(state, payload) {
       const data = (
-        await axios.get(`${serverLink}/api/conversations/${payload}/messages`)
+        await axios.get(`${serverLink}/api/conversations/${payload.id}/messages`)
       ).data;
       console.log("data: ", data);
       console.log("messages: ", data.messages);
@@ -244,51 +225,35 @@ export default new Vuex.Store({
       console.log(data[to]._id);
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
-      this.state.currentView = "Messages";
+      state.commit("changeView", payload.nextPage)
     },
 
     async getTravellerChats(state, payload) {
-      console.log("getTrav payload should be id: ", payload);
       const data = (
-        await axios.get(`${serverLink}/api/conversations/traveller/${payload}`)
+        await axios.get(`${serverLink}/api/conversations/traveller/${payload.id}`)
       ).data;
       state.commit("setChatList", data);
+      console.log("Data passed to setter: ", data)
+      state.commit("changeView", payload.nextPage)
     },
 
     async getGuideChats(state, payload) {
       const data = (
-        await axios.get(`${serverLink}/api/conversations/guide/${payload}`)
+        await axios.get(`${serverLink}/api/conversations/guide/${payload.id}`)
       ).data;
       state.commit("setChatList", data);
+      console.log("Data passed to setter: ", data)
+      state.commit("changeView", payload.nextPage);
     },
 
-    async getBookings(state) {
+    async getBookings(state, payload) {
       const data = (
         await axios.get(
-          // WEBLINK HERE
           `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
-      console.log(
-        `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
-      );
-      this.state.bookings = data;
-      console.log("get bookings data: ", data);
-    },
-    async openBookingStartChat(state, payload) {
-      let data = {
-        traveller: "60b6326339b7417d0f2649ad",
-        guide: "60b47b595c7aa6b557654a30",
-        location: "your mom",
-        date: "Tomorrow, I guess",
-        start_time: "lol",
-        end_time: "ecks Dee",
-        meeting_location: "deez nuts",
-        details: "I have ligma",
-        status: "pending",
-        conversation: "098123098312980"
-      };
-      axios.post(`${serverLink}/api/bookings`, data);
+      state.commit('setBookings', data)
+      state.commit('changeView', 'Bookings')
     },
     // For Registration
     async travellerPackage(state, payload) {
@@ -297,20 +262,21 @@ export default new Vuex.Store({
         .then(data => state.commit("setUserId", data["data"]))
         .then(state.commit("setUserType", "traveller"))
         .then(state.commit("loggedIn", true))
-        .then(state.commit("changeView", "HowTo"));
+        .then(state.commit("changeView", "Search"));
     },
     async guidePackage(state, payload) {
-      axios
-        .post(`${serverLink}/api/guides/newguideregistration`, payload)
-        .then(data => state.commit("setUserId", data["data"]))
-        .then(state.commit("setUserType", "guide"))
-        .then(state.commit("loggedIn", true))
-        .then(state.commit("changeView", "HowTo"));
+      const newGuideId = (await axios.post(`${serverLink}/api/guides/newguideregistration`, payload)).data;
+      console.log("This is the newGuideId", newGuideId)
+      state.commit("setUserId", newGuideId)
+      state.commit("setUserType", "guide")
+      state.commit("loggedIn", true)
+      state.dispatch("getUser", {id: newGuideId, nextPage: 'MyProfile' })
+      state.commit("changeView", "MyProfile");
     },
-
+   
     async guidePackageUpdate(state, payload) {
       axios.post(`${serverLink}/api/guides/update`, payload);
-      console.log("guide Update on front");
+      state.commit("changeView", "MyProfile");
     }
   },
   getters: {

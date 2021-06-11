@@ -3,7 +3,7 @@
   <div class="flex row">
   <q-card class="q-ma-sm my-card col-9">
     <q-card-section class="teal-9">
-      <div class="text-h6">Will Saville</div>
+      <div class="text-h6">{{this.$store.state.guideSelf.name}}</div>
       <div class="text-subtitle2">Professional Guide</div>
       <!-- <div class="text-subtitle2">by John Doe</div> -->
     </q-card-section>
@@ -31,7 +31,7 @@
 
         <q-tab-panel name="two">
           <q-chip
-            v-for="location in this.$store.state.singleGuide.languages"
+            v-for="location in this.$store.state.guideSelf.languages"
             :key="location.fakeValueThatIMadeUp"
             clickable
             square  
@@ -44,9 +44,9 @@
       </q-tab-panels>
     </q-card>
     <div class="q-py-sm q-pr-sm flex justify-center flex-center column col">
-      <q-img class="col full-width overflow-hidden rounded-borders" :fit="cover" v-bind:src="this.$store.state.singleGuide.avatar" />
-      <q-btn class="q-mt-sm full-width" @click="loginAction" :loading="loading2" color="primary">
-        Chat
+      <q-img class="col full-width overflow-hidden rounded-borders" :fit="cover" v-bind:src="this.$store.state.guideSelf.avatar" />
+      <q-btn class="q-mt-sm full-width" @click="editProfile" :loading="loading2" color="primary">
+        Edit
         <template v-slot:loading>
           Loading...
         </template>
@@ -69,7 +69,7 @@
         <q-carousel-slide name="style" class="column no-wrap flex-center">
           <q-icon name="style" size="56px" />
           <div class="q-mt-md text-center">
-            {{ lorem }}
+            {{ this.$store.state.guideSelf.bio }}
           </div>
         </q-carousel-slide>
         <q-carousel-slide name="tv" class="column no-wrap flex-center">
@@ -101,7 +101,7 @@
 import { date } from "quasar";
 
 export default {
- name: "SelectedProfile",
+ name: "MyProfile",
   data: () => ({
     tab: "one",
     slide: 'style',
@@ -119,22 +119,20 @@ export default {
 
   methods: {
     optionsFn(validDate) {
-      validDate = validDate >= date.formatDate(Date.now(), "YYYY/MM/DD");
       // returns true or false for every date in the month
-      return validDate;
+      if (this.$store.state.guideSelf.unavailableDates.includes(validDate)) {
+        return false;
+      } else if (validDate >= date.formatDate(Date.now(), "YYYY/MM/DD")) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    // optionsFn(date) {
-    //   const parts = date.split("/");
-    //   return parts[2] % 2 === 0;
-    // },
+
     editProfile() {
       this.$store.state.currentView = "EditProfile";
-      // this.$store.dispatch("getChatLogs", id);
     }
   },
-  created() {
-    this.$store.dispatch("getSelf", this.$store.state.id);
-  }
 };
 </script>
 

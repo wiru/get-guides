@@ -33,7 +33,7 @@
           </template>
         </q-input>
 
-        <q-input filled bottom-slots v-model="startDate" label="Select date">
+        <q-input filled bottom-slots v-model="date" label="Select date">
           <template v-slot:before>
             <q-btn icon="today" round color="primary">
               <q-popup-proxy
@@ -43,7 +43,7 @@
               >
                 <q-date
                   @input="() => $refs.datePicker.hide()"
-                  v-model="startDate"
+                  v-model="date"
                   title="Start Date"
                   subtitle="Select the first day"
                 />
@@ -53,9 +53,9 @@
 
           <template v-slot:append>
             <q-icon
-              v-if="startDate !== ''"
+              v-if="date !== ''"
               name="close"
-              @click="startDate = ''"
+              @click="date = ''"
               class="cursor-pointer"
             />
           </template>
@@ -83,28 +83,24 @@ export default {
 
     language: "",
 
-    startDate: ""
+    date: "",
   }),
 
   methods: {
     search() {
-      const filterGuidesObj = {
+      let newDate = this.date.split("/").join("");
+      console.log(`New Date is: ${newDate}`);
+
+      this.$store.dispatch("getFilteredGuides", {
         location: this.location.toLowerCase(),
         language: this.language.toLowerCase(),
-        date: this.startDate.split("/").join(""),
-        meme: "69420"
-      };
-      const setQueryObj = {
-        location: this.location.toLowerCase(),
-        language: this.language.toLowerCase(),
-        date: this.startDate,
-        meme: "69420"
-      };
-      this.$store.dispatch("getFilteredGuides", filterGuidesObj);
-      this.$store.commit("setSearchQuery", setQueryObj);
+        date: newDate,
+        // To-Do remove meme:
+        // => remove last parameter from app.py getFilteredGuides endpoint
+        meme: "69420",
+        nextPage: "SearchResults"
+      });
     }
   }
 };
 </script>
-
-<style scoped></style>

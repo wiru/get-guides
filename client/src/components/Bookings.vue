@@ -108,9 +108,6 @@ export default {
       // this.$refs.checkoutRef.redirectToCheckout();
     }
   },
-  created() {
-    this.$store.dispatch("getBookings");
-  }
 };
 
 /*

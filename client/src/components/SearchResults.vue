@@ -29,8 +29,11 @@ export default {
 
   methods: {
     getSingleGuide(id) {
-      this.$store.dispatch("getSingleGuide", id)
-      ;
+      const payload = {
+        id: id,
+        nextPage: "SelectedProfile"
+      }
+      this.$store.dispatch("getSingleGuide", payload);
     }
   }
 };

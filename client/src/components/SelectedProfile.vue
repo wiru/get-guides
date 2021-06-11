@@ -3,7 +3,7 @@
   <div class="flex row">
   <q-card class="q-ma-sm my-card col-9">
     <q-card-section class="teal-9">
-      <div class="text-h6">Will Saville</div>
+      <div class="text-h6">{{this.$store.state.singleGuide.name}}</div>
       <div class="text-subtitle2">Professional Guide</div>
       <!-- <div class="text-subtitle2">by John Doe</div> -->
     </q-card-section>
@@ -69,7 +69,7 @@
         <q-carousel-slide name="style" class="column no-wrap flex-center">
           <q-icon name="style" size="56px" />
           <div class="q-mt-md text-center">
-            {{ lorem }}
+            {{ this.$store.state.singleGuide.bio }}
           </div>
         </q-carousel-slide>
         <q-carousel-slide name="tv" class="column no-wrap flex-center">
@@ -145,11 +145,17 @@ export default {
         currency: "",
         type: "free"
       };
-      const newConvo = (
+      const newConvoId = (
         await axios.post(`${serverLink}/api/bookings`, bookingBody)
       ).data;
-      this.$store.commit("setCurrentChat", newConvo);
-      this.$store.dispatch("getChatLog", newConvo);
+
+      this.$store.commit("setCurrentChat", newConvoId);
+
+      const payload = {
+        id: newConvoId,
+        nextPage: "Messages"
+      }
+      this.$store.dispatch("getChatLog", payload);
       console.log(newConvo);
       // id = this.$store.state.singleGuide.id
       // this.$store.dispatch("getChatLogs", id);

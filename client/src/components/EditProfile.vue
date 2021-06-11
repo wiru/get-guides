@@ -14,7 +14,7 @@
                     </q-card-section>
 
                     <q-card-section class="q-pt-none">
-                     Please edit all necessary information.
+                        Please edit all necessary information.
                     </q-card-section>
 
                     <q-card-actions align="right">
@@ -62,14 +62,19 @@ export default {
             guidePackageUpdate["id"] =this.$store.state.id
 
             //console.log(guidePackageUpdate)
+            
             this.$store.commit("setGuidePackageUpdate", guidePackageUpdate)
             this.$store.dispatch('guidePackageUpdate', guidePackageUpdate)
-            this.$store.commit("changeView", "MyProfile")
+            
+            const inefficientPayload = {
+            id: this.$store.state.id,
+            nextPage: "MyProfile"
             }
+            this.$store.dispatch("getUser", inefficientPayload)
+            }
+            
             else {this.alert = true}
         }
-    },
-    mounted() {
     },
     data () {
         return {
