@@ -5,10 +5,11 @@
 </template>
 
 <script>
+import serverLink from "../serverLink";
 export default {
   name: "Logout",
   created() {
-    window.location.replace(`${window.location.origin}/logout`);
+    window.location.replace(`${serverLink}/logout`);
   }
 };
 </script>

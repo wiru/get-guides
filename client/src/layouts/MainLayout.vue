@@ -143,10 +143,9 @@ export default {
         this.$store.commit("changeView", "Search");
       else if (this.$store.state.currentView === "SelectedProfile")
         this.$store.commit("changeView", "SearchResults");
-    },
+    }
   }
 };
-
 </script>
 <style lang="scss">
 body {

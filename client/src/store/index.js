@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import serverLink from "../serverLink";
 import createSocketioPlugin from "./socketioStorePlugin";
 import socket from "../socket";
 
@@ -18,6 +19,11 @@ export default new Vuex.Store({
     email: "",
     gid: "",
     sendTo: "",
+    searchQuery: {
+      location: "",
+      language: "",
+      date: ""
+    },
     travellerPackage: {},
     guidePackage: {},
     ////
@@ -26,6 +32,7 @@ export default new Vuex.Store({
     typingStatus: false,
     chatList: [],
     singleGuide: {},
+    guideSelf: {},
     bookings: [],
     filteredGuides: [],
     somethingStupid: 0,
@@ -46,7 +53,7 @@ export default new Vuex.Store({
     },
     // Changed for Auth
     setUserId(state, payload) {
-      console.log("setuserid function in store ", payload)
+      console.log("setuserid function in store ", payload);
       this.state.id = payload;
       socket.emit("matchSocketWithMongoId", payload);
     },
@@ -68,6 +75,22 @@ export default new Vuex.Store({
     setUsergid(state, payload) {
       this.state.gid = payload;
     },
+    setSearchQuery(state, payload) {
+      this.state.searchQuery = payload;
+      console.log("In store, setSearchQuery", payload);
+      // this.state.searchQuery.date =
+      // this.state.searchQuery.date.substring(0, 4) +
+      // "/" +
+      // this.state.searchQuery.date.substring(4, 6) +
+      // "/" +
+      // this.state.searchQuery.date.substring(6, 8);
+
+      console.log(
+        "maybe I did it right ",
+        this.state.searchQuery.date,
+        Date.now()
+      );
+    },
     setTravellerPackage(state, payload) {
       this.state.travellerPackage = payload;
     },
@@ -81,6 +104,7 @@ export default new Vuex.Store({
       this.state.filteredGuides = payload;
       console.log("Setter's");
       console.log(this.state.filteredGuides);
+      this.state.currentView = "SearchResults";
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -92,11 +116,45 @@ export default new Vuex.Store({
       this.state.singleGuide.bio = payload.bio;
       this.state.singleGuide.gallery = payload.gallery;
       this.state.singleGuide.rate = payload.rate;
-      this.state.singleGuide.unavailableDates = payload.unavailable_dates;
-      console.log("setter function");
-      state.currentView = "SelectedProfile";
+      console.log("before ", payload.unavailable_dates);
+      let toBeFilteredOut = payload.unavailable_dates;
+      toBeFilteredOut = toBeFilteredOut.map(function(el) {
+        return (
+          el.substring(0, 4) +
+          "/" +
+          el.substring(4, 6) +
+          "/" +
+          el.substring(6, 8)
+        );
+      });
+      this.state.singleGuide.unavailableDates = toBeFilteredOut;
+      this.state.currentView = "SelectedProfile";
       this.state.somethingStupid += 1;
-      console.log("forced render", Date.now());
+    },
+    setSelf(state, payload) {
+      this.state.guideSelf.id = payload._id;
+      this.state.guideSelf.name = payload.name;
+      this.state.guideSelf.avatar = payload.avatar;
+      this.state.guideSelf.languages = payload.languages;
+      this.state.guideSelf.locations = payload.locations;
+      this.state.guideSelf.weekdays = payload.weekdays;
+      this.state.guideSelf.bio = payload.bio;
+      this.state.guideSelf.gallery = payload.gallery;
+      this.state.guideSelf.rate = payload.rate;
+      console.log("before ", payload.unavailable_dates);
+      let toBeFilteredOut = payload.unavailable_dates;
+      toBeFilteredOut = toBeFilteredOut.map(function(el) {
+        return (
+          el.substring(0, 4) +
+          "/" +
+          el.substring(4, 6) +
+          "/" +
+          el.substring(6, 8)
+        );
+      });
+      this.state.guideSelf.unavailableDates = toBeFilteredOut;
+      //this.state.currentView = "MyProfile"
+      this.state.somethingStupid += 1;
     },
 
     setChatList(state, payload) {
@@ -110,6 +168,9 @@ export default new Vuex.Store({
     },
     setTypingStatus(state, bool) {
       this.state.typingStatus = bool;
+    },
+    setCheckoutSessionId(state, payload) {
+      this.state.checkoutSessionId = payload;
     }
   },
   // async stuff - Use "dispatch"
@@ -128,10 +189,11 @@ export default new Vuex.Store({
       const language = payload.language;
       const date = payload.date;
       const meme = payload.meme;
+      console.log("date async ", date, Date.now());
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `/api/guides/search/${location}/${language}/${date}/${meme}`
+          `${serverLink}/api/guides/search/${location}/${language}/${date}/${meme}`
         )
       ).data;
       state.commit("setFilteredGuides", data);
@@ -140,8 +202,11 @@ export default new Vuex.Store({
     async getSingleGuide(state, payload) {
       console.log("getSingleGuide called", payload);
       try {
-        const data = ( // WEBLINK HERE
-          await axios.get(`https://g1000.herokuapp.com/api/guides/${payload}`)
+        const data = (
+          await axios.get(
+            // WEBLINK HERE
+            `${serverLink}/api/guides/${payload}`
+          )
         ).data;
         console.log(data);
         state.commit("setSingleGuide", data);
@@ -151,37 +216,48 @@ export default new Vuex.Store({
       }
     },
 
+    async getSelf(state, payload) {
+      console.log("getSelf called", payload);
+      try {
+        const data = (
+          await axios.get(
+            // WEBLINK HERE
+            `${serverLink}/api/guides/${payload}`
+          )
+        ).data;
+        console.log(data);
+        state.commit("setSelf", data);
+        console.log("state commit setSelf happened");
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     async getChatLog(state, payload) {
       const data = (
-        await axios.get(
-          `https://g1000.herokuapp.com/api/conversations/${payload}/messages`
-        )
+        await axios.get(`${serverLink}/api/conversations/${payload}/messages`)
       ).data;
       console.log("data: ", data);
       console.log("messages: ", data.messages);
       let to = this.state.userType === "guide" ? "traveller" : "guide";
       this.state.currentChatLog = data.messages;
-      console.log(data[to]._id)
+      console.log(data[to]._id);
       this.state.sendTo = data[to]._id;
       console.log(this.state.sendTo);
-      this.state.currentView = "Messages"
+      this.state.currentView = "Messages";
     },
 
     async getTravellerChats(state, payload) {
       console.log("getTrav payload should be id: ", payload);
       const data = (
-        await axios.get(
-          `https://g1000.herokuapp.com/api/conversations/traveller/${payload}`
-        )
+        await axios.get(`${serverLink}/api/conversations/traveller/${payload}`)
       ).data;
       state.commit("setChatList", data);
     },
 
     async getGuideChats(state, payload) {
       const data = (
-        await axios.get(
-          `https://g1000.herokuapp.com/api/conversations/guide/${payload}`
-        )
+        await axios.get(`${serverLink}/api/conversations/guide/${payload}`)
       ).data;
       state.commit("setChatList", data);
     },
@@ -190,15 +266,16 @@ export default new Vuex.Store({
       const data = (
         await axios.get(
           // WEBLINK HERE
-          `https://g1000.herokuapp.com/api/bookings/${this.state.userType}/${this.state.id}`
+          `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
         )
       ).data;
-
+      console.log(
+        `${serverLink}/api/bookings/${this.state.userType}/${this.state.id}`
+      );
       this.state.bookings = data;
-
-      console.log(this.state);
+      console.log("get bookings data: ", data);
     },
-    async someShit(state, payload) {
+    async openBookingStartChat(state, payload) {
       let data = {
         traveller: "60b6326339b7417d0f2649ad",
         guide: "60b47b595c7aa6b557654a30",
@@ -211,26 +288,35 @@ export default new Vuex.Store({
         status: "pending",
         conversation: "098123098312980"
       };
-      axios.post(`https://g1000.herokuapp.com/api/bookings`, data);
+      axios.post(`${serverLink}/api/bookings`, data);
     },
     // For Registration
     async travellerPackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/travellers/newtravellerregistration`, payload);
-      console.log("newTravellerRegistration on front");
+      axios
+        .post(`${serverLink}/api/travellers/newtravellerregistration`, payload)
+        .then(data => state.commit("setUserId", data["data"]))
+        .then(state.commit("setUserType", "traveller"))
+        .then(state.commit("loggedIn", true))
+        .then(state.commit("changeView", "HowTo"));
     },
     async guidePackage(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guides/newguideregistration`, payload)
-      console.log("newGuideRegistration on front");
+      axios
+        .post(`${serverLink}/api/guides/newguideregistration`, payload)
+        .then(data => state.commit("setUserId", data["data"]))
+        .then(state.commit("setUserType", "guide"))
+        .then(state.commit("loggedIn", true))
+        .then(state.commit("changeView", "HowTo"));
     },
+
     async guidePackageUpdate(state, payload) {
-      axios.post(`https://getguides.herokuapp.com/api/guides/update`, payload)
-      console.log("guide Update on front")
+      axios.post(`${serverLink}/api/guides/update`, payload);
+      console.log("guide Update on front");
     }
   },
   getters: {
     chatChecker(state) {
-      console.log("GETTTTTAAAAAAAAAZZZZ")
-      return Object.keys(state.currentChatLog).length
+      console.log("GETTTTTAAAAAAAAAZZZZ");
+      return Object.keys(state.currentChatLog).length;
     }
   }
 });

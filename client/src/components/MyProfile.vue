@@ -1,54 +1,70 @@
 <template>
 <q-page>
-  Hello
-</q-page>
-  <!-- <div id="my-profile" :key="this.$store.state.somethingStupid">
-    <div id="top">
-        <p>Name: {{ this.$store.state.singleGuide.name }}</p>
-        <p>Location: {{ this.$store.state.singleGuide.location }}</p>
-        <p class="pre-chip">I can guide you in:</p>
+  <div class="flex row">
+  <q-card class="q-ma-sm my-card col-9">
+    <q-card-section class="teal-9">
+      <div class="text-h6">Will Saville</div>
+      <div class="text-subtitle2">Professional Guide</div>
+      <!-- <div class="text-subtitle2">by John Doe</div> -->
+    </q-card-section>
+
+    <q-tabs v-model="tab" class="text-teal">
+      <q-tab label="Places" name="one" />
+      <q-tab label="Languages" name="two" />
+    </q-tabs>
+
+    <q-separator />
+
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="one">
         <q-chip
           v-for="location in this.$store.state.singleGuide.locations"
           :key="location.fakeValueThatIMadeUp"
           clickable
-          color="primary"
+          square
           text-color="white"
+          class="bg-primary"
         >
           {{ location }}
         </q-chip>
-        <p class="pre-chip">I can speak:</p>
-        <q-chip
-          v-for="language in this.$store.state.singleGuide.languages"
-          :key="language.fakeValueThatIMadeUp"
-          clickable
-          color="primary"
-          text-color="white"
-        >
-          {{ language }}
-        </q-chip>
-      <div id="avatar-container" class="q-pa-md q-gutter-sm">
-        <q-avatar id="avatar" rounded size="25vw" class="absolute-top-right">
-          <img v-bind:src="this.$store.state.singleGuide.avatar" />
-        </q-avatar>
-        <q-btn
-          id="edit-btn"
-          class="absolute-top-right"
-          color="deep-orange"
-          icon="edit"
-          @click="editProfile"
-        />
+      </q-tab-panel>
 
-      <q-carousel
+        <q-tab-panel name="two">
+          <q-chip
+            v-for="location in this.$store.state.singleGuide.languages"
+            :key="location.fakeValueThatIMadeUp"
+            clickable
+            square  
+            class="bg-primary"
+            text-color="white"
+          >
+            {{ location }}
+         </q-chip>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
+    <div class="q-py-sm q-pr-sm flex justify-center flex-center column col">
+      <q-img class="col full-width overflow-hidden rounded-borders" :fit="cover" v-bind:src="this.$store.state.singleGuide.avatar" />
+      <q-btn class="q-mt-sm full-width" @click="loginAction" :loading="loading2" color="primary">
+        Chat
+        <template v-slot:loading>
+          Loading...
+        </template>
+      </q-btn>
+    </div>
+  </div>
+    <q-carousel
         v-model="slide"
+        transition-prev="scale"
+        transition-next="scale"
         swipeable
         animated
-        :padding="padding"
-        :vertical="vertical"
-        :arrows="arrows"
-        :navigation="navigation"
-        :navigation-position="navPos"
-        height="300px"
-        class="bg-purple text-white rounded-borders"
+        control-color="white"
+        navigation
+        arrows
+        padding
+        height="250px"
+        class="bg-primary text-white shadow-1"
       >
         <q-carousel-slide name="style" class="column no-wrap flex-center">
           <q-icon name="style" size="56px" />
@@ -75,31 +91,31 @@
           </div>
         </q-carousel-slide>
       </q-carousel>
-
-        <p>I'm unavailable:</p>
-        <p></p>
-        <p>{{ this.$store.state.singleGuide.unavailableDates }}</p>
-      </div>
+    <div class="flex justify-center q-pa-md">
+      <q-date v-model="date" :options="optionsFn" minimal />
     </div>
-    <div id="bot">
-      <div class="q-pa-md">
-        <div class="q-gutter-md">
-          <q-date v-model="date" :options="optionsFn" minimal />
-        </div>
-      </div>
-    </div>
-  </div> -->
+</q-page>
 </template>
 
 <script>
 import { date } from "quasar";
 
 export default {
-  name: "MyProfile",
+ name: "SelectedProfile",
   data: () => ({
+    tab: "one",
+    slide: 'style',
+    lorem: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque voluptatem totam, architecto cupiditate officia rerum, error dignissimos praesentium libero ab nemo.',
     left: true,
     date: ""
   }),
+  watch: {
+    vertical (val) {
+      this.navPos = val === true
+        ? 'right'
+        : 'bottom'
+    }
+  },
 
   methods: {
     optionsFn(validDate) {
@@ -112,12 +128,12 @@ export default {
     //   return parts[2] % 2 === 0;
     // },
     editProfile() {
-     this.$store.state.currentView = "EditProfile";
+      this.$store.state.currentView = "EditProfile";
       // this.$store.dispatch("getChatLogs", id);
     }
   },
-  created () {
-    this.$store.dispatch("getSingleGuide", this.$store.state.id)
+  created() {
+    this.$store.dispatch("getSelf", this.$store.state.id);
   }
 };
 </script>

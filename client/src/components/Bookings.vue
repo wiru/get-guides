@@ -79,9 +79,35 @@
 </template>
 
 <script>
+import axios from "axios";
+import serverLink from "../serverLink";
+import { loadStripe } from "@stripe/stripe-js";
+const stripeInit = loadStripe(
+  "pk_test_51IyBaBBjEZPN4gtmG1jLAzZM4yRbvITQHdOApeVCIPXTMianEW5DbRWKMcVPbCxbujQgKIeW0IUytxeUfGlWlRKM00kAUTP5sO"
+);
 export default {
   name: "Bookings",
-  methods: {},
+  methods: {
+    async checkout(price, currency) {
+      let payload = {
+        amount: price,
+        currency: currency
+      };
+      console.log("payload @ component: ", payload);
+      const sessionId = (
+        await axios.post(`${serverLink}/api/checkout-session`, payload)
+      ).data;
+
+      console.log(sessionId);
+      stripeInit.then(stripe => {
+        stripe.redirectToCheckout({
+          sessionId: sessionId
+        });
+      });
+      // this.sessionId = response.data.id;
+      // this.$refs.checkoutRef.redirectToCheckout();
+    }
+  },
   created() {
     this.$store.dispatch("getBookings");
   }

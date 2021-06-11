@@ -66,7 +66,6 @@ export default {
             //console.log(travellerPackage)
             this.$store.commit("setTravellerPackage", travellerPackage)
             this.$store.dispatch('travellerPackage', travellerPackage)
-            this.$store.commit("changeView", "Search")
             }
             
             else {this.alert = true}
@@ -84,10 +83,10 @@ export default {
             guidePackage["rate"] = this.ratemodel
             guidePackage["bio"] = this.biomodel
             guidePackage["gid"] = this.$store.state.gid
+            guidePackage["unavailable_dates"] = []
             //console.log(guidePackage)
             this.$store.commit("setGuidePackage", guidePackage)
             this.$store.dispatch('guidePackage', guidePackage)
-            this.$store.commit("changeView", "MyProfile")
             }
             else {this.alert = true}
         }
