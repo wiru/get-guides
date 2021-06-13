@@ -12,7 +12,7 @@ console.log("Entering custom Service Worker.")
 
 import {precacheAndRoute} from "workbox-precaching"
 import {registerRoute} from 'workbox-routing'
-import {StaleWhileRevalidate} from 'workbox-strategies'
+import {StaleWhileRevalidate, NetworkFirst} from 'workbox-strategies'
 
 // Config
 
@@ -22,7 +22,7 @@ precacheAndRoute(self.__WB_MANIFEST);   // handles pre-caching of (our) static a
 
 registerRoute(
     ({url}) => url.href.startsWith('http'),
-    new StaleWhileRevalidate()
+    new NetworkFirst()
   );
 
 
