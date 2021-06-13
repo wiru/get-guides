@@ -116,13 +116,15 @@ module.exports = function (/* ctx */) {
     pwa: {
 
       // workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {/*swSrc: './custom-service-worker.js'*/},
+      // workboxOptions: {swSrc: './src-pwa/custom-service-worker.js'},
 
 
 
 
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
+      
+        navigateFallback: 'index.html'
         // skipWaiting: true,
         // clientsClaim: true             // added for hot-reloading the dev app. Might have to be taken out before building
         },
@@ -131,7 +133,7 @@ module.exports = function (/* ctx */) {
       // TIP
       //(@quasar/app v2.1.10+) If your PWA is behind basic auth or requires an Authorization header, set quasar.conf.js > pwa > useCredentials 
       //to true to include crossorigin="use-credentials" on the manifest.json meta tag.
-      //useCredentials: true,
+      useCredentials: true,
 
       manifest: {
         name: `Get Guides`,
