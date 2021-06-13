@@ -4,18 +4,26 @@
 //  * quasar.conf > pwa > workboxPluginMode is set to "InjectManifest"
 //  */
 
-// New try, following https://www.youtube.com/watch?v=ULP8vaS_pJs
+// New try
 console.log("Entering custom Service Worker.")
+
+
 // Imports
 
 import {precacheAndRoute} from "workbox-precaching"
+import {registerRoute} from 'workbox-routing'
+import {StaleWhileRevalidate} from 'workbox-strategies'
 
 // Config
 
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);   // handles pre-caching of (our) static assets
 
+// Caching
 
-
+registerRoute(
+    ({url}) => url.href.startsWith('http'),
+    new StaleWhileRevalidate()
+  );
 
 
 
