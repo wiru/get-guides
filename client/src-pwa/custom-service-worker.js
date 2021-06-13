@@ -3,6 +3,59 @@
 //  * is picked up by the build system ONLY if
 //  * quasar.conf > pwa > workboxPluginMode is set to "InjectManifest"
 //  */
+
+// New try, following https://www.youtube.com/watch?v=ULP8vaS_pJs
+console.log("Entering custom Service Worker.")
+// Imports
+
+import {precacheAndRoute} from "workbox-precaching"
+
+// Config
+
+precacheAndRoute(self.__WB_MANIFEST);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// Old version
+
+
 // console.log('I hate workbox')
 // //import { register } from 'register-service-worker'
 // const staticCacheName = 'site-static';
