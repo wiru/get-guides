@@ -48,7 +48,7 @@ export default {
     loginFront() {
       this.$store.commit("setUserId", "60b47b595c7aa6b557654a30"); // Change here ID
       this.$store.commit("setUserType", "guide"); // Change here for traveller
-      this.$store.commit("changeView", "MyProfile"); // Change to search for traveller
+      this.$store.commit("changeView", "My Profile"); // Change to search for traveller
       this.$store.commit("loggedIn", true);
     },
     simulateProgress (number) {
@@ -77,7 +77,7 @@ export default {
         } else if (payload.userType === 'guide') {
           const secondaryPayload = {
             id: payload.id,
-            nextPage: "MyProfile"
+            nextPage: "My Profile"
           }
           this.$store.dispatch("getUser", secondaryPayload);
         }

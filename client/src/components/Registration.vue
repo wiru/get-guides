@@ -1,12 +1,22 @@
 <template>
-    <div id="registragion">
-        <h1> New user registration </h1>
-        <br/>
-        <span>Please fill in the following fields to finish the registration process.</span>
-        <br/>
-        <q-select disable filled v-model="username" :username="username" />
-        <q-select disable filled v-model="emailaddress" :emailaddress="emailaddress" />
-        <br/>
+    <div class="flex row full-width" id="registragion" style="min-height: inherit"> 
+    <q-img src="../assets/welcome1.jpg" style="height: 150px">
+    </q-img>
+    <div class="flex column col q-pa-md">
+        <q-card>
+            <q-card-section class="bg-primary">
+                <div class="text-h5 text-white">
+                    New user registration
+                </div>
+            </q-card-section>
+        
+        <q-card-section>
+        <span class="text-subtitle2">
+            Please fill in the following fields to finish the registration process.
+        </span>
+        
+        <q-select class="q-my-md" disable filled v-model="username" :username="username" />
+        <q-select class="q-mb-md" disable filled v-model="emailaddress" :emailaddress="emailaddress" />
             <q-dialog v-model="alert">
             <q-card>
                 <q-card-section>
@@ -23,8 +33,8 @@
             </q-card>
             </q-dialog>
 
-        <span>Please confirm the type of account you would like to create:</span>
-        <q-select outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" />
+        <span class="text-subtitle2">Please confirm the type of account you would like to create:</span>
+        <q-select class="q-my-md" outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" />
             <div id="travelreg" v-if="(usermodel === 'traveller')">
                 <br/>
                 <span>You're all set! Please confirm to finish the registration.</span>
@@ -47,6 +57,9 @@
                 <br/>
                 <q-btn id="guideconfirm" @click="registerGuide" color="primary" label="Finish" />
             </div>
+            </q-card-section>
+        </q-card>
+        </div>
     </div>
 </template>
 

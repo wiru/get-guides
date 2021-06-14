@@ -23,9 +23,9 @@
 
         <!-- Online/Offline badge -->
         <q-item-section side>
-          <q-badge 
-            :color="chat.online ? 'teal-4' : 'grey-6'">
-            {{ chat.online ? "online" : "offline" }}
+          <q-badge   
+            :color="chat[chatPartner].name === 'Mussin Traveller' ? 'teal-4' : 'grey-6'">
+            {{ chat[chatPartner].name === "Mussin Traveller" ? "online" : "offline" }}
           </q-badge>
     	  </q-item-section>
 

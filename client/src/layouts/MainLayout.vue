@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import socket from "../socket";
 import EssentialLink from "components/EssentialLink.vue";
 import ProfileLink from "components/ProfileLink.vue";
 const logoutData = {
@@ -90,7 +91,7 @@ const profileData = [
     title: "My Profile",
     caption: "Show and edit your own Profile",
     icon: "person",
-    view: "MyProfile"
+    view: "My Profile"
   }
 ];
 
@@ -112,7 +113,7 @@ const linksData = [
     title: "How to",
     caption: "How to use the App",
     icon: "help_outline",
-    view: "HowTo"
+    view: "How to"
   },
   {
     title: "Chats",

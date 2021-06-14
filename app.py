@@ -71,7 +71,7 @@ def searchUser(gid, email, name):
     guide = mongo.db.guides.find_one({"gid": gid}, {'_id':1})
     if guide:
         return {
-            'path': 'MyProfile',
+            'path': 'My Profile',
             'id': str(guide['_id']),
             'loggedIn': True,
             'userType': 'guide'
