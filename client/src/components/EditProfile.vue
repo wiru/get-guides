@@ -167,8 +167,8 @@
 				<q-select
 					class="rounded-borders shadow-2"
 					standout
-					v-model="availabledaysmodel"
-					:options="availabledays"
+					v-model="locationmodel"
+					:options="location"
 					label="Edit your locations"
 					multiple
 					hide-selected
@@ -211,8 +211,8 @@
 				<q-select
 					class="rounded-borders shadow-2"
 					standout
-					v-model="availabledaysmodel"
-					:options="availabledays"
+					v-model="languagemodel"
+					:options="languages"
 					label="Edit your languages"
 					multiple
 					hide-selected
@@ -423,16 +423,7 @@ export default {
             }
             
             else {this.alert = true}
-        },
-				simulateProgress (number) {
-					// we set loading state
-					this[`loading${number}`] = true
-					// simulate a delay
-					setTimeout(() => {
-						// we're done, we reset loading state
-						this[`loading${number}`] = false
-					}, 3000)
-    		}
+        }
     },
     data () {
         return {
@@ -443,8 +434,8 @@ export default {
             ratemodel: this.$store.state.guideSelf.rate,
             biomodel: this.$store.state.guideSelf.bio,
             usertype: ['traveller', 'guide'],
-            location: ['nikko', 'tokyo', 'osaka'],
-            languages: ['english', 'japanese', 'italian'],
+            location: ['nikko', 'tokyo', 'osaka', 'hiroshima', 'sapporo', 'fukuoka', 'ehime', 'kyoto', 'nagoya'],
+            languages: ['english', 'japanese', 'italian', 'german', 'spanish', 'chinese', 'korean', 'french', 'thai', 'indian'],
             // availabledays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
             username: this.$store.state.guideSelf.name,
             //emailaddress: this.$store.state.email,
