@@ -141,7 +141,7 @@ module.exports = function (/* ctx */) {
         description: `An attempt to make PWA work. GG.`,
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
+        background_color: '#E0F2F1',
         theme_color: '#e30202',
         icons: [
           {
