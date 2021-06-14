@@ -43,6 +43,17 @@
         </div> 
 
         <div 
+        v-if="this.$store.state.userType === 'traveller'">
+          <SearchLink
+            class="text-h6"
+            v-for="link in searchLinks"
+            :key="link.title"
+            v-bind="link"
+            @clicked="leftDrawerOpen = !leftDrawerOpen"
+          />
+        </div>
+
+        <div 
         v-if="this.$store.state.userType === 'guide'">
           <ProfileLink
             class="text-h6"
@@ -78,6 +89,7 @@
 <script>
 import EssentialLink from "components/EssentialLink.vue";
 import ProfileLink from "components/ProfileLink.vue";
+import SearchLink from "components/SearchLink.vue";
 const logoutData = {
   title: "Logout",
   caption: "Bye bye",
@@ -94,14 +106,16 @@ const profileData = [
   }
 ];
 
-const linksData = [
+const searchData = [
   {
     title: "Search",
     caption: "Search for Guides",
     icon: "search",
     view: "Search"
   },
+];
 
+const linksData = [
   {
     title: "Bookings",
     caption: "Check your bookings",
@@ -130,12 +144,13 @@ const linksData = [
 
 export default {
   name: "MainLayout",
-  components: { EssentialLink, ProfileLink },
+  components: { EssentialLink, ProfileLink, SearchLink },
   data() {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
       profileLinks: profileData,
+      searchLinks: searchData,
       logoutData: logoutData
     };
   },
