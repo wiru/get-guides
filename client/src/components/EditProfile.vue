@@ -255,7 +255,7 @@
       class="q-pa-sm rounded-borders"
     >
       <div class="row no-wrap">
-        <q-btn
+        		<q-btn
 					label="About me"
 					class="q-mx-sm bg-primary text-white"
 					name="add text"
@@ -263,7 +263,7 @@
 				>
 				</q-btn>
 			<!-- SPECIALTIES -->
-        <q-btn
+        		<q-btn
 					label="Specialties"
 					class="q-mx-sm bg-primary text-white"
 					name="add text"
@@ -271,15 +271,15 @@
 				>
 				</q-btn>
 			<!-- HOBBIES -->
-        <q-btn
+        		<q-btn
 					label="Hobbies"
 					class="q-mx-sm bg-primary text-white"
 					name="add text"
 					@click="hobbies = true"
 				>
 				</q-btn>
-      </div>
-    </q-scroll-area>
+      		</div>
+    	</q-scroll-area>
 	</q-card>
 
 		<!-- ABOUT ME UPDATE DIALOG -->
@@ -318,18 +318,18 @@
 
 		<!-- SPECIALTIES UPDATE DIALOG -->
 		<q-dialog v-model="specialties">
-      <q-card class="my-card full-width">
-				<q-img height="200px" src="../assets/tokyo1.jpg" />
+      	<q-card class="my-card full-width">
+			<q-img height="200px" src="../assets/tokyo1.jpg" />
 
-        <q-card-section>
+			<q-card-section>
 
-          <div class="row no-wrap items-center">
-            <div class="col text-h6 ellipsis">
-              Do you have any knowledgable areas?
-            </div>
-          </div>
+			<div class="row no-wrap items-center">
+				<div class="col text-h6 ellipsis">
+				Do you have any knowledgable areas?
+				</div>
+			</div>
 
-        </q-card-section>
+			</q-card-section>
 
         <q-card-section class="q-pt-none">
          	<q-input
@@ -434,8 +434,8 @@ export default {
             ratemodel: this.$store.state.guideSelf.rate,
             biomodel: this.$store.state.guideSelf.bio,
             usertype: ['traveller', 'guide'],
-            location: ['nikko', 'tokyo', 'osaka', 'hiroshima', 'sapporo', 'fukuoka', 'ehime', 'kyoto', 'nagoya'],
-            languages: ['english', 'japanese', 'italian', 'german', 'spanish', 'chinese', 'korean', 'french', 'thai', 'indian'],
+            location: ['Nikko', 'Tokyo', 'Osaka', 'Hiroshima', 'Sapporo', 'Fukuoka', 'Ehime', 'Kyoto', 'Nagoya'],
+            languages: ['English', 'Japanese', 'Italian', 'German', 'Spanish', 'Chinese', 'Korean', 'French', 'Thai', 'Indian'],
             // availabledays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
             username: this.$store.state.guideSelf.name,
             //emailaddress: this.$store.state.email,
