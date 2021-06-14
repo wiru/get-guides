@@ -65,6 +65,13 @@
                 name="info"/> 
                 {{ booking.details }}
               </q-card-section>
+              <q-btn
+                v-if="booking.type === 'paid'"
+                id="pay"
+                color="deep-orange"
+                icon="credit_card"
+                @click="checkout(booking.price, booking.currency)"
+              />
             </q-card-section>
             </q-card>
           </q-expansion-item>
