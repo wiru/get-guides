@@ -8,7 +8,7 @@ export default function createSocketioPlugin(socket) {
 
       if (payload.path === "Search") {
         store.commit("setUserType", "traveller");
-      } else if (payload.path === "MyProfile") {
+      } else if (payload.path === "My Profile") {
         store.commit("setUserType", "guide");
       }
       store.commit("changeView", payload.path);
@@ -22,7 +22,7 @@ export default function createSocketioPlugin(socket) {
     });
     socket.on("changeView", () => {
       console.log("store access here");
-      store.state.currentView = "HowTo";
+      store.state.currentView = "How to";
     });
     // socket.on("relayMessage", message => {
     //   console.log("CHECKING CURRENT CHAT");

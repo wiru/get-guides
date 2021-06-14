@@ -262,7 +262,7 @@ export default new Vuex.Store({
         )
       ).data;
       state.commit('setBookings', data)
-      state.commit('changeView', 'Bookings')
+      state.commit('changeView', 'Registration')
     },
     // For Registration
     async travellerPackage(state, payload) {
@@ -279,13 +279,13 @@ export default new Vuex.Store({
       state.commit("setUserId", newGuideId)
       state.commit("setUserType", "guide")
       state.commit("loggedIn", true)
-      state.dispatch("getUser", {id: newGuideId, nextPage: 'MyProfile' })
-      state.commit("changeView", "MyProfile");
+      state.dispatch("getUser", {id: newGuideId, nextPage: 'My Profile' })
+      state.commit("changeView", "My Profile");
     },
    
     async guidePackageUpdate(state, payload) {
       axios.post(`${serverLink}/api/guides/update`, payload);
-      state.commit("changeView", "MyProfile");
+      state.commit("changeView", "My Profile");
     }
   },
   getters: {

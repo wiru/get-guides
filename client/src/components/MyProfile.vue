@@ -2,9 +2,9 @@
 <q-page class="q-pa-md full-width">
   <div class="flex row q-mb-sm">
     <q-card class="my-card col-8    ">
-      <q-card-section class="teal-9">
-        <div class="text-h6">{{this.$store.state.guideSelf.name}}</div>
-        <div class="text-subtitle2">Professional Guide</div>
+      <q-card-section class="teal-8">
+        <div class="text-h6 text-teal-7">{{this.$store.state.guideSelf.name}}</div>
+        <div class="text-subtitle2 text-teal-7">Professional Guide</div>
       </q-card-section>
       <!-- PLACE AND LANGUAGES TAB -->
       <q-tabs v-model="tab" class="text-teal-9">
@@ -58,7 +58,7 @@
     <!-- EDIT PAGE LINK -->
     <div class="q-pl-sm flex justify-center flex-center column col">
       <q-img class="q-mb-sm col full-width rounded-borders" v-bind:src="this.$store.state.guideSelf.avatar" />
-      <q-btn class="full-width" :loading="loading1" color="primary" @click="simulateProgress(1); editProfile()" label="Button" />
+      <q-btn class="full-width" :loading="loading1" color="primary" @click="simulateProgress(1); editProfile()" label="Edit" />
     </div>
   </div>
     <q-carousel

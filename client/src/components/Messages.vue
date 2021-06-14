@@ -1,7 +1,7 @@
 <template>
   <q-page 
   ref="chatPage"
-  class="bg-white flex full-width column">
+  class="flex full-width column">
     <div class="q-pa-md column col justify-end">
       <q-chat-message
         v-for="message in messageLog"
@@ -133,5 +133,8 @@ export default {
 <style scoped>
 h1 {
     color: #235;
+}
+.body {
+  background-color: white!important;
 }
 </style>

@@ -2,9 +2,9 @@
 <q-page class="q-pa-md full-width">
   <div class="flex row q-mb-sm">
     <q-card class="my-card col-8    ">
-      <q-card-section class="teal-9">
-        <div class="text-h6">{{this.$store.state.singleGuide.name}}</div>
-        <div class="text-subtitle2">Professional Guide</div>
+      <q-card-section class="teal-8">
+        <div class="text-h6 text-teal-7">{{this.$store.state.singleGuide.name}}</div>
+        <div class="text-subtitle2 text-teal-7">Professional Guide</div>
       </q-card-section>
       <!-- PLACE AND LANGUAGES TAB -->
       <q-tabs v-model="tab" class="text-teal-9">

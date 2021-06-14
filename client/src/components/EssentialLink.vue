@@ -24,7 +24,7 @@
 export default {
   methods: {
     changeView(view) {
-      if (view === 'Search' || 'HowTo' || 'AboutUs') {
+      if (view === 'Search' || 'How to' || 'AboutUs') {
         this.$store.commit("changeView", view)
       }
       if (view === 'Bookings') {

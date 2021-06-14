@@ -5,11 +5,11 @@
     <SearchResults v-if="this.$store.state.currentView === 'SearchResults'" />
     <Bookings v-if="this.$store.state.currentView === 'Bookings'" />
     <SelectedProfile v-if="this.$store.state.currentView === 'SelectedProfile'" />
-    <MyProfile v-if="this.$store.state.currentView === 'MyProfile'" />
+    <MyProfile v-if="this.$store.state.currentView === 'My Profile'" />
     <EditProfile v-if="this.$store.state.currentView === 'EditProfile'" />
     <Chats v-if="this.$store.state.currentView === 'Chats'" />
     <Messages v-if="this.$store.state.currentView === 'Messages'" />
-    <HowTo v-if="this.$store.state.currentView === 'HowTo'" />
+    <HowTo v-if="this.$store.state.currentView === 'How to'" />
     <AboutUs v-if="this.$store.state.currentView === 'AboutUs'" />
     <Login v-if="this.$store.state.currentView === 'Login'" />
     <Logout v-if="this.$store.state.currentView === 'Logout'" />

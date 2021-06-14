@@ -417,7 +417,7 @@ export default {
             
             const inefficientPayload = {
             id: this.$store.state.id,
-            nextPage: "MyProfile"
+            nextPage: "My Profile"
             }
             this.$store.dispatch("getUser", inefficientPayload)
             }
