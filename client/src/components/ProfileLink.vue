@@ -24,8 +24,7 @@
 export default {
   methods: {
     changeView(view) {
-
-      const payload = {
+        const payload = {
         id: this.$store.state.id,
         nextPage: view
       }

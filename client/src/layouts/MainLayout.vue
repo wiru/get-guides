@@ -35,15 +35,17 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer class="text-white" color="white" v-model="leftDrawerOpen" content-class="bg-red-6">
+    <q-drawer class="text-white" color="white" v-model="leftDrawerOpen" content-class="bg-primary">
       <q-list>
-        <q-item-label header class="text-white">
-          Essential Links
-        </q-item-label>
+        <div class="flex column flex-center">
+          <q-img class="q-ma-lg" src="../assets/GG1.png" style="max-width:40%; height:auto" />
+          <q-img class="q-mb-lg" src="../assets/GetGuides.png" style="max-width:60%; height:auto" />
+        </div> 
 
         <div 
         v-if="this.$store.state.userType === 'guide'">
           <ProfileLink
+            class="text-h6"
             v-for="link in profileLinks"
             :key="link.title"
             v-bind="link"
@@ -52,6 +54,7 @@
         </div>
 
         <EssentialLink
+          class="text-h6"
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
@@ -59,6 +62,7 @@
         />
 
         <EssentialLink
+          class="text-h6"
           v-if="this.$store.state.loggedIn === true"
           :key="logoutData.title"
           v-bind="logoutData"
@@ -77,7 +81,7 @@ import ProfileLink from "components/ProfileLink.vue";
 const logoutData = {
   title: "Logout",
   caption: "Bye bye",
-  icon: "favorite",
+  icon: "logout",
   view: "Logout"
 };
 
@@ -94,7 +98,7 @@ const linksData = [
   {
     title: "Search",
     caption: "Search for Guides",
-    icon: "code",
+    icon: "search",
     view: "Search"
   },
 

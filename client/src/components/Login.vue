@@ -7,17 +7,17 @@
     <div class="fullscreen column items-center justify-center" v-if="$q.platform.is.mobile">
       <div class="flex col" style="align-items: center">
           <q-img style="width: 300px" class="q-mb-xl"
-            src="../assets/GG-white-red.png"
+            src="../assets/GG1.png"
           />
       </div>
       <div class="col-1">
-        <q-btn @click="loginAction" class="text-h6 q-ma-md" style="width: 200px" :loading="loading2" color="red">
+        <q-btn @click="loginAction" class="text-h6 q-ma-md" style="width: 200px" :loading="loading2" color="primary">
           Login
           <template v-slot:loading>
             Loading...
           </template>
         </q-btn>
-        <q-btn @click="loginFront" class="text-h6 q-ma-md" style="width: 200px" :loading="loading2" color="red">
+        <q-btn @click="loginFront" class="text-h6 q-ma-md" style="width: 200px" :loading="loading2" color="primary">
           Login8080
           <template v-slot:loading>
             Loading...
@@ -36,6 +36,11 @@ import axios from "axios";
 import serverLink from "../serverLink";
 export default {
   name: "Login",
+  data() {
+    return {
+      loading2: false
+    }
+  },
   methods: {
     loginAction() {
       window.location.replace(`${window.location.origin}/login`);
@@ -45,6 +50,15 @@ export default {
       this.$store.commit("setUserType", "guide"); // Change here for traveller
       this.$store.commit("changeView", "MyProfile"); // Change to search for traveller
       this.$store.commit("loggedIn", true);
+    },
+    simulateProgress (number) {
+      // we set loading state
+      this[`loading${number}`] = true
+      // simulate a delay
+      setTimeout(() => {
+        // we're done, we reset loading state
+        this[`loading${number}`] = false
+      }, 3000)
     }
   },
   async created() {

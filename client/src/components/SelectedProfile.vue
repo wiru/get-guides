@@ -1,56 +1,64 @@
 <template>
-<q-page>
-  <div class="flex row">
-  <q-card class="q-ma-sm my-card col-9">
-    <q-card-section class="teal-9">
-      <div class="text-h6">{{this.$store.state.singleGuide.name}}</div>
-      <div class="text-subtitle2">Professional Guide</div>
-      <!-- <div class="text-subtitle2">by John Doe</div> -->
-    </q-card-section>
+<q-page class="q-pa-md full-width">
+  <div class="flex row q-mb-sm">
+    <q-card class="my-card col-8    ">
+      <q-card-section class="teal-9">
+        <div class="text-h6">{{this.$store.state.singleGuide.name}}</div>
+        <div class="text-subtitle2">Professional Guide</div>
+      </q-card-section>
+      <!-- PLACE AND LANGUAGES TAB -->
+      <q-tabs v-model="tab" class="text-teal-9">
+        <q-tab label="Places" name="places" />
+        <q-tab label="Languages" name="languages" />
+      </q-tabs>
 
-    <q-tabs v-model="tab" class="text-teal">
-      <q-tab label="Places" name="one" />
-      <q-tab label="Languages" name="two" />
-    </q-tabs>
+      <q-separator />
 
-    <q-separator />
-
-    <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="one">
-        <q-chip
+      <!-- PLACES TAB -->
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="places" class="q-pa-none">
+        <q-tabs
+          v-model="tab"
+          inline-label
+          outside-arrows
+          mobile-arrows       
+          class="bg-primary shadow-2 text-white"
+        >
+          <q-tab 
           v-for="location in this.$store.state.singleGuide.locations"
           :key="location.fakeValueThatIMadeUp"
-          clickable
-          square
-          text-color="white"
-          class="bg-primary"
-        >
+          class="text-white q-px-md q-ma-xs">
           {{ location }}
-        </q-chip>
-      </q-tab-panel>
-
-        <q-tab-panel name="two">
-          <q-chip
-            v-for="location in this.$store.state.singleGuide.languages"
-            :key="location.fakeValueThatIMadeUp"
-            clickable
-            square  
-            class="bg-primary"
-            text-color="white"
-          >
-            {{ location }}
-         </q-chip>
+              
+            </q-tab>
+          </q-tabs>
+        </q-tab-panel>
+          
+      <!-- LANGUAGES TAB --> 
+      <q-tab-panel name="languages" class="q-pa-none">
+        <q-tabs
+          v-model="tab"
+          inline-label
+          outside-arrows
+          mobile-arrows
+          class="bg-primary shadow-2 text-white"
+        >
+          <q-tab 
+          v-for="language in this.$store.state.singleGuide.languages"
+          :key="language.fakeValueThatIMadeUp"
+          class="text-white q-px-md q-ma-xs">
+          {{ language }}
+              
+            </q-tab>
+          </q-tabs>
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
-    <div class="q-py-sm q-pr-sm flex justify-center flex-center column col">
-      <q-img class="col full-width overflow-hidden rounded-borders" :fit="cover" v-bind:src="this.$store.state.singleGuide.avatar" />
-      <q-btn class="q-mt-sm full-width" @click="loginAction" :loading="loading2" color="primary">
-        Chat
-        <template v-slot:loading>
-          Loading...
-        </template>
-      </q-btn>
+
+    <!-- EDIT PAGE LINK -->
+    <div class="q-pl-sm flex justify-center flex-center column col">
+      <q-img class="q-mb-sm col full-width rounded-borders" v-bind:src="this.$store.state.singleGuide.avatar" />
+      <q-btn class="full-width" :loading="loading1" color="primary" @click="simulateProgress(1); editProfile()" label="Chat" />
     </div>
   </div>
     <q-carousel
@@ -64,36 +72,44 @@
         arrows
         padding
         height="250px"
-        class="bg-primary text-white shadow-1"
+        class="q-mb-md bg-primary text-white shadow-1"
       >
-        <q-carousel-slide name="style" class="column no-wrap flex-center">
-          <q-icon name="style" size="56px" />
-          <div class="q-mt-md text-center">
-            {{ this.$store.state.singleGuide.bio }}
-          </div>
+      <!-- CAROUSEL SCREEN 1 -->
+        <q-carousel-slide name="style" class="text-center"  >
+          <q-scroll-area class="fit">
+            <q-icon class="q-pt-lg" name="hiking" size="36px" />
+            <div class="q-mt-md text-center">
+              {{ this.$store.state.singleGuide.bio }}
+            </div>
+          </q-scroll-area>
         </q-carousel-slide>
-        <q-carousel-slide name="tv" class="column no-wrap flex-center">
-          <q-icon name="live_tv" size="56px" />
-          <div class="q-mt-md text-center">
-            {{ lorem }}
-          </div>
+      <!-- CAROUSEL SCREEN 2 -->
+        <q-carousel-slide name="tv" class="text-center">
+          <q-scroll-area class="fit">
+            <q-icon class="q-pt-lg" name="terrain" size="36px" />
+            <div class="q-mt-md text-center overflow-auto">
+              {{ lorem }}
+            </div>
+          </q-scroll-area>
         </q-carousel-slide>
-        <q-carousel-slide name="layers" class="column no-wrap flex-center">
-          <q-icon name="layers" size="56px" />
-          <div class="q-mt-md text-center">
-            {{ lorem }}
-          </div>
+      <!-- CAROUSEL SCREEN 3 -->  
+        <q-carousel-slide name="map" class="text-center">
+          <q-scroll-area class="fit">
+            <q-icon class="q-pt-lg" name="snowboarding" size="36px" />
+            <div class="q-mt-md text-center">
+              {{ lorem }}
+            </div>
+          </q-scroll-area>
         </q-carousel-slide>
-        <q-carousel-slide name="map" class="column no-wrap flex-center">
-          <q-icon name="terrain" size="56px" />
-          <div class="q-mt-md text-center">
-            {{ lorem }}
-          </div>
-        </q-carousel-slide>
+     
       </q-carousel>
-    <div class="flex justify-center q-pa-md">
-      <q-date v-model="date" :options="optionsFn" minimal />
-    </div>
+    <q-card class="flex justify-start">
+      <span class="q-pa-md text-h6 text-teal-6">
+        Select a date
+        <q-icon name="touch_app" size="36px"></q-icon>
+      </span>
+      <q-date class="full-width" v-model="date" :options="optionsFn" minimal />
+    </q-card>
 </q-page>
 </template>
 
@@ -105,7 +121,8 @@ import serverLink from "../serverLink";
 export default {
   name: "SelectedProfile",
   data: () => ({
-    tab: "one",
+    loading1: false,
+    tab: "places",
     slide: 'style',
     lorem: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque voluptatem totam, architecto cupiditate officia rerum, error dignissimos praesentium libero ab nemo.',
     left: true,

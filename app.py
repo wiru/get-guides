@@ -200,7 +200,6 @@ def index():
 
 @app.get("/api/guides/search/<location>/<language>/<startdate>/<enddate>")
 def get_guides(location, language, startdate, enddate):
-    print("let's see if session persists")
     print(session)
     out = []
     for guide in mongo.db.guides.find({ "$and": [
@@ -208,7 +207,7 @@ def get_guides(location, language, startdate, enddate):
         {"languages": language},
         { "unavailable_dates": { "$nin": [startdate] } }
     ]
-    }, {"name":1, "avatar":1}):
+    }, {"name":1, "avatar":1, "bio":1}):
         guide["_id"] = str(guide["_id"])
         out.append(guide)
     print(out)
