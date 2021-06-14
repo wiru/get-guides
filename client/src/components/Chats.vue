@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex full-width">
+  <q-page class="bg-white flex full-width">
     <q-list class="full-width" bordered>
       <q-item v-for="chat in this.$store.state.chatList" 
       :key="chat._id" 
@@ -24,7 +24,7 @@
         <!-- Online/Offline badge -->
         <q-item-section side>
           <q-badge 
-            :color="chat.online ? 'blue' : 'grey-5'">
+            :color="chat.online ? 'teal-4' : 'grey-6'">
             {{ chat.online ? "online" : "offline" }}
           </q-badge>
     	  </q-item-section>

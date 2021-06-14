@@ -5,7 +5,7 @@
     </q-img>
     <div class="q-pa-md">
         
-        <q-card rounded class="q-ma-sm">
+        <q-card rounded>
         <q-card-section class="text-subtitle1 bg-primary text-white">
           Your current bookings
         </q-card-section>
@@ -13,9 +13,9 @@
           class="q-pa-none q-ma-none bg-white"
           :key="booking.id"
           v-for="booking in this.$store.state.bookings"
-          >
+          > 
           <q-card-section class="q-pa-none q-ma-sm">
-          <q-expansion-item class="" v-bind:label="booking.date" :arrows="arrows">
+          <q-expansion-item class="" v-bind:label="booking.date">
             <q-card>
               <q-card-section>
               <q-card-section class="text-subtitle1">

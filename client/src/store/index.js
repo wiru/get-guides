@@ -92,6 +92,7 @@ export default new Vuex.Store({
 
     setFilteredGuides(state, payload) {
       this.state.filteredGuides = payload;
+      console.log(payload)
     },
     setSingleGuide(state, payload) {
       this.state.singleGuide.id = payload._id;
@@ -117,6 +118,7 @@ export default new Vuex.Store({
       this.state.singleGuide.unavailableDates = toBeFilteredOut;
     },
     setUser(state, payload) {
+      console.log(payload)
       this.state.guideSelf.id = payload._id;
       this.state.guideSelf.name = payload.name;
       this.state.guideSelf.avatar = payload.avatar;

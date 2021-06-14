@@ -1,14 +1,14 @@
 <template>
   <q-page 
   ref="chatPage"
-  class="flex full-width column">
+  class="bg-white flex full-width column">
     <div class="q-pa-md column col justify-end">
       <q-chat-message
         v-for="message in messageLog"
         :key="message.text"
         :text="[message.text]"
         :sent="message.from == me"
-        :bg-color="message.from == me ? 'green-5' : 'grey-4'"
+        :bg-color="message.from == me ? 'teal-2' : 'grey-4'"
       />
       <q-spinner-dots v-if="theirTypingStatus" size="2rem" />
     </div>
