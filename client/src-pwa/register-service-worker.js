@@ -18,7 +18,7 @@ register(process.env.SERVICE_WORKER_FILE, {
   },
 
   registered (/* registration */) {
-     console.log('Service worker has been registered in the file where it shouldnt.')
+     console.log('Service worker has been registered automatically.')
     // evt.waituntil(
     //   caches.open(staticCacheName).then(cache => {
     //   cache.addAll(assets)

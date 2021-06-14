@@ -3,6 +3,67 @@
 //  * is picked up by the build system ONLY if
 //  * quasar.conf > pwa > workboxPluginMode is set to "InjectManifest"
 //  */
+
+// New try
+console.log("Entering custom Service Worker.")
+
+
+// Imports
+
+import {precacheAndRoute} from "workbox-precaching"
+import {registerRoute} from 'workbox-routing'
+import {StaleWhileRevalidate, NetworkFirst} from 'workbox-strategies'
+
+// Config
+
+precacheAndRoute(self.__WB_MANIFEST);   // handles pre-caching of (our) static assets
+
+// Caching
+
+registerRoute(
+    ({url}) => url.href.startsWith('http'),
+    new NetworkFirst()
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// Old version
+
+
 // console.log('I hate workbox')
 // //import { register } from 'register-service-worker'
 // const staticCacheName = 'site-static';

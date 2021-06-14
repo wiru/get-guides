@@ -115,23 +115,25 @@ module.exports = function (/* ctx */) {
     // https://v1.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
 
-      // workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {/*swSrc: './custom-service-worker.js'*/},
+      workboxPluginMode: 'InjectManifest',
+      workboxOptions: {/*swSrc: './src-pwa/custom-service-worker.js'*/},
 
 
 
 
-      workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: {
-        // skipWaiting: true,
-        // clientsClaim: true             // added for hot-reloading the dev app. Might have to be taken out before building
-        },
+      // workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+      // workboxOptions: {
+      
+      //   navigateFallback: 'index.html'
+      //   // skipWaiting: true,
+      //   // clientsClaim: true             // added for hot-reloading the dev app. Might have to be taken out before building
+      //   },
        // only for GenerateSW
 
       // TIP
       //(@quasar/app v2.1.10+) If your PWA is behind basic auth or requires an Authorization header, set quasar.conf.js > pwa > useCredentials 
       //to true to include crossorigin="use-credentials" on the manifest.json meta tag.
-      //useCredentials: true,
+      useCredentials: true,
 
       manifest: {
         name: `Get Guides`,
@@ -139,7 +141,7 @@ module.exports = function (/* ctx */) {
         description: `An attempt to make PWA work. GG.`,
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
+        background_color: '#E0F2F1',
         theme_color: '#e30202',
         icons: [
           {
