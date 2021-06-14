@@ -294,21 +294,17 @@
       <span class="text-subtitle2">
         Bio
       </span>
-      <q-scroll-area
-        horizontal
-        style="height:80px"
-        class="q-pa-sm rounded-borders"
-      >
-        <div class="row no-wrap">
-          <q-btn
-            label="About me"
-            class="q-mx-sm bg-primary text-white"
-            name="add text"
-            @click="aboutMe = true"
-          >
-          </q-btn>
-        </div>
-      </q-scroll-area>
+
+      <div id="aboutme" class="flex q-gutter-md q-pa-md">
+        <q-btn
+          label="About me"
+          class="col q-pa-xs bg-primary text-white"
+          name="add text"
+          icon="account_circle"
+          @click="aboutMe = true"
+        >
+        </q-btn>
+      </div>
     </q-card>
 
     <!-- ABOUT ME UPDATE DIALOG -->
