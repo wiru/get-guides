@@ -58,7 +58,7 @@
     <!-- EDIT PAGE LINK -->
     <div class="q-pl-sm flex justify-center flex-center column col">
       <q-img class="q-mb-sm col full-width rounded-borders" v-bind:src="this.$store.state.singleGuide.avatar" />
-      <q-btn class="full-width" :loading="loading1" color="primary" @click="simulateProgress(1); editProfile()" label="Chat" />
+      <q-btn class="full-width" :loading="loading1" color="primary" @click="startChat()" label="Chat" />
     </div>
   </div>
     <q-carousel
@@ -167,13 +167,14 @@ export default {
       ).data;
 
       this.$store.commit("setCurrentChat", newConvoId);
+      this.$store.dispatch("silentChatFetch", this.$store.state.id )
 
       const payload = {
         id: newConvoId,
         nextPage: "Messages"
       }
       this.$store.dispatch("getChatLog", payload);
-      console.log(newConvo);
+      console.log("conv ID is: ", newConvoId);
       // id = this.$store.state.singleGuide.id
       // this.$store.dispatch("getChatLogs", id);
     }
