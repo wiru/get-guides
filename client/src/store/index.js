@@ -262,7 +262,7 @@ export default new Vuex.Store({
         )
       ).data;
       state.commit('setBookings', data)
-      state.commit('changeView', 'Registration')
+      state.commit('changeView', "Bookings")
     },
     // For Registration
     async travellerPackage(state, payload) {

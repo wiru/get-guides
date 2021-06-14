@@ -247,7 +247,7 @@
 
 
 			<span class="text-subtitle2">
-			Languages
+			Bio
 			</span>	
 		<q-scroll-area
       horizontal
@@ -260,22 +260,6 @@
 					class="q-mx-sm bg-primary text-white"
 					name="add text"
 					@click="aboutMe = true"
-				>
-				</q-btn>
-			<!-- SPECIALTIES -->
-        <q-btn
-					label="Specialties"
-					class="q-mx-sm bg-primary text-white"
-					name="add text"
-					@click="specialties = true"
-				>
-				</q-btn>
-			<!-- HOBBIES -->
-        <q-btn
-					label="Hobbies"
-					class="q-mx-sm bg-primary text-white"
-					name="add text"
-					@click="hobbies = true"
 				>
 				</q-btn>
       </div>
