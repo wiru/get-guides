@@ -238,6 +238,13 @@ export default new Vuex.Store({
       console.log("Data passed to setter: ", data)
       state.commit("changeView", payload.nextPage)
     },
+    async silentChatFetch(state, payload) {
+      const data = (
+        await axios.get(`${serverLink}/api/conversations/traveller/${payload}`)
+      ).data;
+      state.commit("setChatList", data);
+      console.log("Data passed to setter: ", data)
+    },
 
     async getGuideChats(state, payload) {
       const data = (
