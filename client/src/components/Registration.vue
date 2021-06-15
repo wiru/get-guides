@@ -11,7 +11,7 @@
             </q-card-section>
         
         <q-card-section>
-        <span class="text-subtitle2">
+        <span class="text-teal-9 text-subtitle2">
             Please fill in the following fields to finish the registration process.
         </span>
         
@@ -23,7 +23,7 @@
                     <div class="text-h6">Alert</div>
                     </q-card-section>
 
-                    <q-card-section class="q-pt-none">
+                    <q-card-section class="text-teal-9 q-pt-none">
                      Please fill in all necessary information.
                     </q-card-section>
 
@@ -33,29 +33,159 @@
             </q-card>
             </q-dialog>
 
-        <span class="text-subtitle2">Please confirm the type of account you would like to create:</span>
-        <q-select class="q-my-md" outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" />
+        <span class="text-teal-9 text-subtitle2">Please confirm the type of account you would like to create:</span>
+        
+                <q-select
+					class="q-mt-md rounded-borders shadow-2"
+					standout
+					v-model="usermodel"
+					:options="usertype"
+					label="Account Type"
+					emit-value
+					map-options
+                    hide-selected
+					transition-show="scale"
+					transition-hide="scale"
+					bg-color="primary"
+					label-color="white"
+					dropdown-icon="person_add"
+					text-color="primary"
+					> 
+						
+                </q-select>
+
+        <!-- <q-select class="q-my-md" outlined v-model="usermodel" :options="usertype" label="Account Type" :dense="dense" /> -->
             <div id="travelreg" v-if="(usermodel === 'traveller')">
                 <br/>
-                <span>You're all set! Please confirm to finish the registration.</span>
+                <span class="text-teal-9 text-subtitle2">You're all set! Please confirm to finish the registration.</span>
                 <br/>
-                <q-btn id="travelconfirm" @click="registerTraveller" color="primary" label="Finish" />
+                <q-btn class="q-pa-xs q-my-md full-width" id="travelconfirm" @click="registerTraveller" color="primary" label="Finish" />
             </div>
             <div id="guidereg" v-if="(usermodel === 'guide')">
                 <br/>          
                 <q-input filled v-model="biomodel" type="string" maxlength=160 placeholder="Please write a short bio about yourself!" hint="max 160 characters" :dense="dense" />
                 <br/>
-                <q-select filled v-model="locationmodel" multiple :options="location" label="Location" hint="Multiple Options" :dense="dense" />
+
+                <q-select
+					class="rounded-borders shadow-2"
+					standout
+					v-model="locationmodel"
+					:options="location"
+					label="Locations"
+					multiple
+					hide-selected
+					emit-value
+					map-options
+					transition-show="scale"
+					transition-hide="scale"
+					bg-color="primary"
+					label-color="white"
+					dropdown-icon="place"
+					text-color="primary"
+					> 
+						<template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+							<q-item
+								
+								v-bind="itemProps"
+								v-on="itemEvents"
+								
+							>
+							<q-item-section>
+									<q-item-label class="text-primary" v-html="opt"></q-item-label>
+								</q-item-section>
+						
+								<q-item-section side>
+									<q-toggle							
+									:value="selected" color="primary" keep-color @input="toggleOption(opt)" />
+								</q-item-section>
+							</q-item>
+						</template>
+                </q-select>
+
+                <!-- <q-select filled v-model="locationmodel" multiple :options="location" label="Location" hint="Multiple Options" :dense="dense" /> -->
+                
                 <br/>
-                <q-select filled v-model="languagemodel" multiple :options="languages" label="Languages"  hint="Multiple Options" :dense="dense" />
+                <q-select
+					class="rounded-borders shadow-2"
+					standout
+					v-model="languagemodel"
+					:options="languages"
+					label="Languages"
+					multiple
+					hide-selected
+					emit-value
+					map-options
+					transition-show="scale"
+					transition-hide="scale"
+					bg-color="primary"
+					label-color="white"
+					dropdown-icon="language"
+					text-color="primary"
+					> 
+						<template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+							<q-item
+								
+								v-bind="itemProps"
+								v-on="itemEvents"
+								
+							>
+							<q-item-section>
+									<q-item-label class="text-primary" v-html="opt"></q-item-label>
+								</q-item-section>
+						
+								<q-item-section side>
+									<q-toggle							
+									:value="selected" color="primary" keep-color @input="toggleOption(opt)" />
+								</q-item-section>
+							</q-item>
+						</template>
+                </q-select>
+
+                <!-- <q-select filled v-model="languagemodel" multiple :options="languages" label="Languages"  hint="Multiple Options" :dense="dense" />
+                 -->
                 <br/>
-                <q-select filled v-model="availabledaysmodel" multiple :options="availabledays" label="Available Days"  hint="Multiple Options" />
+                <q-select
+					class="rounded-borders shadow-2"
+					standout
+					v-model="availabledaysmodel"
+					:options="availabledays"
+					label="Availability"
+					multiple
+					hide-selected
+					emit-value
+					map-options
+					transition-show="scale"
+					transition-hide="scale"
+					bg-color="primary"
+					label-color="white"
+					dropdown-icon="event"
+					text-color="primary"
+					> 
+						<template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+							<q-item
+								
+								v-bind="itemProps"
+								v-on="itemEvents"
+								
+							>
+							<q-item-section>
+									<q-item-label class="text-primary" v-html="opt"></q-item-label>
+								</q-item-section>
+						
+								<q-item-section side>
+									<q-toggle							
+									:value="selected" color="primary" keep-color @input="toggleOption(opt)" />
+								</q-item-section>
+							</q-item>
+						</template>
+                </q-select>
+                <!-- <q-select filled v-model="availabledaysmodel" multiple :options="availabledays" label="Available Days"  hint="Multiple Options" /> -->
                 <br/>
                 <q-input filled v-model="ratemodel" type="number" placeholder="Approx. Rate" hint="in JPY, per hour" :dense="dense" />
                 <br/>
-                <span>You're all set! Please confirm to finish the registration.</span>
+                <span class="text-teal-9 text-subtitle2">You're all set! Please confirm to finish the registration.</span>
                 <br/>
-                <q-btn id="guideconfirm" @click="registerGuide" color="primary" label="Finish" />
+                <q-btn class="q-ma-md q-py-xs full-width" id="guideconfirm" @click="registerGuide" color="primary" label="Finish" />
             </div>
             </q-card-section>
         </q-card>
@@ -115,9 +245,9 @@ export default {
             ratemodel: null,
             biomodel: null,
             usertype: ['traveller', 'guide'],
-            location: ['nikko', 'tokyo', 'osaka', 'hiroshima', 'sapporo', 'fukuoka', 'ehime', 'kyoto', 'nagoya'],
-            languages: ['english', 'japanese', 'italian', 'german', 'spanish', 'chinese', 'korean', 'french', 'thai', 'indian'],
-            availabledays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            location: ['Nikko', 'Tokyo', 'Osaka', 'Hiroshima', 'Sapporo', 'Fukuoka', 'Ehime', 'Kyoto', 'Nagoya'],
+            languages: ['English', 'Japanese', 'Italian', 'German', 'Spanish', 'Chinese', 'Korean', 'French', 'Thai', 'Indian'],
+            availabledays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
             username: this.$store.state.name,
             emailaddress: this.$store.state.email,
             dense: true,
@@ -127,9 +257,12 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-    color: black;
-    font-size: 34pt
+<style>
+.q-select__dropdown-icon {
+	color: white!important;
+	
 }
+/* .q-field__native {
+    color: white;
+} */
 </style>

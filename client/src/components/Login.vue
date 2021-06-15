@@ -4,28 +4,46 @@
       I'm only rendered on desktop!
     </div>
 
-    <div class="fullscreen column items-center justify-center" v-if="$q.platform.is.mobile">
+    <div
+      class="fullscreen column items-center justify-center"
+      v-if="$q.platform.is.mobile"
+    >
       <div class="flex col" style="align-items: center">
-          <q-img style="width: 300px" class="q-mb-xl"
-            src="../assets/GG1.png"
-          />
+        <q-img style="width: 300px" class="q-mb-xl" src="../assets/GG1.png" />
       </div>
       <div class="col-1">
-        <q-btn @click="loginAction" class="text-h6 q-ma-md" style="width: 200px" :loading="loading2" color="primary">
+        <q-btn
+          @click="loginAction"
+          class="text-h6 q-ma-md"
+          style="width: 200px"
+          :loading="loading2"
+          color="primary"
+        >
           Login
           <template v-slot:loading>
             Loading...
           </template>
         </q-btn>
-        <q-btn @click="loginFront" class="text-h6 q-ma-md" style="width: 200px" :loading="loading2" color="primary">
+        <!-- <q-btn
+          @click="loginFront"
+          class="text-h6 q-ma-md"
+          style="width: 200px"
+          :loading="loading2"
+          color="primary"
+        >
           Login8080
           <template v-slot:loading>
             Loading...
           </template>
-        </q-btn>
+        </q-btn> -->
       </div>
       <div class="col-1 q-mb-xl q-mt-sm">
-        <p @click="loginAction" class="text-h6 q-ma-md text-primary self-center">Register</p>
+        <p
+          @click="loginAction"
+          class="text-h6 q-ma-md text-primary self-center"
+        >
+          Register
+        </p>
       </div>
     </div>
   </div>
@@ -39,7 +57,7 @@ export default {
   data() {
     return {
       loading2: false
-    }
+    };
   },
   methods: {
     loginAction() {
@@ -51,14 +69,14 @@ export default {
       this.$store.commit("changeView", "My Profile"); // Change to search for traveller
       this.$store.commit("loggedIn", true);
     },
-    simulateProgress (number) {
+    simulateProgress(number) {
       // we set loading state
-      this[`loading${number}`] = true
+      this[`loading${number}`] = true;
       // simulate a delay
       setTimeout(() => {
         // we're done, we reset loading state
-        this[`loading${number}`] = false
-      }, 3000)
+        this[`loading${number}`] = false;
+      }, 3000);
     }
   },
   async created() {
@@ -72,13 +90,13 @@ export default {
       } else {
         this.$store.commit("setUserId", payload.id);
         this.$store.commit("setUserType", payload.userType);
-        if (payload.userType === 'traveller') {
+        if (payload.userType === "traveller") {
           this.$store.commit("changeView", payload.path);
-        } else if (payload.userType === 'guide') {
+        } else if (payload.userType === "guide") {
           const secondaryPayload = {
             id: payload.id,
             nextPage: "My Profile"
-          }
+          };
           this.$store.dispatch("getUser", secondaryPayload);
         }
         this.$store.commit("loggedIn", payload.loggedIn);
