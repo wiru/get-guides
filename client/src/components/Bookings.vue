@@ -67,8 +67,9 @@
               </q-card-section>
               <q-btn
                 v-if="booking.type === 'paid'"
+                class="full-width"
                 id="pay"
-                color="deep-orange"
+                color="primary"
                 icon="credit_card"
                 @click="checkout(booking.price, booking.currency)"
               />
