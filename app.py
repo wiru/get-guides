@@ -354,7 +354,7 @@ def update_guide():
     guideUpdate = request.json 
     mongo.db.guides.update_one({"_id": ObjectId(guideUpdate["id"])},  
     { "$set": {
-        "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
+        "avatar": "https://lh3.googleusercontent.com/-5Bt0sdplPfU/YLY0wxsm1NI/AAAAAAAAAAw/3F_inSdgAaUzdoMj7N87rmBoX5AZXG0AQCEwYBhgLKtMDABHVOhzgjrBtRS-cLwXAmZEUZJIb8CSl-TkGS5-nhSJm1rAva7MIP660lcOXPR56tXQ3A6Da4VDxkBzgzOB6G3zN9DVYVZx_jsWq04NCcOPKtkBRCeOcaPzRfx4B-OE1Ap0QNVgFQwvchnCUNjiURyA6X-lJk6i25n5J4Yog4EXEaIb1an1DsmcW0dUibI1-SvKdc1cSVcEhZdv2edIHC6kTeb6tBtVx4jL6Momo6q20wGsMy2KJVMvvVts0hqr9Ih75kFbZ3LNVhiYABy6YXSM-wfHOI5ZgIu5c6_DR5TUDi-2zDSguhTeJrMemNv4yZU9QCOdq86fcgI6M9Wg_ZKecqHi5G37SkyR_VmVh9bxSHJDyfzGMOjxZ9OVjvy3LZXKmU3B0oDS4k-jZNKDB7kEFpa7PaoUMnB-aR4ox4Gf07geA3Zs-ixKPiTRLKhBCZ94C0CR9p8horn0ERY0OkWE_AjSSeDG7e6S7hbJvRUcUbKGwuCyQYMunJpzPyJFDqmF7CqIBg0ITHAzD6IIXNGoIdaNmUwb7gInMOpUOFoLyMw6uDU89bpIJutx2AOzcWTqVzMqC_s4gbcQtVgDFMa7HiRtoXxa46EpzMFDUu98CukAwsYGhhgY/w140-h139-p/memeAVATAR.png",
         "languages": guideUpdate['language'],
         "bio": guideUpdate['bio'],
         "weekdays": guideUpdate['availabledays'],
