@@ -23,8 +23,8 @@
         <q-btn
           v-if="
             this.$store.state.currentView === 'Messages' ||
-              this.$store.state.currentView === 'SelectedProfile' ||
-              this.$store.state.currentView === 'SearchResults'
+              this.$store.state.currentView === 'Guide Profile' ||
+              this.$store.state.currentView === 'Search Results'
           "
           @click="goBack"
           dense
@@ -35,15 +35,27 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer class="text-white" color="white" v-model="leftDrawerOpen" content-class="bg-primary">
+    <q-drawer
+      class="text-white"
+      color="white"
+      v-model="leftDrawerOpen"
+      content-class="bg-primary"
+    >
       <q-list>
         <div class="flex column flex-center">
-          <q-img class="q-ma-lg" src="../assets/GG1.png" style="max-width:40%; height:auto" />
-          <q-img class="q-mb-lg" src="../assets/GetGuides.png" style="max-width:60%; height:auto" />
-        </div> 
+          <q-img
+            class="q-ma-lg"
+            src="../assets/GG1.png"
+            style="max-width:40%; height:auto"
+          />
+          <q-img
+            class="q-mb-lg"
+            src="../assets/GetGuides.png"
+            style="max-width:60%; height:auto"
+          />
+        </div>
 
-        <div 
-        v-if="this.$store.state.userType === 'traveller'">
+        <div v-if="this.$store.state.userType === 'traveller'">
           <SearchLink
             class="text-h6"
             v-for="link in searchLinks"
@@ -53,8 +65,7 @@
           />
         </div>
 
-        <div 
-        v-if="this.$store.state.userType === 'guide'">
+        <div v-if="this.$store.state.userType === 'guide'">
           <ProfileLink
             class="text-h6"
             v-for="link in profileLinks"
@@ -80,7 +91,7 @@
         />
       </q-list>
     </q-drawer>
-    <q-page-container >
+    <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
@@ -113,7 +124,7 @@ const searchData = [
     caption: "Search for Guides",
     icon: "search",
     view: "Search"
-  },
+  }
 ];
 
 const linksData = [
@@ -139,7 +150,7 @@ const linksData = [
     title: "About Us",
     caption: "The team behind Get Guides",
     icon: "favorite",
-    view: "AboutUs"
+    view: "About Us"
   }
 ];
 
@@ -159,10 +170,10 @@ export default {
     goBack() {
       if (this.$store.state.currentView === "Messages")
         this.$store.commit("changeView", "Chats");
-      else if (this.$store.state.currentView === "SearchResults")
+      else if (this.$store.state.currentView === "Search Results")
         this.$store.commit("changeView", "Search");
-      else if (this.$store.state.currentView === "SelectedProfile")
-        this.$store.commit("changeView", "SearchResults");
+      else if (this.$store.state.currentView === "Guide Profile")
+        this.$store.commit("changeView", "Search Results");
     }
   }
 };
@@ -171,6 +182,5 @@ export default {
 body {
   background-color: $teal-1;
   background-image: url("../assets/brushDiag.png") repeat 0 0;
-
 }
 </style>

@@ -1,13 +1,6 @@
 <template>
-  <q-item
-  clickable
-    tag="span"
-     @click="changeView(view)"
-  >
-    <q-item-section
-      v-if="icon"
-      avatar
-    >
+  <q-item clickable tag="span" @click="changeView(view)">
+    <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
 
@@ -25,9 +18,10 @@ export default {
   methods: {
     changeView(view) {
       this.$store.commit("changeView", view);
-      }
+      this.$emit("clicked");
+    }
   },
-  name: 'SearchLink',
+  name: "SearchLink",
   props: {
     title: {
       type: String,
@@ -36,18 +30,18 @@ export default {
 
     caption: {
       type: String,
-      default: ''
+      default: ""
     },
 
     view: {
       type: String,
-      default: ''
+      default: ""
     },
 
     icon: {
       type: String,
-      default: ''
+      default: ""
     }
   }
-}
+};
 </script>

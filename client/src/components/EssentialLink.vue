@@ -1,13 +1,6 @@
 <template>
-  <q-item
-  clickable
-    tag="span"
-     @click="changeView(view)"
-  >
-    <q-item-section
-      v-if="icon"
-      avatar
-    >
+  <q-item clickable tag="span" @click="changeView(view)">
+    <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
 
@@ -24,27 +17,27 @@
 export default {
   methods: {
     changeView(view) {
-      if (view === 'Search' || 'How to' || 'AboutUs') {
-        this.$store.commit("changeView", view)
+      if (view === "Search" || "How to" || "About Us") {
+        this.$store.commit("changeView", view);
       }
-      if (view === 'Bookings') {
+      if (view === "Bookings") {
         this.$store.dispatch("getBookings");
       }
-      if (view === 'Chats') {
+      if (view === "Chats") {
         const payload = {
           id: this.$store.state.id,
           nextPage: view
-        }
+        };
         if (this.$store.state.userType === "traveller") {
-          this.$store.dispatch("getTravellerChats", payload)
+          this.$store.dispatch("getTravellerChats", payload);
         } else {
-          this.$store.dispatch("getGuideChats", payload)
+          this.$store.dispatch("getGuideChats", payload);
         }
-        console.log("This is inside Essential Link, getchats", payload)
       }
+      this.$emit("clicked");
     }
   },
-  name: 'EssentialLink',
+  name: "EssentialLink",
   props: {
     title: {
       type: String,
@@ -53,18 +46,18 @@ export default {
 
     caption: {
       type: String,
-      default: ''
+      default: ""
     },
 
     view: {
       type: String,
-      default: ''
+      default: ""
     },
 
     icon: {
       type: String,
-      default: ''
+      default: ""
     }
   }
-}
+};
 </script>

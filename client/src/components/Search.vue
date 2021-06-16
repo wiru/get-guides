@@ -1,24 +1,29 @@
 <template>
   <q-page class="flex column full-width full-height">
-    
     <q-img src="../assets/fuji.jpg" class="flex col-1" style="height: 150px">
     </q-img>
 
     <div class="q-pa-lg flex flex-center col">
-  
-    <!-- CARD TITLE -->
-    <q-card class="q-pa-lg my-card full-width">
-      <div class="q-pb-md">
-        <span class="text-h6 q-py-lg">
-          Enter search criteria
-        </span>
-      </div>	
+      <!-- CARD TITLE -->
+      <q-card class="q-pa-lg my-card full-width">
+        <div class="q-pb-md">
+          <span class="text-h6 q-py-lg">
+            Enter search criteria
+          </span>
+        </div>
 
-    <!-- LOCATION SEARCH -->
-      <q-input color="primary" bg-color="grey-3" outlined bottom-slots v-model="location" label="Select location">
-        <template v-slot:before>
-          <q-btn icon="my_location" round color="primary" />
-        </template>
+        <!-- LOCATION SEARCH -->
+        <q-input
+          color="primary"
+          bg-color="grey-3"
+          outlined
+          bottom-slots
+          v-model="location"
+          label="Select location"
+        >
+          <template v-slot:before>
+            <q-btn icon="my_location" round color="primary" />
+          </template>
 
           <template v-slot:append>
             <q-icon
@@ -28,26 +33,40 @@
               class="cursor-pointer"
             />
           </template>
-      </q-input>
+        </q-input>
 
-    <!-- LANGUAGE SEARCH -->
-      <q-input color="primary" bg-color="grey-3" outlined bottom-slots v-model="language" label="Select language">
-        <template v-slot:before>
-          <q-btn icon="language" round color="primary" />
-        </template>
+        <!-- LANGUAGE SEARCH -->
+        <q-input
+          color="primary"
+          bg-color="grey-3"
+          outlined
+          bottom-slots
+          v-model="language"
+          label="Select language"
+        >
+          <template v-slot:before>
+            <q-btn icon="language" round color="primary" />
+          </template>
 
-        <template v-slot:append>
-          <q-icon
-            v-if="language !== ''"
-            name="close"
-            @click="language = ''"
-            class="cursor-pointer"
-          />
-        </template>
-      </q-input>
+          <template v-slot:append>
+            <q-icon
+              v-if="language !== ''"
+              name="close"
+              @click="language = ''"
+              class="cursor-pointer"
+            />
+          </template>
+        </q-input>
 
-    <!-- DATE SEARCH -->
-        <q-input color="primary" bg-color="grey-3" outlined bottom-slots v-model="date" label="Select date">
+        <!-- DATE SEARCH -->
+        <q-input
+          color="primary"
+          bg-color="grey-3"
+          outlined
+          bottom-slots
+          v-model="date"
+          label="Select date"
+        >
           <template v-slot:before>
             <q-btn icon="today" round color="primary">
               <q-popup-proxy
@@ -75,16 +94,15 @@
           </template>
         </q-input>
 
-        <q-btn 
+        <q-btn
           size="2vh"
           class="full-width q-px-xl q-py-xs"
           color="primary"
           label="Search"
           @click="search"
         />
-    </q-card>
-    
-</div>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -97,7 +115,7 @@ export default {
 
     language: "",
 
-    date: "",
+    date: ""
   }),
 
   methods: {
@@ -110,13 +128,11 @@ export default {
         language: this.language.toLowerCase(),
         date: newDate,
         // => remove last parameter from app.py getFilteredGuides endpoint
-        nextPage: "SearchResults"
+        nextPage: "Search Results"
       });
     }
   }
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
