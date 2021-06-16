@@ -412,15 +412,6 @@ export default {
   name: "EditProfile",
   methods: {
     editGuide() {
-      console.log(
-        this.usermodel,
-        this.username,
-        this.locationmodel,
-        this.languagemodel,
-        this.availabledaysmodel,
-        this.ratemodel,
-        this.biomodel
-      );
       if (
         this.usermodel !== null &&
         this.username !== "" &&
