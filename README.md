@@ -33,6 +33,9 @@ When organizing a trip somewhere, finding and hiring a guide is currently the on
 
 Get Guides aims to free travellers from that burden and allows them to directly access and interact with guides🔥
 
+This project was presented as part of a full-stack engineering bootcamp showcase event.
+You can see the event and the presentation at the following link: [youtube](https://youtu.be/522BJezfQ5Y?t=260)
+
 ## Built With
 
 - [Quasar](https://quasar.dev/)
