@@ -27,6 +27,8 @@
 
 ## About The Project
 
+This is a group comprising the work of four people over a couple of weeks. The project was undertaken as part of my advanced immersive coding bootcamp. 
+
 Get Guides is a platform that connects freelance tour guides to tourists🏃‍♂️
 
 When organizing a trip somewhere, finding and hiring a guide is currently the only step that requires going through some sort of professional service such as a travel agency or a travel consultant🙅
